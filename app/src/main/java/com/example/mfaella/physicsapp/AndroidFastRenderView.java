@@ -10,7 +10,7 @@ import android.view.SurfaceView;
 
 public class AndroidFastRenderView extends SurfaceView implements Runnable {
     /*
-    Changed comment
+    Changed comment again again
      */
     private Bitmap framebuffer;
     private Thread renderThread = null;
