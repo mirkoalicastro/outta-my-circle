@@ -6,8 +6,16 @@
           <option name="url" value="https://github.com/mfaella/ch06-mrnom-AS1.5.1.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/mirkoalicastro/outta-my-circle.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/mirkoalicastro/outta-my-circle/" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\Mirko Alicastro\Documents\GitHub" />
+    <option name="cloneParentDir" value="C:\GitHubAndroid" />
   </component>
 </application>
