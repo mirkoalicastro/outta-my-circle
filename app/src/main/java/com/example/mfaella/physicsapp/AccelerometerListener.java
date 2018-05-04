@@ -11,9 +11,6 @@ import android.util.Log;
 public class AccelerometerListener implements SensorEventListener {
 
     private final GameWorld gw;
-    /*
-    Dani's mistake.
-     */
 
     public AccelerometerListener(GameWorld gw)
     {
