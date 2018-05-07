@@ -9,7 +9,7 @@ import com.google.fpl.liquidfun.Body;
  * Created by mfaella on 27/02/16.
  */
 public abstract class GameObject {
-    Body body;
+    protected Body body;
     protected String name;
     protected GameWorld gw;
 
