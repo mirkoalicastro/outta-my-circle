@@ -64,10 +64,18 @@ public class KeyboardHandler implements OnKeyListener {
             int len = keyEvents.size();
             for (int i = 0; i < len; i++)
                 keyEventPool.free(keyEvents.get(i));
-            keyEvents.clear();
+/*            keyEvents.clear();
             keyEvents.addAll(keyEventsBuffer);
             keyEventsBuffer.clear();
             return keyEvents;
+            */
+
+            List<KeyEvent> tmp = keyEvents;
+            keyEvents = keyEventsBuffer;
+            keyEventsBuffer = tmp;
+            keyEventsBuffer.clear();
+            return keyEvents;
+
         }
     }
 }
