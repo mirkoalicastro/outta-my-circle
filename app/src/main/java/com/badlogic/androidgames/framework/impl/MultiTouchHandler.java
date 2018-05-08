@@ -124,10 +124,10 @@ public class MultiTouchHandler implements TouchHandler {
         // empty the old list and return the events to the pool
         for (TouchEvent event: touchEvents)
                 touchEventPool.free(event);
+        List<TouchEvent> tmp = touchEventsBuffer;
         touchEvents.clear();
-        // copy the event buffer into the list
-        touchEvents.addAll(touchEventsBuffer);
-        touchEventsBuffer.clear();
+        touchEventsBuffer = touchEvents;
+        touchEvents = tmp;
         return touchEvents;
     }
 }

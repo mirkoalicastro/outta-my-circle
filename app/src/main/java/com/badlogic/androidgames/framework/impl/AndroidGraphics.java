@@ -8,10 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.Shader;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
@@ -50,11 +52,9 @@ public class AndroidGraphics implements Graphics {
             in = assets.open(fileName);
             bitmap = BitmapFactory.decodeStream(in);
             if (bitmap == null)
-                throw new RuntimeException("Couldn't load bitmap from asset '"
-                        + fileName + "'");
+                throw new RuntimeException("Couldn't load bitmap from asset '"+ fileName + "'");
         } catch (IOException e) {
-            throw new RuntimeException("Couldn't load bitmap from asset '"
-                    + fileName + "'");
+            throw new RuntimeException("Couldn't load bitmap from asset '"+ fileName + "'");
         } finally {
             if (in != null) {
                 try {
@@ -74,10 +74,14 @@ public class AndroidGraphics implements Graphics {
         return new AndroidPixmap(bitmap, format);
     }
 
+    public Shader newShader(String fileName, PixmapFormat format) {
+        AndroidPixmap pixmap = (AndroidPixmap) newPixmap(fileName, format);
+        return new BitmapShader(pixmap.bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+    }
+
     @Override
     public void clear(int color) {
-        canvas.drawRGB((color & 0xff0000) >> 16, (color & 0xff00) >> 8,
-                (color & 0xff));
+        canvas.drawRGB((color & 0xff0000) >> 16, (color & 0xff00) >> 8, (color & 0xff));
     }
 
     @Override
@@ -96,12 +100,11 @@ public class AndroidGraphics implements Graphics {
     public void drawRect(int x, int y, int width, int height, int color) {
         paint.setColor(color);
         paint.setStyle(Style.FILL);
-        canvas.drawRect(x, y, x + width - 1, y + width - 1, paint);
+        canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
     }
 
     @Override
-    public void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY,
-            int srcWidth, int srcHeight) {
+    public void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY, int srcWidth, int srcHeight) {
         srcRect.left = srcX;
         srcRect.top = srcY;
         srcRect.right = srcX + srcWidth - 1;
@@ -112,13 +115,20 @@ public class AndroidGraphics implements Graphics {
         dstRect.right = x + srcWidth - 1;
         dstRect.bottom = y + srcHeight - 1;
 
-        canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect,
-                null);
+        canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect,null);
     }
     
     @Override
     public void drawPixmap(Pixmap pixmap, int x, int y) {
         canvas.drawBitmap(((AndroidPixmap)pixmap).bitmap, x, y, null);
+    }
+
+    @Override
+    public boolean drawTile(Shader shader, int x, int y, int width, int height) {
+        paint.setShader(shader);
+        canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
+        paint.setShader(null);
+        return true;
     }
 
     @Override

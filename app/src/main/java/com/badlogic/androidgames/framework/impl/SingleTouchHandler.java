@@ -92,9 +92,10 @@ public class SingleTouchHandler implements TouchHandler {
             int len = touchEvents.size();
             for( int i = 0; i < len; i++ )
                 touchEventPool.free(touchEvents.get(i));
+            List<TouchEvent> tmp = touchEventsBuffer;
             touchEvents.clear();
-            touchEvents.addAll(touchEventsBuffer);
-            touchEventsBuffer.clear();
+            touchEventsBuffer = touchEvents;
+            touchEvents = tmp;
             return touchEvents;
         }
     }

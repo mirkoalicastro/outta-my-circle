@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
         GameObject a = gw.addGameObject(new DynamicBoxGO(gw, 0, -2));
         GameObject b = gw.addGameObject(new DynamicBoxGO(gw, 1, -3));
-        new MyRevoluteJoint(gw, a.body, b.body);
+      //  new MyRevoluteJoint(gw, a.body, b.body);
         //new MyPrismaticJoint(gw, a.body, b.body);
 
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();

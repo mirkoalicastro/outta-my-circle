@@ -13,4 +13,6 @@ public interface Game {
 
     public Screen getCurrentScreen();
 
+    public void display();
+
 }

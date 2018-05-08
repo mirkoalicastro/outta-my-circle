@@ -32,7 +32,7 @@ public class MarblesGO extends GameObject
 
     public MarblesGO(GameWorld gw, float x, float y)
     {
-        super(gw);
+   //     super(gw);
 
         this.canvas = new Canvas(gw.buffer);
         this.psys = gw.particleSystem;
@@ -50,7 +50,7 @@ public class MarblesGO extends GameObject
         Log.d("DragMe", "Created " + group.getParticleCount() + " particles");
 
         // no body
-        this.body = null;
+      //  this.body = null;
 
         // clean up native objects
         groupDef.delete();
@@ -59,7 +59,7 @@ public class MarblesGO extends GameObject
 
 
     // the last three parameters are irrelevant (actually, zero)
-    @Override
+//    @Override
     public void draw(Bitmap buffer, float _x, float _y, float _angle) {
         /* final int particleCount = psys.getParticleCount();
         for (int i=0; i<particleCount; i++) {

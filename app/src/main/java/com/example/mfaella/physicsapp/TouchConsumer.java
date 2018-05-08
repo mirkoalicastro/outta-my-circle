@@ -79,7 +79,7 @@ public class TouchConsumer {
             Object userData = touchedBody.getUserData();
             if (userData != null) {
                 GameObject touchedGO = (GameObject) userData;
-                Log.d("MultiTouchHandler", "touched body " + touchedGO.name);
+//                Log.d("MultiTouchHandler", "touched body " + touchedGO.name);
                 mouseJointDef.setBodyA(touchedBody); // irrelevant but necessary
                 mouseJointDef.setBodyB(touchedBody);
                 mouseJointDef.setMaxForce(500 * touchedBody.getMass());

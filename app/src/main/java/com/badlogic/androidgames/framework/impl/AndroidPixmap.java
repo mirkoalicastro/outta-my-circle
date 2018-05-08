@@ -32,5 +32,6 @@ public class AndroidPixmap implements Pixmap {
     @Override
     public void dispose() {
         bitmap.recycle();
-    }      
+    }
+
 }

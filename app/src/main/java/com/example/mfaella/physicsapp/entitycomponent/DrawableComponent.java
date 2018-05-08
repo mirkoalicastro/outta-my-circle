@@ -4,6 +4,6 @@ import android.graphics.Canvas;
 
 public abstract class DrawableComponent extends Component {
     @Override
-    public ComponentType type() { return ComponentType.Drawable; }
+    public Component.Type type() { return Component.Type.Drawable; }
     public abstract void draw(Canvas canvas);
 }

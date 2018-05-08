@@ -70,10 +70,10 @@ public class KeyboardHandler implements OnKeyListener {
             return keyEvents;
             */
 
-            List<KeyEvent> tmp = keyEvents;
-            keyEvents = keyEventsBuffer;
-            keyEventsBuffer = tmp;
-            keyEventsBuffer.clear();
+            List<KeyEvent> tmp = keyEventsBuffer;
+            keyEvents.clear();
+            keyEventsBuffer = keyEvents;
+            keyEvents = tmp;
             return keyEvents;
 
         }

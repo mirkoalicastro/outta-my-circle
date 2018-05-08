@@ -27,7 +27,7 @@ public class DynamicBoxGO extends GameObject
 
     public DynamicBoxGO(GameWorld gw, float x, float y)
     {
-        super(gw);
+       // super(gw);
 
         instances++;
 
@@ -40,10 +40,10 @@ public class DynamicBoxGO extends GameObject
         bdef.setPosition(x, y);
         bdef.setType(BodyType.dynamicBody);
         // a body
-        this.body = gw.world.createBody(bdef);
-        body.setSleepingAllowed(false);
-        this.name = "Box" + instances;
-        body.setUserData(this);
+   //     this.body = gw.world.createBody(bdef);
+     //   body.setSleepingAllowed(false);
+       // this.name = "Box" + instances;
+        //body.setUserData(this);
 
         PolygonShape box = new PolygonShape();
         box.setAsBox(width / 2, height / 2);
@@ -52,7 +52,7 @@ public class DynamicBoxGO extends GameObject
         fixturedef.setFriction(0.1f);       // default 0.2
         fixturedef.setRestitution(0.4f);    // default 0
         fixturedef.setDensity(density);     // default 0
-        body.createFixture(fixturedef);
+//        body.createFixture(fixturedef);
 
         int green = (int)(255*Math.random());
         int color = Color.argb(200, 255, green, 0);
@@ -65,7 +65,7 @@ public class DynamicBoxGO extends GameObject
         box.delete();
     }
 
-    @Override
+//    @Override
     public void draw(Bitmap buffer, float x, float y, float angle) {
         canvas.save();
         canvas.rotate((float) Math.toDegrees(angle), x, y);

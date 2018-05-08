@@ -1,9 +1,12 @@
 package com.badlogic.androidgames.framework;
 
+import android.graphics.Shader;
+
 public interface Graphics {
     public static enum PixmapFormat {
         ARGB8888, ARGB4444, RGB565
     }
+    public Shader newShader(String fileName, PixmapFormat format);
 
     public Pixmap newPixmap(String fileName, PixmapFormat format);
 
@@ -19,6 +22,8 @@ public interface Graphics {
             int srcWidth, int srcHeight);
 
     public void drawPixmap(Pixmap pixmap, int x, int y);
+
+    public boolean drawTile(Shader shader, int x, int y, int width, int height);
 
     public int getWidth();
 

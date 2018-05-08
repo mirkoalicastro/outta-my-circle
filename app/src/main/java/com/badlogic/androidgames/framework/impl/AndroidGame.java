@@ -28,6 +28,11 @@ public abstract class AndroidGame extends Activity implements Game {
     Screen screen;
 
     @Override
+    public void display() {
+        renderView.displayCanvas();
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -38,10 +43,10 @@ public abstract class AndroidGame extends Activity implements Game {
         int frameBufferWidth = isLandscape ? 480 : 320;
         int frameBufferHeight = isLandscape ? 320 : 480;
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.RGB_565);
-        Point p = new Point();
-        getWindowManager().getDefaultDisplay().getSize(p);
-        float scaleX = frameBufferWidth / p.x;
-        float scaleY = frameBufferHeight / p.y;
+        Point dim = new Point();
+        getWindowManager().getDefaultDisplay().getSize(dim);
+        float scaleX = frameBufferWidth / dim.x;
+        float scaleY = frameBufferHeight / dim.y;
 
         renderView = new AndroidFastRenderView(this, frameBuffer);
         graphics = new AndroidGraphics(getAssets(), frameBuffer);
@@ -50,8 +55,6 @@ public abstract class AndroidGame extends Activity implements Game {
         input = new AndroidInput(this, renderView, scaleX, scaleY);
         screen = getStartScreen();
         setContentView(renderView);
-
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
     }
 
     @Override
