@@ -1,14 +1,11 @@
 package com.badlogic.androidgames.framework.impl;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.view.Window;
 import android.view.WindowManager;
 

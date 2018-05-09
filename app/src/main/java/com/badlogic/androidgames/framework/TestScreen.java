@@ -108,5 +108,5 @@ class TestScreen extends Screen {
     public void dispose() {
         Log.d("MrNom", "dispose");
         music.dispose();
-    }            
+    }
 }
