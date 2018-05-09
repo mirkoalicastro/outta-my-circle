@@ -1,22 +1,11 @@
 package com.example.mfaella.physicsapp;
 
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.graphics.Shader;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
-import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
-import com.badlogic.androidgames.framework.impl.AndroidGame;
-import com.badlogic.androidgames.framework.impl.AndroidPixmap;
-
-import java.util.Calendar;
 
 public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingScreen {
     private final Graphics g;
@@ -67,19 +56,6 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
     @Override
     public void resume() {
 
-    }
-
-    private void full() {
-        int size = 1000;
-        int ret = 0;
-        for(int i=0; i<size; i++) {
-            for(int j=0; j<size; j++) {
-                for(int h=0; h<size; h++) {
-                    ret += i+j+h;
-                }
-            }
-        }
-        Log.d("", "->" + ret + "<-");
     }
 
 }
