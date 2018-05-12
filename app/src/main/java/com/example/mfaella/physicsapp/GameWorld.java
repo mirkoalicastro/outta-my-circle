@@ -26,24 +26,24 @@ import java.util.List;
 public class GameWorld {
     // Rendering
     final static int bufferWidth = 400, bufferHeight = 600;    // actual pixels
-    Bitmap buffer;
-    private Canvas canvas;
-    private Paint particlePaint;
+    final Bitmap buffer;
+    private final Canvas canvas;
+    private final Paint particlePaint;
     private final boolean isLittleEndian;
 
     // Simulation
-    List<GameObject> objects;
-    World world;
-    final Box physicalSize, screenSize;
-    private ContactListener contactListener; // kept to prevent GC
-    private TouchConsumer touchConsumer;
+    private final List<GameObject> objects;
+    private final World world;
+    private final Box physicalSize;
+    private final ContactListener contactListener; // kept to prevent GC
+    private final TouchConsumer touchConsumer;
     private TouchHandler touchHandler;
     private final int bufferOffset; // an architecture-dependent parameter
 
     // Particles
-    ParticleSystem particleSystem;
-    private byte[] particlePositions;
-    private ByteBuffer particlePositionsBuffer;
+    private final ParticleSystem particleSystem;
+    private final byte[] particlePositions;
+    private final ByteBuffer particlePositionsBuffer;
     private static final int BYTESPERPARTICLE = 8;
     private static final int MAXPARTICLECOUNT = 1000;
     private static final float PARTICLE_RADIUS = 0.3f;
@@ -57,7 +57,6 @@ public class GameWorld {
     // Arguments are in physical simulation units.
     public GameWorld(Box physicalSize, Box screenSize) {
         this.physicalSize = physicalSize;
-        this.screenSize = screenSize;
 
         this.buffer = Bitmap.createBitmap(bufferWidth, bufferHeight, Bitmap.Config.ARGB_8888);
         this.world = new World(0, 0);  // gravity vector
@@ -97,18 +96,16 @@ public class GameWorld {
             bufferOffset = 4; // real device
     }
 
-    public synchronized GameObject addGameObject(GameObject obj)
-    {
-        objects.add(obj); return obj;
+    public synchronized GameObject addGameObject(GameObject obj) {
+        objects.add(obj);
+        return obj;
     }
 
-    public synchronized void addParticleGroup(GameObject obj)
-    {
+    public synchronized void addParticleGroup(GameObject obj) {
         objects.add(obj);
     }
 
-    private void drawParticles()
-    {
+    private void drawParticles() {
         final int particleCount = particleSystem.getParticleCount();
 
         // Log.d("GameWorld", "about to draw " + particleCount + " particles");
@@ -134,8 +131,7 @@ public class GameWorld {
         }
     }
 
-    public synchronized void update()
-    {
+    public synchronized void update() {
         // advance the physics simulation
         world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, PARTICLE_ITERATIONS);
         // handle touch events
@@ -143,8 +139,7 @@ public class GameWorld {
             touchConsumer.consumeTouchEvent(event);
     }
 
-    public synchronized void render()
-    {
+    public synchronized void render() {
         // clear the screen (with black)
         canvas.drawARGB(255, 0, 0, 0);
    //     for (GameObject obj: objects)
@@ -158,8 +153,7 @@ public class GameWorld {
         return (x-physicalSize.xmin)/physicalSize.width*bufferWidth;
     }
 
-    public float toPixelsY(float y)
-    {
+    public float toPixelsY(float y) {
         return (y-physicalSize.ymin)/physicalSize.height*bufferHeight;
     }
 

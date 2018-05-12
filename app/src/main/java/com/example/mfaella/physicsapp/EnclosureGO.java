@@ -14,18 +14,14 @@ import com.google.fpl.liquidfun.PolygonShape;
  *
  * Created by mfaella on 27/02/16.
  */
-public class EnclosureGO extends GameObject
-{
+public class EnclosureGO extends GameObject {
     private static final float THICKNESS = 1;
 
-    private Paint paint = new Paint();
-    private float xmin, xmax, ymin, ymax;
-    private float screen_xmin, screen_xmax, screen_ymin, screen_ymax;
+    private final Paint paint = new Paint();
+    private final float screen_xmin, screen_xmax, screen_ymin, screen_ymax;
 
-    public EnclosureGO(GameWorld gw, float xmin, float xmax, float ymin, float ymax)
-    {
+    public EnclosureGO(GameWorld gw, float xmin, float xmax, float ymin, float ymax) {
      //   super(gw);
-        this.xmin = xmin; this.xmax = xmax; this.ymin = ymin; this.ymax = ymax;
         this.screen_xmin = gw.toPixelsX(xmin+THICKNESS);
         this.screen_xmax = gw.toPixelsX(xmax-THICKNESS);
         this.screen_ymin = gw.toPixelsY(ymin+THICKNESS);

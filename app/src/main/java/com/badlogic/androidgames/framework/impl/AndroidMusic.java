@@ -9,15 +9,15 @@ import android.media.MediaPlayer.OnCompletionListener;
 import com.badlogic.androidgames.framework.Music;
 
 public class AndroidMusic implements Music, OnCompletionListener {
-    MediaPlayer mediaPlayer;
-    boolean isPrepared = false;
+    private final MediaPlayer mediaPlayer;
+    private boolean isPrepared;
 
     public AndroidMusic(AssetFileDescriptor assetDescriptor) {
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(assetDescriptor.getFileDescriptor());
-                    //assetDescriptor.getStartOffset(),
-                    //assetDescriptor.getLength());
+            //assetDescriptor.getStartOffset(),
+            //assetDescriptor.getLength());
             mediaPlayer.prepare();
             isPrepared = true;
             mediaPlayer.setOnCompletionListener(this);

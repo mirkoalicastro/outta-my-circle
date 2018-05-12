@@ -19,23 +19,27 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidGraphics implements Graphics {
-    AssetManager assets;
-    Bitmap frameBuffer;
-    Canvas canvas;
-    Paint paint;
-    Rect srcRect = new Rect();
-    Rect dstRect = new Rect();
+    private final AssetManager assets;
+    private final Bitmap frameBuffer;
+    private final Canvas canvas;
+    private final Paint paint;
+    private final Rect srcRect;
+    private final Rect dstRect;
+    private final Options options;
 
     public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) {
         this.assets = assets;
         this.frameBuffer = frameBuffer;
         this.canvas = new Canvas(frameBuffer);
         this.paint = new Paint();
+        this.srcRect = new Rect();
+        this.dstRect = new Rect();
+        this.options = new Options();
     }
 
     @Override
     public Pixmap newPixmap(String fileName, PixmapFormat format) {
-        Config config = null;
+        Config config;
         if (format == PixmapFormat.RGB565)
             config = Config.RGB_565;
         else if (format == PixmapFormat.ARGB4444)
@@ -43,11 +47,10 @@ public class AndroidGraphics implements Graphics {
         else
             config = Config.ARGB_8888;
 
-        Options options = new Options();
         options.inPreferredConfig = config;
 
         InputStream in = null;
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         try {
             in = assets.open(fileName);
             bitmap = BitmapFactory.decodeStream(in);
@@ -60,6 +63,7 @@ public class AndroidGraphics implements Graphics {
                 try {
                     in.close();
                 } catch (IOException e) {
+
                 }
             }
         }

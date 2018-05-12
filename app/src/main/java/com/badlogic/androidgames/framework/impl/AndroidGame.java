@@ -17,12 +17,12 @@ import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Screen;
 
 public abstract class AndroidGame extends Activity implements Game {
-    AndroidFastRenderView renderView;
-    Graphics graphics;
-    Audio audio;
-    Input input;
-    FileIO fileIO;
-    Screen screen;
+    private AndroidFastRenderView renderView;
+    private Graphics graphics;
+    private Audio audio;
+    private Input input;
+    private FileIO fileIO;
+    private Screen screen;
 
     @Override
     public void display() {
@@ -39,7 +39,7 @@ public abstract class AndroidGame extends Activity implements Game {
         boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         int frameBufferWidth = isLandscape ? 480 : 320;
         int frameBufferHeight = isLandscape ? 320 : 480;
-        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.RGB_565);
+        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.ARGB_8888); //was RGB_565
         Point dim = new Point();
         getWindowManager().getDefaultDisplay().getSize(dim);
         float scaleX = frameBufferWidth / dim.x;

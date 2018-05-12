@@ -9,8 +9,7 @@ import com.example.mfaella.physicsapp.entitycomponent.PositionComponent;
 class BoxDrawableComponent extends DrawableComponent {
     @Override
     public void draw(Canvas canvas) {
-        PositionComponent pos = (PositionComponent)
-                owner.getComponent(Component.Type.Position);
+        PositionComponent pos = (PositionComponent) owner.getComponent(Component.Type.Position);
         float x = pos.x;
 
         //TODO draaaaaaw

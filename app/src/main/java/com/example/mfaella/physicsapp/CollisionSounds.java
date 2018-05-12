@@ -20,8 +20,7 @@ public class CollisionSounds {
         return a.hashCode() ^ b.hashCode();
     }
 
-    public static void init(Audio audio)
-    {
+    public static void init(Audio audio) {
         metallicSound = audio.newSound("urto1.wav");
         dumbSound = audio.newSound("urto2.wav");
         map = new SparseArray<>();
@@ -30,8 +29,7 @@ public class CollisionSounds {
         map.put(myHash(DynamicBoxGO.class,EnclosureGO.class), dumbSound);
     }
 
-    public static Sound getSound(Class<?> a, Class<?> b)
-    {
+    public static Sound getSound(Class<?> a, Class<?> b) {
         int hash = myHash(a, b);
         return map.get(hash);
     }

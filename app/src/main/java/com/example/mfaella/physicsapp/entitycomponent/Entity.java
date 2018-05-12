@@ -4,7 +4,11 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Entity {
-    private Map<Component.Type, Component> components = new EnumMap<Component.Type, Component>(Component.Type.class);
+    private final Map<Component.Type, Component> components;
+
+    public Entity() {
+        components = new EnumMap<>(Component.Type.class);
+    }
 
     public void addComponent(Component c) {
         c.setOwner(this);
