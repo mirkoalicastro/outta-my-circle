@@ -33,7 +33,7 @@ public class GameWorld {
 
     // Simulation
     private final List<GameObject> objects;
-    private final World world;
+    final World world;
     private final Box physicalSize;
     private final ContactListener contactListener; // kept to prevent GC
     private final TouchConsumer touchConsumer;

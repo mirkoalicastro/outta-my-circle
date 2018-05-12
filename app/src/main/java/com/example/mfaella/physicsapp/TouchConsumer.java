@@ -46,8 +46,7 @@ public class TouchConsumer {
         this.offsetY = offsetY;
     }
 
-    public void consumeTouchEvent(Input.TouchEvent event)
-    {
+    public void consumeTouchEvent(Input.TouchEvent event) {
         switch (event.type) {
             case Input.TouchEvent.TOUCH_DOWN:
                 consumeTouchDown(event);
