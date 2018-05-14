@@ -3,17 +3,10 @@ package com.example.mfaella.physicsapp;
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Screen;
 
-public class SinglePlayerScreen extends Screen {
-    private final World world;
-    public SinglePlayerScreen(Game game) {
+public abstract class ClientServerScreen extends Screen {
+
+    public ClientServerScreen(Game game) {
         super(game);
-        world = new World();
-
-    }
-
-    @Override
-    public void update(float deltaTime) {
-
     }
 
     @Override
