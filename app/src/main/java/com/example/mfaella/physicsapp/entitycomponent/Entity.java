@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Entity {
+    public float x, y;
     private final Map<Component.Type, Component> components;
 
     public Entity() {
