@@ -29,15 +29,12 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
 
     @Override
     public void update(float deltaTime) {
-        Assets.backgroundTile = g.newShader("bgtile.png", PixmapFormat.ARGB8888);
+        Assets.backgroundTile = g.newTile("bgtile.png", PixmapFormat.ARGB8888);
         Assets.loading = g.newPixmap("loading.png", PixmapFormat.ARGB8888);
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         setProgress(30);
         Log.d("LoadingScreenImpl", "intanto avanzo!!!!");
-        setProgress(70);
-        setProgress(10);
         Log.d("LoadingScreenImpl", "e finisco pure!!!!");
-        setProgress(100);
         // long to = Calendar.getInstance().getTime().getTime()+50;
         // while(Calendar.getInstance().getTime().getTime() < to);
         // Assets.click = game.getAudio().newSound("click.ogg");

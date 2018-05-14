@@ -14,7 +14,6 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     volatile boolean running = false;
     private final Rect dstRect = new Rect();
 
-
     public AndroidFastRenderView(AndroidGame game, Bitmap framebuffer) {
         super(game);
         this.game = game;

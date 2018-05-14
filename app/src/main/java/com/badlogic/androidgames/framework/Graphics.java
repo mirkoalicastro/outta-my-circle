@@ -1,12 +1,10 @@
 package com.badlogic.androidgames.framework;
 
-import android.graphics.Shader;
-
 public interface Graphics {
     enum PixmapFormat {
         ARGB8888, ARGB4444, RGB565
     }
-    Shader newShader(String fileName, PixmapFormat format);
+    Tile newTile(String fileName, PixmapFormat format);
 
     Pixmap newPixmap(String fileName, PixmapFormat format);
 
@@ -22,7 +20,9 @@ public interface Graphics {
 
     void drawPixmap(Pixmap pixmap, int x, int y);
 
-    boolean drawTile(Shader shader, int x, int y, int width, int height);
+    void drawCircle(int x, int y, int radius, int color);
+
+    boolean drawTile(Tile tile, int x, int y, int width, int height);
 
     int getWidth();
 
