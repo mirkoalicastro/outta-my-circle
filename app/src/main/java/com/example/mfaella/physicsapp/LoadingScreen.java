@@ -16,12 +16,14 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
 
     @Override
     public void onProgress(int progress) {
+        int x = (g.getWidth()-Assets.loading.getWidth())/2;
+        int y = (g.getHeight()-Assets.loading.getHeight())/2;
         //x: 13, y: 254, width: 290, height: 19
-        g.drawPixmap(Assets.loading, 10,250);
-        float vals = 290.0f*(((float)progress)/100.0f);
-        int val = (int)vals;
+        g.drawPixmap(Assets.loading, x,y);
+        int val = 475;
+        float vals = (float)val*(((float)progress)/100.0f);
         Log.d("LoadingScreenImpl", "VALORE: " + val + " __ PROGRESS: " + progress);
-        g.drawRect(13+val,254,291-val,19, Color.BLACK);
+        g.drawRect((int)vals+11+x,y+12,val-(int)vals,31, Color.BLACK);
         game.display();
     }
 
