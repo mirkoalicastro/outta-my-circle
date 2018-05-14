@@ -25,6 +25,4 @@ class CirclePhysicsComponent extends LiquidFunPhysicsComponent{
         box.delete();
         fixtureDef.delete();
     }*/
-
-    private Body body;
 }
