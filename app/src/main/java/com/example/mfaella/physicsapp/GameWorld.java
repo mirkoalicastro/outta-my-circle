@@ -41,7 +41,7 @@ public class GameWorld {
     private final int bufferOffset; // an architecture-dependent parameter
 
     // Particles
-    private final ParticleSystem particleSystem;
+    final ParticleSystem particleSystem;
     private final byte[] particlePositions;
     private final ByteBuffer particlePositionsBuffer;
     private static final int BYTESPERPARTICLE = 8;

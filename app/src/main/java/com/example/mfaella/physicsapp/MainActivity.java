@@ -22,7 +22,6 @@ import java.nio.ByteOrder;
 
 public class MainActivity extends Activity {
 
-    private MyThread t; // just for fun, unrelated to the rest
     private AndroidFastRenderView renderView;
     private Audio audio;
     private Music backgroundMusic;
@@ -93,10 +92,6 @@ public class MainActivity extends Activity {
         // setter needed due to cyclic dependency
         gw.setTouchHandler(touch);
 
-        // unrelated to the rest, just to show interaction with another thread
-        t = new MyThread(gw);
-        t.start();
-
         Log.i(getString(R.string.app_name), "onCreate complete, Endianness = " +
                 (ByteOrder.nativeOrder()==ByteOrder.BIG_ENDIAN? "Big Endian" : "Little Endian"));
     }
@@ -111,9 +106,9 @@ public class MainActivity extends Activity {
         // persistence example
         SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(getString(R.string.important_info), t.counter);
+        editor.putInt(getString(R.string.important_info), 4);
         editor.commit();
-        Log.i("Main thread", "saved counter " + t.counter);
+        Log.i("Main thread", "saved counter " + 4);
     }
 
     @Override
@@ -133,7 +128,5 @@ public class MainActivity extends Activity {
         // persistence example
         SharedPreferences pref = getPreferences(Context.MODE_PRIVATE);
         int counter = pref.getInt(getString(R.string.important_info), -1); // default value
-        Log.i("Main thread", "read counter " + counter);
-        t.counter = counter;
     }
 }

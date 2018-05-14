@@ -9,6 +9,8 @@ import com.google.fpl.liquidfun.MouseJoint;
 import com.google.fpl.liquidfun.MouseJointDef;
 import com.google.fpl.liquidfun.QueryCallback;
 
+import java.nio.ByteBuffer;
+
 
 public class TouchConsumer {
 
@@ -26,8 +28,7 @@ public class TouchConsumer {
     // physical units, semi-side of a square around the touch point
     private final static float POINTER_SIZE = 0.5f;
 
-    private class TouchQueryCallback extends QueryCallback
-    {
+    private class TouchQueryCallback extends QueryCallback {
         public boolean reportFixture(Fixture fixture) {
             touchedFixture = fixture;
             return true;
