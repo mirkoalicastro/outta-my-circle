@@ -4,6 +4,8 @@ import com.example.mfaella.physicsapp.entitycomponent.PhysicsComponent;
 import com.google.fpl.liquidfun.Body;
 
 class CirclePhysicsComponent extends PhysicsComponent{
+    public float radius;
+
     /*public CirclePhysicsComponent() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setPosition(owner.x, owner.y);
