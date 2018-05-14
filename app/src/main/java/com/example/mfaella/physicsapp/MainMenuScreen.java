@@ -68,6 +68,7 @@ public class MainMenuScreen extends Screen {
     public void present(float deltaTime) {
         Graphics g = game.getGraphics();
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
+        //TODO forse dovrebbe disegnare graphics direttamente, o forse no.
         sound.draw(g, android.graphics.Color.RED);
         start.draw(g, android.graphics.Color.BLUE);
 //        g.drawPixmap(Assets.background, 0, 0);
