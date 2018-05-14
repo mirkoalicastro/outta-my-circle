@@ -15,24 +15,23 @@ import com.badlogic.androidgames.framework.Pool;
 import com.badlogic.androidgames.framework.Pool.PoolObjectFactory;
 
 public class MultiTouchHandler implements TouchHandler {
-    boolean[] isTouching = new boolean[20];
-    int[] touchX = new int[20];
-    int[] touchY = new int[20];
-    Pool<TouchEvent> touchEventPool;
-    List<TouchEvent> touchEvents = new ArrayList<TouchEvent>();
-    List<TouchEvent> touchEventsBuffer = new ArrayList<TouchEvent>();
-    float scaleX;
-    float scaleY;
+    private final boolean[] isTouching = new boolean[20];
+    private final int[] touchX = new int[20];
+    private final int[] touchY = new int[20];
+    private final Pool<TouchEvent> touchEventPool;
+    private List<TouchEvent> touchEvents = new ArrayList<TouchEvent>();
+    private List<TouchEvent> touchEventsBuffer = new ArrayList<TouchEvent>();
+    private final float scaleX;
+    private final float scaleY;
     private static final int MAXPOOLSIZE = 100;
 
     public MultiTouchHandler(View view, float scaleX, float scaleY) {
-        PoolObjectFactory<TouchEvent> factory = new PoolObjectFactory<TouchEvent>() {
+        touchEventPool = new Pool<TouchEvent>(new PoolObjectFactory<TouchEvent>() {
             @Override
             public TouchEvent createObject() {
                 return new TouchEvent();
             }
-        };
-        touchEventPool = new Pool<TouchEvent>(factory, MAXPOOLSIZE);
+        }, MAXPOOLSIZE);
         view.setOnTouchListener(this);
 
         this.scaleX = scaleX;
@@ -47,49 +46,43 @@ public class MultiTouchHandler implements TouchHandler {
         TouchEvent touchEvent;
 
         switch (action) {
-        case MotionEvent.ACTION_DOWN:
-        case MotionEvent.ACTION_POINTER_DOWN:
-            touchEvent = touchEventPool.newObject();
-            touchEvent.type = TouchEvent.TOUCH_DOWN;
-            touchEvent.pointer = pointerId;
-            touchEvent.x = touchX[pointerId] = (int) (event
-                    .getX(pointerIndex) * scaleX);
-            touchEvent.y = touchY[pointerId] = (int) (event
-                    .getY(pointerIndex) * scaleY);
-            isTouching[pointerId] = true;
-            touchEventsBuffer.add(touchEvent);
-            break;
-
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_POINTER_UP:
-        case MotionEvent.ACTION_CANCEL:
-            touchEvent = touchEventPool.newObject();
-            touchEvent.type = TouchEvent.TOUCH_UP;
-            touchEvent.pointer = pointerId;
-            touchEvent.x = touchX[pointerId] = (int) (event
-                    .getX(pointerIndex) * scaleX);
-            touchEvent.y = touchY[pointerId] = (int) (event
-                    .getY(pointerIndex) * scaleY);
-            isTouching[pointerId] = false;
-            touchEventsBuffer.add(touchEvent);
-            break;
-
-        case MotionEvent.ACTION_MOVE:
-            int pointerCount = event.getPointerCount();
-            for (int i = 0; i < pointerCount; i++) {
-                pointerIndex = i;
-                pointerId = event.getPointerId(pointerIndex);
-
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
                 touchEvent = touchEventPool.newObject();
-                touchEvent.type = TouchEvent.TOUCH_DRAGGED;
+                touchEvent.type = TouchEvent.TOUCH_DOWN;
                 touchEvent.pointer = pointerId;
-                touchEvent.x = touchX[pointerId] = (int) (event
-                        .getX(pointerIndex) * scaleX);
-                touchEvent.y = touchY[pointerId] = (int) (event
-                        .getY(pointerIndex) * scaleY);
+                touchEvent.x = touchX[pointerId] = (int) (event.getX(pointerIndex) * scaleX);
+                touchEvent.y = touchY[pointerId] = (int) (event.getY(pointerIndex) * scaleY);
+                isTouching[pointerId] = true;
                 touchEventsBuffer.add(touchEvent);
-            }
-            break;
+                break;
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_CANCEL:
+                touchEvent = touchEventPool.newObject();
+                touchEvent.type = TouchEvent.TOUCH_UP;
+                touchEvent.pointer = pointerId;
+                touchEvent.x = touchX[pointerId] = (int) (event.getX(pointerIndex) * scaleX);
+                touchEvent.y = touchY[pointerId] = (int) (event.getY(pointerIndex) * scaleY);
+                isTouching[pointerId] = false;
+                touchEventsBuffer.add(touchEvent);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                int pointerCount = event.getPointerCount();
+                for (int i = 0; i < pointerCount; i++) {
+                    pointerIndex = i;
+                    pointerId = event.getPointerId(pointerIndex);
+
+                    touchEvent = touchEventPool.newObject();
+                    touchEvent.type = TouchEvent.TOUCH_DRAGGED;
+                    touchEvent.pointer = pointerId;
+                    touchEvent.x = touchX[pointerId] = (int) (event.getX(pointerIndex) * scaleX);
+                    touchEvent.y = touchY[pointerId] = (int) (event.getY(pointerIndex) * scaleY);
+                    touchEventsBuffer.add(touchEvent);
+                }
+                break;
         }
 
         return true;
@@ -124,10 +117,10 @@ public class MultiTouchHandler implements TouchHandler {
         // empty the old list and return the events to the pool
         for (TouchEvent event: touchEvents)
                 touchEventPool.free(event);
+        List<TouchEvent> tmp = touchEventsBuffer;
         touchEvents.clear();
-        // copy the event buffer into the list
-        touchEvents.addAll(touchEventsBuffer);
-        touchEventsBuffer.clear();
+        touchEventsBuffer = touchEvents;
+        touchEvents = tmp;
         return touchEvents;
     }
 }

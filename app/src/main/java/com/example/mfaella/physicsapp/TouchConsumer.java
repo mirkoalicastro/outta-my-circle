@@ -9,6 +9,8 @@ import com.google.fpl.liquidfun.MouseJoint;
 import com.google.fpl.liquidfun.MouseJointDef;
 import com.google.fpl.liquidfun.QueryCallback;
 
+import java.nio.ByteBuffer;
+
 
 public class TouchConsumer {
 
@@ -26,8 +28,7 @@ public class TouchConsumer {
     // physical units, semi-side of a square around the touch point
     private final static float POINTER_SIZE = 0.5f;
 
-    private class TouchQueryCallback extends QueryCallback
-    {
+    private class TouchQueryCallback extends QueryCallback {
         public boolean reportFixture(Fixture fixture) {
             touchedFixture = fixture;
             return true;
@@ -46,8 +47,7 @@ public class TouchConsumer {
         this.offsetY = offsetY;
     }
 
-    public void consumeTouchEvent(Input.TouchEvent event)
-    {
+    public void consumeTouchEvent(Input.TouchEvent event) {
         switch (event.type) {
             case Input.TouchEvent.TOUCH_DOWN:
                 consumeTouchDown(event);
@@ -79,7 +79,7 @@ public class TouchConsumer {
             Object userData = touchedBody.getUserData();
             if (userData != null) {
                 GameObject touchedGO = (GameObject) userData;
-                Log.d("MultiTouchHandler", "touched body " + touchedGO.name);
+//                Log.d("MultiTouchHandler", "touched body " + touchedGO.name);
                 mouseJointDef.setBodyA(touchedBody); // irrelevant but necessary
                 mouseJointDef.setBodyB(touchedBody);
                 mouseJointDef.setMaxForce(500 * touchedBody.getMass());

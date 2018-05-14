@@ -1,5 +1,6 @@
 package com.example.mfaella.physicsapp;
 
+import android.content.Entity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;

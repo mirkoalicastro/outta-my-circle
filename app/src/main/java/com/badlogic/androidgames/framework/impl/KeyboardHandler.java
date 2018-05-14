@@ -11,19 +11,19 @@ import com.badlogic.androidgames.framework.Pool;
 import com.badlogic.androidgames.framework.Pool.PoolObjectFactory;
 
 public class KeyboardHandler implements OnKeyListener {
-    boolean[] pressedKeys = new boolean[128];
-    Pool<KeyEvent> keyEventPool;
-    List<KeyEvent> keyEventsBuffer = new ArrayList<KeyEvent>();    
-    List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
+    private final boolean[] pressedKeys = new boolean[128];
+    private final Pool<KeyEvent> keyEventPool;
+    private List<KeyEvent> keyEventsBuffer = new ArrayList<KeyEvent>();
+    private List<KeyEvent> keyEvents = new ArrayList<KeyEvent>();
+    private static final int MAXPOOLSIZE = 100;
 
     public KeyboardHandler(View view) {
-        PoolObjectFactory<KeyEvent> factory = new PoolObjectFactory<KeyEvent>() {
+        keyEventPool = new Pool<KeyEvent>(new PoolObjectFactory<KeyEvent>() {
             @Override
             public KeyEvent createObject() {
                 return new KeyEvent();
             }
-        };
-        keyEventPool = new Pool<KeyEvent>(factory, 100);
+        }, MAXPOOLSIZE);
         view.setOnKeyListener(this);
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -64,10 +64,13 @@ public class KeyboardHandler implements OnKeyListener {
             int len = keyEvents.size();
             for (int i = 0; i < len; i++)
                 keyEventPool.free(keyEvents.get(i));
+
+            List<KeyEvent> tmp = keyEventsBuffer;
             keyEvents.clear();
-            keyEvents.addAll(keyEventsBuffer);
-            keyEventsBuffer.clear();
+            keyEventsBuffer = keyEvents;
+            keyEvents = tmp;
             return keyEvents;
+
         }
     }
 }

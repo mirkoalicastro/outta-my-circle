@@ -7,7 +7,7 @@ import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidPixmap implements Pixmap {
     Bitmap bitmap;
-    PixmapFormat format;
+    private final PixmapFormat format;
     
     public AndroidPixmap(Bitmap bitmap, PixmapFormat format) {
         this.bitmap = bitmap;
@@ -32,5 +32,6 @@ public class AndroidPixmap implements Pixmap {
     @Override
     public void dispose() {
         bitmap.recycle();
-    }      
+    }
+
 }

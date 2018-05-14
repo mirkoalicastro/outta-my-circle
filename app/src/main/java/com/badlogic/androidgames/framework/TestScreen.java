@@ -14,7 +14,7 @@ import com.badlogic.androidgames.framework.Input.KeyEvent;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 
 class TestScreen extends Screen {
-    long startTime = System.nanoTime();
+    private long startTime = System.nanoTime();
     int frames;
     Pixmap bob;
     Pixmap bobAlpha;
@@ -108,5 +108,5 @@ class TestScreen extends Screen {
     public void dispose() {
         Log.d("MrNom", "dispose");
         music.dispose();
-    }            
+    }
 }
