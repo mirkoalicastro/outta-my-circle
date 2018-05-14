@@ -15,6 +15,7 @@ import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Screen;
+import com.example.mfaella.physicsapp.GameObject;
 
 public abstract class AndroidGame extends Activity implements Game {
     private AndroidFastRenderView renderView;
