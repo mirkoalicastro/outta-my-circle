@@ -12,6 +12,7 @@ public class MainMenuScreen extends Screen {
 
     @Override
     public void update(float deltaTime) {
+        game.setScreen(new SinglePlayerScreen(game));
 
         Graphics g = game.getGraphics();
 
