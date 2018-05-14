@@ -29,7 +29,7 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
 
     @Override
     public void update(float deltaTime) {
-        Assets.backgroundTile = g.newShader("bgtile.png", PixmapFormat.ARGB8888);
+        Assets.backgroundTile = g.newTile("bgtile.png", PixmapFormat.ARGB8888);
         Assets.loading = g.newPixmap("loading.png", PixmapFormat.ARGB8888);
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         setProgress(30);

@@ -17,6 +17,7 @@ import android.graphics.Shader;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
+import com.badlogic.androidgames.framework.Tile;
 
 public class AndroidGraphics implements Graphics {
     private final AssetManager assets;
@@ -78,9 +79,8 @@ public class AndroidGraphics implements Graphics {
         return new AndroidPixmap(bitmap, format);
     }
 
-    public Shader newShader(String fileName, PixmapFormat format) {
-        AndroidPixmap pixmap = (AndroidPixmap) newPixmap(fileName, format);
-        return new BitmapShader(pixmap.bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+    public Tile newTile(String fileName, PixmapFormat format) {
+        return new AndroidTile((AndroidPixmap) newPixmap(fileName, format));
     }
 
     @Override
@@ -128,8 +128,15 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public boolean drawTile(Shader shader, int x, int y, int width, int height) {
-        paint.setShader(shader);
+    public void drawCircle(int x, int y, int radius, int color) {
+        paint.setColor(color);
+        paint.setStyle(Style.FILL);
+        canvas.drawCircle(x,y,radius,paint);
+    }
+
+    @Override
+    public boolean drawTile(Tile tile, int x, int y, int width, int height) {
+        paint.setShader(((AndroidTile)tile).shader);
         canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
         paint.setShader(null);
         return true;

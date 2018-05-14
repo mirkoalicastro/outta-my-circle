@@ -1,10 +1,9 @@
 package com.example.mfaella.physicsapp;
 
-import android.graphics.Shader;
-
 import com.badlogic.androidgames.framework.Pixmap;
+import com.badlogic.androidgames.framework.Tile;
 
 class Assets {
-    public static Shader backgroundTile;
+    public static Tile backgroundTile;
     public static Pixmap loading;
 }

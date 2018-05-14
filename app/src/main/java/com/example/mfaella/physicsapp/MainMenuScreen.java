@@ -6,14 +6,14 @@ import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.Screen;
 
 public class MainMenuScreen extends Screen {
+
     public MainMenuScreen(Game game) {
+
         super(game);
     }
 
     @Override
     public void update(float deltaTime) {
-        game.setScreen(new ClientScreen(game));
-
         Graphics g = game.getGraphics();
 
         game.getInput().getKeyEvents();
