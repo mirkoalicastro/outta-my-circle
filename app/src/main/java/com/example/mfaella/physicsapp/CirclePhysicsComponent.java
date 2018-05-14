@@ -1,9 +1,10 @@
 package com.example.mfaella.physicsapp;
 
-import com.example.mfaella.physicsapp.entitycomponent.PhysicsComponent;
 import com.google.fpl.liquidfun.Body;
 
-class CirclePhysicsComponent extends PhysicsComponent{
+class CirclePhysicsComponent extends LiquidFunPhysicsComponent{
+    public float radius;
+
     /*public CirclePhysicsComponent() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.setPosition(owner.x, owner.y);
@@ -24,6 +25,4 @@ class CirclePhysicsComponent extends PhysicsComponent{
         box.delete();
         fixtureDef.delete();
     }*/
-
-    private Body body;
 }
