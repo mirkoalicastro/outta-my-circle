@@ -1,9 +1,8 @@
-package com.example.mfaella.physicsapp;
+package com.example.mfaella.physicsapp.entitycomponent.impl;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.example.mfaella.physicsapp.entitycomponent.Component;
 import com.example.mfaella.physicsapp.entitycomponent.DrawableComponent;
 import com.example.mfaella.physicsapp.entitycomponent.PositionComponent;
 

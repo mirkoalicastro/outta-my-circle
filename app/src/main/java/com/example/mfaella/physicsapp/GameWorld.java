@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.TouchHandler;
+import com.example.mfaella.physicsapp.entitycomponent.impl.GameObject;
 import com.google.fpl.liquidfun.ContactListener;
 import com.google.fpl.liquidfun.ParticleSystem;
 import com.google.fpl.liquidfun.ParticleSystemDef;

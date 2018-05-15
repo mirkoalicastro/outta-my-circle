@@ -4,9 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.google.fpl.liquidfun.Body;
+import com.example.mfaella.physicsapp.entitycomponent.impl.GameObject;
 import com.google.fpl.liquidfun.BodyDef;
-import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.PolygonShape;
 
 /**

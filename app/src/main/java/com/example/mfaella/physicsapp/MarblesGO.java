@@ -5,15 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.google.fpl.liquidfun.BodyDef;
-import com.google.fpl.liquidfun.BodyType;
-import com.google.fpl.liquidfun.FixtureDef;
+import com.example.mfaella.physicsapp.entitycomponent.impl.GameObject;
 import com.google.fpl.liquidfun.ParticleGroup;
 import com.google.fpl.liquidfun.ParticleGroupDef;
 import com.google.fpl.liquidfun.ParticleSystem;
 import com.google.fpl.liquidfun.PolygonShape;
-
-import java.nio.ByteBuffer;
 
 /**
  * A singleton.

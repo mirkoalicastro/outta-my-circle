@@ -3,13 +3,12 @@ package com.example.mfaella.physicsapp;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Input;
+import com.example.mfaella.physicsapp.entitycomponent.impl.GameObject;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Fixture;
 import com.google.fpl.liquidfun.MouseJoint;
 import com.google.fpl.liquidfun.MouseJointDef;
 import com.google.fpl.liquidfun.QueryCallback;
-
-import java.nio.ByteBuffer;
 
 
 public class TouchConsumer {

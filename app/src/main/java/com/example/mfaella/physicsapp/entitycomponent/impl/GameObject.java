@@ -1,4 +1,4 @@
-package com.example.mfaella.physicsapp;
+package com.example.mfaella.physicsapp.entitycomponent.impl;
 
 import com.example.mfaella.physicsapp.entitycomponent.*;
 
@@ -7,5 +7,5 @@ import com.example.mfaella.physicsapp.entitycomponent.*;
  */
 public abstract class GameObject extends Entity{
     //protected String name;
-    public transient int id;
+    public int id;
 }

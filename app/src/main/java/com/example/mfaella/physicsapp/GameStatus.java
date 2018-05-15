@@ -1,5 +1,7 @@
 package com.example.mfaella.physicsapp;
 
+import com.example.mfaella.physicsapp.entitycomponent.impl.GameObject;
+
 import java.util.LinkedList;
 import java.util.List;
 
