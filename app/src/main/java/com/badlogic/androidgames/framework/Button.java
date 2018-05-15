@@ -6,6 +6,6 @@ public interface Button {
     int getHeight();
     int getX();
     int getY();
-    public void draw(Graphics graphics, int color);
-    public void draw(Graphics graphics, Pixmap pixmap);
+    void draw(Graphics graphics, int color);
+    void draw(Graphics graphics, Pixmap pixmap);
 }
