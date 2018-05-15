@@ -11,5 +11,4 @@ import java.util.List;
  */
 public class LiquidFunPhysicsComponent extends PhysicsComponent{
     protected Body body;
-    List<Fixture> fixs = null;
 }
