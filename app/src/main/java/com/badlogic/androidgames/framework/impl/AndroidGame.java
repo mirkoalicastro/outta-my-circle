@@ -15,7 +15,6 @@ import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Screen;
-import com.example.mfaella.physicsapp.GameObject;
 
 public abstract class AndroidGame extends Activity implements Game {
     private AndroidFastRenderView renderView;
@@ -43,8 +42,8 @@ public abstract class AndroidGame extends Activity implements Game {
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.ARGB_8888); //was RGB_565
         Point dim = new Point();
         getWindowManager().getDefaultDisplay().getSize(dim);
-        float scaleX = frameBufferWidth / dim.x;
-        float scaleY = frameBufferHeight / dim.y;
+        float scaleX = (float)frameBufferWidth / (float)dim.x; //Cast to float!
+        float scaleY = (float)frameBufferHeight / (float)dim.y; //Cast to float!
 
         renderView = new AndroidFastRenderView(this, frameBuffer);
         graphics = new AndroidGraphics(getAssets(), frameBuffer);

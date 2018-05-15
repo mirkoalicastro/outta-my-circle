@@ -114,8 +114,6 @@ public class MultiTouchHandler implements TouchHandler {
 
     @Override
     public synchronized List<TouchEvent> getTouchEvents() {
-        /*
-        // empty the old list and return the events to the pool
         for (TouchEvent event: touchEvents)
                 touchEventPool.free(event);
 
@@ -123,14 +121,6 @@ public class MultiTouchHandler implements TouchHandler {
         touchEvents.clear();
         touchEventsBuffer = touchEvents;
         touchEvents = tmp;
-        return touchEvents;*/
-        // empty the old list and return the events to the pool
-        for (TouchEvent event: touchEvents)
-            touchEventPool.free(event);
-        touchEvents.clear();
-        // copy the event buffer into the list
-        touchEvents.addAll(touchEventsBuffer);
-        touchEventsBuffer.clear();
         return touchEvents;
 
     }

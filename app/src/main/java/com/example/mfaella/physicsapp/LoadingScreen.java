@@ -22,7 +22,6 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
         g.drawPixmap(Assets.loading, x,y);
         int val = 475;
         float vals = (float)val*(((float)progress)/100.0f);
-        Log.d("LoadingScreenImpl", "VALORE: " + val + " __ PROGRESS: " + progress);
         g.drawRect((int)vals+11+x,y+12,val-(int)vals,31, Color.BLACK);
         game.display();
     }
@@ -33,8 +32,6 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
         Assets.loading = g.newPixmap("loading.png", PixmapFormat.ARGB8888);
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         setProgress(30);
-        Log.d("LoadingScreenImpl", "intanto avanzo!!!!");
-        Log.d("LoadingScreenImpl", "e finisco pure!!!!");
         // long to = Calendar.getInstance().getTime().getTime()+50;
         // while(Calendar.getInstance().getTime().getTime() < to);
         // Assets.click = game.getAudio().newSound("click.ogg");
