@@ -1,5 +1,7 @@
 package com.example.mfaella.physicsapp.entitycomponent;
 
+import android.graphics.Paint;
+
 import com.example.mfaella.physicsapp.entitycomponent.impl.CircleDrawableComponent;
 import com.example.mfaella.physicsapp.entitycomponent.impl.CirclePhysicsComponent;
 import com.example.mfaella.physicsapp.entitycomponent.impl.PowerUp;
@@ -9,7 +11,6 @@ import com.google.fpl.liquidfun.World;
 public class EntityFactory{
     public static Entity createPowerUp(){
         PowerUp e = null;
-        //TODO distruggi tutto
         //serie di addComponent()
         return e;
     }
@@ -19,7 +20,11 @@ public class EntityFactory{
 
         c.addComponent(new PositionComponent(x, y));
         c.addComponent(new CirclePhysicsComponent(world, radius));
-        c.addComponent(new CircleDrawableComponent());
+
+        Paint paint = new Paint();
+        paint.setARGB(255,255,0,0);
+
+        c.addComponent(new CircleDrawableComponent(paint));
 
         return c;
     }

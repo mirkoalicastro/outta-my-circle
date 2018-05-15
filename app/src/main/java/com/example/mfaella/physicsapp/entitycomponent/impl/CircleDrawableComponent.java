@@ -8,8 +8,14 @@ import com.example.mfaella.physicsapp.entitycomponent.PositionComponent;
 
 public class CircleDrawableComponent extends DrawableComponent {
     private float x, y, radius;
+    private Paint paint;
+
+    public CircleDrawableComponent(Paint paint){
+        this.paint = paint;
+    }
+
     @Override
-    public void draw(Canvas canvas, Paint paint) {
+    public void draw(Canvas canvas) {
         PositionComponent pos = (PositionComponent)
                 owner.getComponent(Type.Position);
         x = pos.x;
@@ -18,6 +24,5 @@ public class CircleDrawableComponent extends DrawableComponent {
         radius = ((CirclePhysicsComponent)owner.getComponent(Type.Physics)).radius;
 
         canvas.drawCircle(x, y, radius, paint);
-
     }
 }
