@@ -28,13 +28,13 @@ public class MainMenuScreen extends Screen {
         for(TouchEvent event: game.getInput().getTouchEvents()) {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(sound.inBounds(event)) {
-                    Log.d("AGLIO","sound");
+                    Log.d("MainMenuScreen","sound");
                     Settings.soundEnabled = !Settings.soundEnabled;
 //                    if(Settings.soundEnabled)
   //                      Assets.click.play(1);
                 }
                 if(start.inBounds(event)) {
-                    Log.d("AGLIO","start");
+                    Log.d("MainMenuScreen","start");
                     if(colorStart == android.graphics.Color.BLUE)
                         colorStart = android.graphics.Color.MAGENTA;
                     else

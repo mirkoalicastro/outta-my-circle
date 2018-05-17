@@ -6,9 +6,10 @@ import android.util.Log;
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
+import com.badlogic.androidgames.framework.LoadingScreen;
 
-public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingScreen {
-    public LoadingScreen(Game game) {
+public class StartScreen extends LoadingScreen {
+    public StartScreen(Game game) {
         super(game);
     }
 
@@ -31,11 +32,8 @@ public class LoadingScreen extends com.badlogic.androidgames.framework.LoadingSc
         game.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         setProgress(70);
         Assets.click = game.getAudio().newSound("urto1.wav");
-        setProgress(100);
-        // long to = Calendar.getInstance().getTime().getTime()+50;
-        // while(Calendar.getInstance().getTime().getTime() < to);
-        // Assets.click = game.getAudio().newSound("click.ogg");
         // Settings.load(game.getFileIO());
+        setProgress(100);
         game.setScreen(new MainMenuScreen(game));
     }
 

@@ -7,6 +7,6 @@ public class OuttaMyCircleGame extends AndroidGame {
 
     @Override
     public Screen getStartScreen() {
-        return new LoadingScreen(this);
+        return new StartScreen(this);
     }
 }
