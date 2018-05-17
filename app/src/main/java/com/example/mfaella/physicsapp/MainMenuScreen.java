@@ -37,8 +37,10 @@ public class MainMenuScreen extends Screen {
                     Log.d(tag,"start");
                     if(colorStart == android.graphics.Color.BLUE)
                         colorStart = android.graphics.Color.MAGENTA;
-                    else
+                    else {
                         colorStart = android.graphics.Color.BLUE;
+                        game.setScreen(new JoyStickScreen(game));
+                    }
     //                if(Settings.soundEnabled)
       //                  Assets.click.play(1);
                     //Start lobby

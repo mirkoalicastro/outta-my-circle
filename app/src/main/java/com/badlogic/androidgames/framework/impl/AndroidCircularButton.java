@@ -6,6 +6,7 @@ import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidCircularButton implements Button {
+    //TODO x e y as center or as top left?
     private final int x,y,radius;
     public AndroidCircularButton(int x, int y, int radius) {
         this.x = x;
@@ -14,7 +15,7 @@ public class AndroidCircularButton implements Button {
     }
     @Override
     public boolean inBounds(Input.TouchEvent event) {
-        return Math.pow(Math.abs(event.x-getX()),2)+Math.pow(Math.abs(event.y-y),2)<Math.pow(radius,2);
+        return Math.pow(Math.abs(event.x-x),2)+Math.pow(Math.abs(event.y-y),2)<Math.pow(radius,2);
     }
 
     @Override
@@ -44,6 +45,6 @@ public class AndroidCircularButton implements Button {
 
     @Override
     public void draw(Graphics graphics, Pixmap pixmap) {
-        graphics.drawPixmap(pixmap, x-radius, y-radius);
+        graphics.drawPixmap(pixmap, x, y);
     }
 }
