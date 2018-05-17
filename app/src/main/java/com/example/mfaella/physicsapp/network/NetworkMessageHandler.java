@@ -2,14 +2,17 @@ package com.example.mfaella.physicsapp.network;
 import android.support.v4.util.Pools.SimplePool;
 import android.support.v4.util.Pools.Pool;
 
-public abstract class NetworkMessageHandler {
+import java.util.List;
 
-    protected Pool<GameMessage> messagePool = new SimplePool<>(10);
+public interface NetworkMessageHandler {
 
+    void writeReliable(String player, GameMessage message);
 
-    abstract void write(/*COSA?*/);
+    void writeUnreliable(String player, GameMessage message);
 
-    public abstract void broadcast();
+    void broadcastReliable(GameMessage message);
 
-    abstract GameMessage getMessage();
+    void broadcastUnreliable(GameMessage message);
+
+    List<GameMessage> getMessages();
 }
