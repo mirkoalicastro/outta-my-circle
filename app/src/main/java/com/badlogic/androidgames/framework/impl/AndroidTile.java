@@ -7,9 +7,10 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Tile;
 
 public class AndroidTile implements Tile {
-    Shader shader;
-    AndroidPixmap pixmap;
+    final Shader shader;
+    final AndroidPixmap pixmap;
     public AndroidTile(AndroidPixmap pixmap) {
+        this.pixmap = pixmap;
         shader = new BitmapShader(pixmap.bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
     }
     @Override
