@@ -15,9 +15,12 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
+    private final int radius;
+    private int pointer = -1;
 
     public AndroidJoyStick(Input input, int x, int y, int radius) {
         super(x, y, radius);
+        this.radius = radius;
         this.input = input;
         buffer = new LinkedList<>();
     }
@@ -25,9 +28,21 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     @Override
     public List<Input.TouchEvent> processAndRelease(List<Input.TouchEvent> events) {
         for (Input.TouchEvent event : events) {
-            if (inBounds(event)) {
+            if(event.type == Input.TouchEvent.TOUCH_DOWN)
+                if(Math.pow(event.x-getX(),2)+Math.pow(event.y-getY(),2)<Math.pow(radius*2,2))
+                    pointer = event.pointer;
+            if(event.type == Input.TouchEvent.TOUCH_UP && pointer == event.pointer) {
+                pointer = -1;
+                x = 0;
+                y = 0;
+            }
+            if (event.pointer == pointer) {
                 x = event.x - getX();
                 y = getY() - event.y; //TODO why reversing is ok?
+                int tmpx = Math.abs((int)((radius)*Math.cos(Math.atan2(y,x))));
+                int tmpy = Math.abs((int)((radius)*Math.sin(Math.atan2(y,x))));
+                x = Math.max(Math.min(tmpx, x), tmpx*-1);
+                y = Math.max(Math.min(tmpy, y), tmpy*-1);
                 buffer.add(event);
             }
         }
