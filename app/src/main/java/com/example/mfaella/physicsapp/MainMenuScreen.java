@@ -35,8 +35,10 @@ public class MainMenuScreen extends Screen {
                 }
                 if(start.inBounds(event)) {
                     Log.d(tag,"start");
-                    if(colorStart == android.graphics.Color.BLUE)
+                    if(colorStart == android.graphics.Color.BLUE) {
                         colorStart = android.graphics.Color.MAGENTA;
+                        game.setScreen(new MatchScreen(game));
+                    }
                     else {
                         colorStart = android.graphics.Color.BLUE;
                         game.setScreen(new JoyStickScreen(game));
