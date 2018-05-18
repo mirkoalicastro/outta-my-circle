@@ -32,13 +32,17 @@ public class EntityFactory{
         return c;
     }
 
-    public static Arena createArena(int radius){
-        Arena a = new Arena();
+    public static Arena createArena(int radius, int x, int y){
+        Arena arena = new Arena();
 
-        CircleDrawableComponent circle = new CircleDrawableComponent(graphics, radius);
-        circle.setColor(Color.CYAN);
-        a.addComponent(circle);
+        CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics, radius);
+        circleDrawableComponent.setColor(Color.CYAN);
+        arena.addComponent(circleDrawableComponent);
 
-        return a;
+        PositionComponent positionComponent = new PositionComponent(x,y);
+        positionComponent.owner = arena;
+        arena.addComponent(positionComponent);
+
+        return arena;
     }
 }

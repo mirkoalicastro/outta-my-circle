@@ -33,6 +33,9 @@ public abstract class AndroidGame extends Activity implements Game {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        System.loadLibrary("liquidfun");
+        System.loadLibrary("liquidfun_jni");
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -42,8 +45,8 @@ public abstract class AndroidGame extends Activity implements Game {
         Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.ARGB_8888); //was RGB_565
         Point dim = new Point();
         getWindowManager().getDefaultDisplay().getSize(dim);
-        float scaleX = (float)frameBufferWidth / (float)dim.x; //Cast to float!
-        float scaleY = (float)frameBufferHeight / (float)dim.y; //Cast to float!
+        float scaleX = (float)frameBufferWidth / dim.x;
+        float scaleY = (float)frameBufferHeight / dim.y;
 
         renderView = new AndroidFastRenderView(this, frameBuffer);
         graphics = new AndroidGraphics(getAssets(), frameBuffer);
