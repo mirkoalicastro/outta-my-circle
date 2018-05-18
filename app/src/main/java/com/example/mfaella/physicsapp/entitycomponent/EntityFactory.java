@@ -1,7 +1,9 @@
 package com.example.mfaella.physicsapp.entitycomponent;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.badlogic.androidgames.framework.Graphics;
 import com.example.mfaella.physicsapp.entitycomponent.impl.Arena;
 import com.example.mfaella.physicsapp.entitycomponent.impl.CircleDrawableComponent;
 import com.example.mfaella.physicsapp.entitycomponent.impl.CirclePhysicsComponent;
@@ -10,27 +12,32 @@ import com.example.mfaella.physicsapp.entitycomponent.impl.Character;
 import com.google.fpl.liquidfun.World;
 
 public class EntityFactory{
-    public static Character createDefaultCharacter(World world, float radius, float x, float y){
+    private static World world;
+    private static Graphics graphics;
+
+    private EntityFactory(){}
+
+    public static void setWorld(World world){ EntityFactory.world = world; }
+
+    public static void setGraphics(Graphics graphics){ EntityFactory.graphics = graphics; }
+
+    public static Character createDefaultCharacter(int radius, int x, int y){
         Character c = new Character();
 
         c.addComponent(new PositionComponent(x, y));
         c.addComponent(new CirclePhysicsComponent(world, radius));
 
-        Paint paint = new Paint();
-        paint.setARGB(255,255,0,0);
-
-        c.addComponent(new CircleDrawableComponent(paint, radius));
+        c.addComponent(new CircleDrawableComponent(graphics, radius));
 
         return c;
     }
 
-    public static Arena createArena(long radius){
+    public static Arena createArena(int radius){
         Arena a = new Arena();
 
-        Paint paint = new Paint();
-        paint.setARGB(255,132,112,255); //light blue
-
-        a.addComponent(new CircleDrawableComponent(paint, radius));
+        CircleDrawableComponent circle = new CircleDrawableComponent(graphics, radius);
+        circle.setColor(Color.CYAN);
+        a.addComponent(circle);
 
         return a;
     }

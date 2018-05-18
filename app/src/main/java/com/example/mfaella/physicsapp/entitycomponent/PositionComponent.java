@@ -1,9 +1,9 @@
 package com.example.mfaella.physicsapp.entitycomponent;
 
 public class PositionComponent extends Component {
-    public float x, y;
+    public int x, y;
 
-    public PositionComponent(float x, float y){
+    public PositionComponent(int x, int y){
         this.x = x;
         this.y = y;
     }
