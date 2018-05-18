@@ -18,16 +18,14 @@ public class CircleDrawableComponent extends DrawableComponent {
 
     @Override
     public void drawColor() {
-        PositionComponent pos = (PositionComponent)
-                owner.getComponent(Type.Position);
+        PositionComponent pos = (PositionComponent) owner.getComponent(Type.Position);
 
         graphics.drawCircle(pos.x, pos.y, radius, color);
     }
 
     @Override
     public void drawPixmap() {
-        PositionComponent pos = (PositionComponent)
-                owner.getComponent(Type.Position);
+        PositionComponent pos = (PositionComponent) owner.getComponent(Type.Position);
 
         graphics.drawPixmap(pixmap, pos.x, pos.y);
     }

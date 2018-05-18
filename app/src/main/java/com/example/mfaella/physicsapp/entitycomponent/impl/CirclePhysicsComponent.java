@@ -9,13 +9,11 @@ import com.google.fpl.liquidfun.World;
 
 public class CirclePhysicsComponent extends LiquidFunPhysicsComponent{
     public float radius;
-    private float x, y;
 
     public CirclePhysicsComponent(World world, float radius) {
-        PositionComponent pos = (PositionComponent)
-                owner.getComponent(Type.Position);
-        x = pos.x;
-        y = pos.y;
+        PositionComponent pos = (PositionComponent) owner.getComponent(Type.Position);
+        int x = pos.x;
+        int y = pos.y;
 
         this.radius = radius;
 

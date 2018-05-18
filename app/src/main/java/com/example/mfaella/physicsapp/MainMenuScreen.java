@@ -32,12 +32,12 @@ public class MainMenuScreen extends Screen {
                     Settings.soundEnabled = !Settings.soundEnabled;
 //                    if(Settings.soundEnabled)
   //                      Assets.click.play(1);
+                    game.setScreen(new MatchScreen(game));
                 }
                 if(start.inBounds(event)) {
                     Log.d(tag,"start");
                     if(colorStart == android.graphics.Color.BLUE) {
                         colorStart = android.graphics.Color.MAGENTA;
-                        game.setScreen(new MatchScreen(game));
                     }
                     else {
                         colorStart = android.graphics.Color.BLUE;

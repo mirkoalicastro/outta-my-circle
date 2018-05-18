@@ -13,6 +13,7 @@ import com.example.mfaella.physicsapp.entitycomponent.Component;
 import com.example.mfaella.physicsapp.entitycomponent.DrawableComponent;
 import com.example.mfaella.physicsapp.entitycomponent.EntityFactory;
 import com.example.mfaella.physicsapp.entitycomponent.impl.Arena;
+import com.example.mfaella.physicsapp.entitycomponent.impl.Character;
 import com.google.fpl.liquidfun.World;
 
 import java.util.List;
@@ -21,12 +22,16 @@ public class JoyStickScreen extends Screen {
     private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),300,300,100);
     private final World world;
     private final Arena arena;
+  //  private final Character gameCharacter;
+
     public JoyStickScreen(Game game) {
         super(game);
         world = new World(0,0);
         EntityFactory.setGraphics(game.getGraphics());
         EntityFactory.setWorld(world);
-        arena = EntityFactory.createArena(300,200,200);
+
+        arena = EntityFactory.createArena(300,500,400);
+    //    gameCharacter = EntityFactory.createDefaultCharacter(30, 500,400);
     }
 
     @Override
@@ -46,6 +51,10 @@ public class JoyStickScreen extends Screen {
         DrawableComponent arenaDrawable = (DrawableComponent) arena.getComponent(Component.Type.Drawable);
         arenaDrawable.setColor(Color.BLUE);
         arenaDrawable.drawColor();
+/*        DrawableComponent gameCharacterDrawable = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
+        gameCharacterDrawable.setColor(Color.RED);
+        gameCharacterDrawable.drawColor();
+*/
         androidJoyStick.draw(g, Color.GREEN);
     }
 

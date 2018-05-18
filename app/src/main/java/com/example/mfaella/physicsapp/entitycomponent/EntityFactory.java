@@ -40,7 +40,7 @@ public class EntityFactory{
         arena.addComponent(circleDrawableComponent);
 
         PositionComponent positionComponent = new PositionComponent(x,y);
-        positionComponent.owner = arena;
+        //positionComponent.owner = arena; //madaffacca ma che lo fai a fare
         arena.addComponent(positionComponent);
 
         return arena;
