@@ -37,7 +37,7 @@ public class MatchScreen extends Screen {
 
 
 
-        state.setArena(EntityFactory.createArena(game.getGraphics().getWidth()/2 - 1));
+        state.setArena(EntityFactory.createArena(game.getGraphics().getWidth()/2 - 1, 0, 0));
 
         Character[] characters = {EntityFactory.createDefaultCharacter(2,0,0)};
 
