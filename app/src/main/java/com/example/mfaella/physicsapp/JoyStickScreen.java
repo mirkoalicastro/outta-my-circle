@@ -26,7 +26,7 @@ public class JoyStickScreen extends Screen {
         world = new World(0,0);
         EntityFactory.setGraphics(game.getGraphics());
         EntityFactory.setWorld(world);
-        arena = EntityFactory.createArena(300);
+        arena = EntityFactory.createArena(300,200,200);
     }
 
     @Override
