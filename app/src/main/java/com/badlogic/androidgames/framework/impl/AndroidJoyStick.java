@@ -54,11 +54,6 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     }
 
     @Override
-    public List<Input.TouchEvent> processAndRelease() {
-        return processAndRelease(input.getTouchEvents());
-    }
-
-    @Override
     public double getAngle() {
         return Math.toDegrees(Math.atan2(y,x));
     }
