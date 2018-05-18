@@ -1,5 +1,7 @@
 package com.badlogic.androidgames.framework.impl;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.JoyStick;
@@ -12,7 +14,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
-    private boolean haveTouched;
+    private int pointer = -1;
 
     public AndroidJoyStick(Input input, int x, int y, int radius) {
         super(x, y, radius);
@@ -25,13 +27,15 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
         for (Input.TouchEvent event : events) {
             boolean inBounds = inBounds(event);
             if(event.type == Input.TouchEvent.TOUCH_DOWN)
-                haveTouched = inBounds;
-            if (haveTouched && inBounds) {
+                pointer = inBounds ? event.pointer : -1;
+            if (pointer == event.pointer && inBounds) {
                 x = event.x - getX();
                 y = getY() - event.y; //TODO why reversing is ok?
                 buffer.add(event);
             }
         }
+        if(!buffer.isEmpty())
+            Log.d("JoyStickCore", "Angolo: " + getAngle());
         events.removeAll(buffer);
         buffer.clear();
         return events;
