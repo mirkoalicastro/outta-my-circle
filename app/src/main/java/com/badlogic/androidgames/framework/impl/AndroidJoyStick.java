@@ -10,11 +10,11 @@ import com.badlogic.androidgames.framework.Pixmap;
 import java.util.LinkedList;
 import java.util.List;
 
+//TODO should it automatically go back to 0,0?
 public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
-    private int pointer = -1;
 
     public AndroidJoyStick(Input input, int x, int y, int radius) {
         super(x, y, radius);
@@ -25,10 +25,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     @Override
     public List<Input.TouchEvent> processAndRelease(List<Input.TouchEvent> events) {
         for (Input.TouchEvent event : events) {
-            boolean inBounds = inBounds(event);
-            if(event.type == Input.TouchEvent.TOUCH_DOWN)
-                pointer = inBounds ? event.pointer : -1;
-            if (pointer == event.pointer && inBounds) {
+            if (inBounds(event)) {
                 x = event.x - getX();
                 y = getY() - event.y; //TODO why reversing is ok?
                 buffer.add(event);
@@ -60,12 +57,12 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     @Override
     public void draw(Graphics graphics, int color) {
         super.draw(graphics, color);
-        graphics.drawCircle(getX()+x, getY()-y, 30, -1);
+        graphics.drawCircle(getX()+x, getY()-y, 50, -1);
     }
 
     @Override
     public void draw(Graphics graphics, Pixmap pixmap) {
         super.draw(graphics, pixmap);
-        graphics.drawCircle(getX()+x, getY()-y, 30, -1);
+        graphics.drawCircle(getX()+x, getY()-y, 50, -1);
     }
 }
