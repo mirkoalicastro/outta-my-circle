@@ -32,9 +32,9 @@ public class CirclePhysicsComponent extends LiquidFunPhysicsComponent{
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.setShape(shape);
-        fixtureDef.setFriction(0.1f); // attrito (tra 0 e 1, default 0.2)
-        fixtureDef.setRestitution(0.4f); // elasticità (tra 0 e 1, default 0)
-        fixtureDef.setDensity(0.5f); // densità (kg/m2, default 0)
+        fixtureDef.setFriction(0.1f);       // attrito (tra 0 e 1, default 0.2)
+        fixtureDef.setRestitution(0.4f);    // elasticità (tra 0 e 1, default 0)
+        fixtureDef.setDensity(0.5f);        // densità (kg/m2, default 0)
         body.createFixture(fixtureDef);
 
         // release native objects

@@ -10,8 +10,9 @@ public class CircleDrawableComponent extends DrawableComponent {
     private float x, y, radius;
     private Paint paint;
 
-    public CircleDrawableComponent(Paint paint){
+    public CircleDrawableComponent(Paint paint, float radius){
         this.paint = paint;
+        this.radius = radius;
     }
 
     @Override
@@ -20,8 +21,6 @@ public class CircleDrawableComponent extends DrawableComponent {
                 owner.getComponent(Type.Position);
         x = pos.x;
         y = pos.y;
-
-        radius = ((CirclePhysicsComponent)owner.getComponent(Type.Physics)).radius;
 
         canvas.drawCircle(x, y, radius, paint);
     }
