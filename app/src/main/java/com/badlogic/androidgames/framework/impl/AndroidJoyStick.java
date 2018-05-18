@@ -10,7 +10,6 @@ import com.badlogic.androidgames.framework.Pixmap;
 import java.util.LinkedList;
 import java.util.List;
 
-//TODO should it automatically go back to 0,0?
 public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     private final Input input;
     private int x, y;
@@ -38,7 +37,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
             }
             if (event.pointer == pointer) {
                 x = event.x - getX();
-                y = getY() - event.y; //TODO why reversing is ok?
+                y = getY() - event.y;
                 int tmpx = Math.abs((int)((radius)*Math.cos(Math.atan2(y,x))));
                 int tmpy = Math.abs((int)((radius)*Math.sin(Math.atan2(y,x))));
                 x = Math.max(Math.min(tmpx, x), tmpx*-1);
