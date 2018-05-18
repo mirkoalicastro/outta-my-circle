@@ -13,9 +13,10 @@ public class AndroidCircularButton implements Button {
         this.y = y;
         this.radius = radius;
     }
+
     @Override
     public boolean inBounds(Input.TouchEvent event) {
-        return Math.pow(Math.abs(event.x-x),2)+Math.pow(Math.abs(event.y-y),2)<Math.pow(radius,2);
+        return Math.pow(event.x-x,2)+Math.pow(event.y-y,2)<Math.pow(radius,2);
     }
 
     @Override

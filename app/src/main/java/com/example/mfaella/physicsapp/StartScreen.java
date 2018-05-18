@@ -30,10 +30,13 @@ public class StartScreen extends LoadingScreen {
         Assets.backgroundTile = game.getGraphics().newTile("bgtile.png", PixmapFormat.ARGB8888);
         Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
         game.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
-//        setProgress(70);
+        boolean debug = false;
+        if(!debug)
+        setProgress(70);
         Assets.click = game.getAudio().newSound("urto1.wav");
         // Settings.load(game.getFileIO());
-//        setProgress(100);
+        if(!debug)
+            setProgress(100);
         game.setScreen(new MainMenuScreen(game));
     }
 
