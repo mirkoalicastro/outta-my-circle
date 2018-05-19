@@ -4,7 +4,11 @@ import android.graphics.Color;
 
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
+import com.badlogic.androidgames.framework.JoyStick;
 import com.badlogic.androidgames.framework.Screen;
+import com.badlogic.androidgames.framework.impl.AndroidJoyStick;
+import com.example.mfaella.physicsapp.entitycomponent.Component;
+import com.example.mfaella.physicsapp.entitycomponent.DrawableComponent;
 import com.example.mfaella.physicsapp.entitycomponent.EntityFactory;
 import com.example.mfaella.physicsapp.entitycomponent.impl.Arena;
 import com.google.fpl.liquidfun.World;
@@ -13,9 +17,12 @@ import com.example.mfaella.physicsapp.entitycomponent.impl.Character;
 import java.util.List;
 
 public class MatchScreen extends Screen {
+
+    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),300,300,100);
+
     private class State{
-        Arena arena;
-        Character[] characters;
+        public Arena arena;
+        public Character[] characters;
 
         public void setArena(Arena arena){
             this.arena = arena;
@@ -35,8 +42,6 @@ public class MatchScreen extends Screen {
         EntityFactory.setWorld(new World(0, 0));
         EntityFactory.setGraphics(game.getGraphics());
 
-
-
         state.setArena(EntityFactory.createArena(game.getGraphics().getWidth()/2 - 1, 0, 0));
 
         Character[] characters = {EntityFactory.createDefaultCharacter(2,0,0)};
@@ -54,7 +59,8 @@ public class MatchScreen extends Screen {
         Graphics g = game.getGraphics(); //se lo sfondo è un gameobject si può separare graphics da screen
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
 
-        //disegna
+        DrawableComponent arenaDrawable = (DrawableComponent) state.arena.getComponent(Component.Type.Drawable);
+        arenaDrawable.draw();
 
     }
 

@@ -49,8 +49,8 @@ public class JoyStickScreen extends Screen {
         Graphics g = game.getGraphics();
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         DrawableComponent arenaDrawable = (DrawableComponent) arena.getComponent(Component.Type.Drawable);
-        arenaDrawable.setColor(Color.BLUE);
-        arenaDrawable.drawColor();
+        //arenaDrawable.setColor(Color.BLUE);
+        //arenaDrawable.drawColor();
 /*        DrawableComponent gameCharacterDrawable = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();

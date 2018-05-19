@@ -13,6 +13,9 @@ import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 public class MainMenuScreen extends Screen {
     private final Button sound = new AndroidCircularButton(200,200,150);
     private final Button start = new AndroidRectangularButton(500,500,100,100);
+
+    private final Button match = new AndroidRectangularButton(500,200,100,100);
+
     private int colorStart = android.graphics.Color.BLUE;
     public MainMenuScreen(Game game) {
         super(game);
@@ -32,13 +35,11 @@ public class MainMenuScreen extends Screen {
                     Settings.soundEnabled = !Settings.soundEnabled;
 //                    if(Settings.soundEnabled)
   //                      Assets.click.play(1);
-                    game.setScreen(new MatchScreen(game));
                 }
                 if(start.inBounds(event)) {
                     Log.d(tag,"start");
-                    if(colorStart == android.graphics.Color.BLUE) {
+                    if(colorStart == android.graphics.Color.BLUE)
                         colorStart = android.graphics.Color.MAGENTA;
-                    }
                     else {
                         colorStart = android.graphics.Color.BLUE;
                         game.setScreen(new JoyStickScreen(game));
@@ -46,6 +47,10 @@ public class MainMenuScreen extends Screen {
     //                if(Settings.soundEnabled)
       //                  Assets.click.play(1);
                     //Start lobby
+                }
+                if(match.inBounds(event)){
+                    Log.d(tag,"start");
+                    game.setScreen(new MatchScreen(game));
                 }
             }
         }
