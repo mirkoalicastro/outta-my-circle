@@ -42,16 +42,20 @@ public class MatchScreen extends Screen {
         EntityFactory.setWorld(new World(0, 0));
         EntityFactory.setGraphics(game.getGraphics());
 
-        state.setArena(EntityFactory.createArena(game.getGraphics().getWidth()/2 - 1, 0, 0));
+        int h = game.getGraphics().getHeight();
+        int w = game.getGraphics().getWidth();
 
-        Character[] characters = {EntityFactory.createDefaultCharacter(2,0,0)};
+        state.setArena(EntityFactory.createArena(h/2 -5, w/2, h/2));
 
-        state.setCharacters(characters);
+        /*Character[] characters = {EntityFactory.createDefaultCharacter(25, w/2, h/2)};
+            pare non funzioni la componente fisica
+
+        state.setCharacters(characters);*/
     }
 
     @Override
     public void update(float deltaTime) {
-
+        //world.step(); ??
     }
 
     @Override

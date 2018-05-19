@@ -1,5 +1,6 @@
 package com.example.mfaella.physicsapp;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Button;
@@ -17,6 +18,9 @@ public class MainMenuScreen extends Screen {
     private final Button match = new AndroidRectangularButton(500,200,100,100);
 
     private int colorStart = android.graphics.Color.BLUE;
+
+    private int colorMatch = Color.WHITE;
+
     public MainMenuScreen(Game game) {
         super(game);
         game.getInput().getTouchEvents(); //clear
@@ -49,7 +53,7 @@ public class MainMenuScreen extends Screen {
                     //Start lobby
                 }
                 if(match.inBounds(event)){
-                    Log.d(tag,"start");
+                    Log.d(tag,"CREATING MATCH SCREEN");
                     game.setScreen(new MatchScreen(game));
                 }
             }
@@ -65,6 +69,8 @@ public class MainMenuScreen extends Screen {
         else
             sound.draw(g, android.graphics.Color.RED);
         start.draw(g, colorStart);
+
+        match.draw(g, colorMatch);
     }
 
     @Override
