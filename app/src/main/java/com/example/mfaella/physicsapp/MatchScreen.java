@@ -31,6 +31,11 @@ public class MatchScreen extends Screen {
         public void setCharacters(Character[] characters) {
             this.characters = characters;
         }
+
+        public void drawCharacters(){
+            for(int i=0 ; i<characters.length ; i++)
+                ((DrawableComponent)characters[i].getComponent(Component.Type.Drawable)).draw();
+        }
     }
 
     private State state;
@@ -44,13 +49,17 @@ public class MatchScreen extends Screen {
 
         int h = game.getGraphics().getHeight();
         int w = game.getGraphics().getWidth();
+        int r = h/2 -10;
 
-        state.setArena(EntityFactory.createArena(h/2 -5, w/2, h/2));
+        state.setArena(EntityFactory.createArena(r, w/2, h/2));
 
-        /*Character[] characters = {EntityFactory.createDefaultCharacter(25, w/2, h/2)};
-            pare non funzioni la componente fisica
-
-        state.setCharacters(characters);*/
+        Character[] characters = {
+                EntityFactory.createDefaultCharacter(40, w/2, r/2 - 90, Color.GREEN),
+                EntityFactory.createDefaultCharacter(40, w/2, r + r/2 + 90, Color.WHITE),
+                EntityFactory.createDefaultCharacter(40, w/2 + r/2 + 90, h/2, Color.YELLOW),
+                EntityFactory.createDefaultCharacter(40, w/2 - r/2 - 90, h/2, Color.RED),
+        };
+        state.setCharacters(characters);
     }
 
     @Override
@@ -65,6 +74,8 @@ public class MatchScreen extends Screen {
 
         DrawableComponent arenaDrawable = (DrawableComponent) state.arena.getComponent(Component.Type.Drawable);
         arenaDrawable.draw();
+
+        state.drawCharacters();
 
     }
 

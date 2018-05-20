@@ -1,5 +1,6 @@
 package com.example.mfaella.physicsapp.entitycomponent.impl;
 
+import com.example.mfaella.physicsapp.entitycomponent.Entity;
 import com.example.mfaella.physicsapp.entitycomponent.PositionComponent;
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
@@ -7,14 +8,10 @@ import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.FixtureDef;
 import com.google.fpl.liquidfun.World;
 
-public class CirclePhysicsComponent extends LiquidFunPhysicsComponent{
+public class DynamicCircle extends LiquidFunPhysicsComponent{
     public float radius;
 
-    public CirclePhysicsComponent(World world, float radius) {
-        PositionComponent pos = (PositionComponent) owner.getComponent(Type.Position);
-        int x = pos.x;
-        int y = pos.y;
-
+    public DynamicCircle(World world, float radius, int x, int y) {
         this.radius = radius;
 
         BodyDef bodyDef = new BodyDef();

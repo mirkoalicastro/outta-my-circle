@@ -11,7 +11,7 @@ import com.example.mfaella.physicsapp.entitycomponent.PositionComponent;
 
 
 public class CircleDrawableComponent extends DrawableComponent {
-    private int radius, color = Color.GREEN;
+    private int radius, color;
 
     public CircleDrawableComponent(Graphics graphics, int radius){
         super(graphics);

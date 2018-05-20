@@ -1,13 +1,11 @@
 package com.example.mfaella.physicsapp.entitycomponent;
 
 import android.graphics.Color;
-import android.graphics.Paint;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.example.mfaella.physicsapp.entitycomponent.impl.Arena;
 import com.example.mfaella.physicsapp.entitycomponent.impl.CircleDrawableComponent;
-import com.example.mfaella.physicsapp.entitycomponent.impl.CirclePhysicsComponent;
-import com.example.mfaella.physicsapp.entitycomponent.impl.PowerUp;
+import com.example.mfaella.physicsapp.entitycomponent.impl.DynamicCircle;
 import com.example.mfaella.physicsapp.entitycomponent.impl.Character;
 import com.google.fpl.liquidfun.World;
 
@@ -21,13 +19,15 @@ public class EntityFactory{
 
     public static void setGraphics(Graphics graphics){ EntityFactory.graphics = graphics; }
 
-    public static Character createDefaultCharacter(int radius, int x, int y){
+    public static Character createDefaultCharacter(int radius, int x, int y, int color){
         Character c = new Character();
 
         c.addComponent(new PositionComponent(x, y));
-        c.addComponent(new CirclePhysicsComponent(world, radius));
+        c.addComponent(new DynamicCircle(world, radius, x, y));
 
-        c.addComponent(new CircleDrawableComponent(graphics, radius));
+        CircleDrawableComponent drawable = new CircleDrawableComponent(graphics, radius);
+        drawable.setColor(color);
+        c.addComponent(drawable);
 
         return c;
     }
