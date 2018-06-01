@@ -10,14 +10,16 @@ public abstract class LoadingScreen extends Screen {
     private final int duration;
     private final GradualProgress thread;
     public LoadingScreen(Game game) {
-        this(game, 0, 100);
+        this(game, 0, 1000);
     }
     public LoadingScreen(Game game, int delay, int duration) {
         //TODO raise exception
         super(game);
+        if(delay < 0 || duration < 0)
+            throw new IllegalArgumentException("Parameters delay and duration must be positive or zero");
         this.progressValue = 0;
-        this.delay = Math.max(0, delay);
-        this.duration = Math.max(0, duration);
+        this.delay = delay;
+        this.duration = duration;
         animations = new LinkedList<>();
         thread = new GradualProgress();
         thread.start();
@@ -70,7 +72,6 @@ public abstract class LoadingScreen extends Screen {
                         animations.remove();
                         continue;
                     }
-                    //TODO: sleep o attesa attiva?
                     try {
                         Thread.sleep(delay);
                     } catch(InterruptedException ex) {
@@ -78,14 +79,11 @@ public abstract class LoadingScreen extends Screen {
                     }
                     //TODO fix calculation
                     int sleepingTime = duration / Math.abs(to - from);
-                    // Riduco lo sleepingTime per via euristica
-                    sleepingTime *= 0.5;
                     int sign = from < to ? 1 : -1;
                     int delta = 1 * sign;
                     for (int i = from+delta; sign < 0 ? i >= to : i <= to; i += delta) {
                         progressValue = i;
                         onProgress(i);
-                        //TODO: sleep o attesa attiva?
                         try {
                             Thread.sleep(sleepingTime);
                         } catch(InterruptedException ex) {

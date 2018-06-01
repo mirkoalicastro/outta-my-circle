@@ -40,7 +40,7 @@ public class JoyStickScreen extends Screen {
         events = androidJoyStick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
-            Log.d(tag, "Ho la possibilita' di gestire " + event.x + "," + event.y);
+
         }
     }
 

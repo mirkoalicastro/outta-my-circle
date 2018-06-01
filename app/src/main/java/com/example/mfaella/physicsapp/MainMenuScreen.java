@@ -35,13 +35,11 @@ public class MainMenuScreen extends Screen {
         for(TouchEvent event: game.getInput().getTouchEvents()) {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(sound.inBounds(event)) {
-                    Log.d(tag,"sound");
                     Settings.soundEnabled = !Settings.soundEnabled;
 //                    if(Settings.soundEnabled)
   //                      Assets.click.play(1);
                 }
                 if(start.inBounds(event)) {
-                    Log.d(tag,"start");
                     if(colorStart == android.graphics.Color.BLUE)
                         colorStart = android.graphics.Color.MAGENTA;
                     else {
@@ -53,7 +51,6 @@ public class MainMenuScreen extends Screen {
                     //Start lobby
                 }
                 if(match.inBounds(event)){
-                    Log.d(tag,"CREATING MATCH SCREEN");
                     game.setScreen(new MatchScreen(game));
                 }
             }
