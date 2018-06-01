@@ -54,12 +54,19 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
 
     @Override
     public double getAngle() {
-        return Math.toDegrees(Math.atan2(y,x));
+        getDistance(); return Math.toDegrees(Math.atan2(y,x));
+    }
+
+    public double getNormX() {
+        return (double)x/radius;
+    }
+
+    public double getNormY() {
+        return (double)x/radius;
     }
 
     @Override
     public double getDistance() {
-        //TODO maybe it could be better just the sum of the absolute values?
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
     }
 

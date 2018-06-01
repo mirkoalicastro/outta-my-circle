@@ -6,4 +6,6 @@ public interface JoyStick extends Button {
     List<Input.TouchEvent> processAndRelease(List<Input.TouchEvent> events);
     double getAngle();
     double getDistance();
+    double getNormX();
+    double getNormY();
 }
