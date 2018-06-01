@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
 
     defaultConfig {
-        applicationId "com.example.mfaella.exampleapp"
+        applicationId "com.acg.outtamycircle"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
