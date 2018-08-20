@@ -73,7 +73,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     @Override
     public void draw(Graphics graphics, int color) {
         super.draw(graphics, color);
-        graphics.drawCircle(getX()+x, getY()-y, radius/3, -1);
+        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
     }
 
     @Override

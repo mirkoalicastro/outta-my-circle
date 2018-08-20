@@ -21,7 +21,7 @@ import java.util.List;
 public class MatchScreen extends Screen {
     private Graphics graphics = game.getGraphics();
     /*120 - 600*/
-    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),150,550,50);
+    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),150,550,70);
 
     private class State{
         public Arena arena;
