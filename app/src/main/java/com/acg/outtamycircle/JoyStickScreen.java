@@ -19,7 +19,7 @@ import com.google.fpl.liquidfun.World;
 import java.util.List;
 
 public class JoyStickScreen extends Screen {
-    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),300,300,100);
+    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),200,580,100);
     private final World world;
     private final Arena arena;
   //  private final Character gameCharacter;
