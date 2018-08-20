@@ -19,6 +19,10 @@ public class AndroidCircularButton implements Button {
         return Math.pow(event.x-x,2)+Math.pow(event.y-y,2)<Math.pow(radius,2);
     }
 
+    public int getRadius() {
+        return radius;
+    }
+
     @Override
     public int getWidth() {
         return radius*2;

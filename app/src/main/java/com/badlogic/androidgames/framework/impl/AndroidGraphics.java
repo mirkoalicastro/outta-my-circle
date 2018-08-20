@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
@@ -25,6 +26,7 @@ public class AndroidGraphics implements Graphics {
     private final Rect srcRect;
     private final Rect dstRect;
     private final Options options;
+    private final RectF rectF;
 
     public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) {
         this.assets = assets;
@@ -33,6 +35,7 @@ public class AndroidGraphics implements Graphics {
         this.paint = new Paint();
         this.srcRect = new Rect();
         this.dstRect = new Rect();
+        this.rectF = new RectF();
         this.options = new Options();
     }
 
@@ -96,6 +99,17 @@ public class AndroidGraphics implements Graphics {
     public void drawLine(int x, int y, int x2, int y2, int color) {
         paint.setColor(color);
         canvas.drawLine(x, y, x2, y2, paint);
+    }
+
+    @Override
+    public void drawArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean useCenter, int color) {
+        paint.setColor(color);
+        rectF.left = left;
+        rectF.top = top;
+        rectF.right  = right;
+        rectF.bottom = bottom;
+
+        canvas.drawArc(rectF, startAngle, sweepAngle, useCenter, paint);
     }
 
     @Override

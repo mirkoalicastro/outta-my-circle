@@ -1,6 +1,7 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
@@ -12,6 +13,7 @@ import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
+import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class JoystickScreen extends Screen {
     private final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,100);
     private final World world;
     private final Arena arena;
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
   //  private final Character gameCharacter;
 
     public JoystickScreen(Game game) {
@@ -38,7 +41,12 @@ public class JoystickScreen extends Screen {
         events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
-
+            if(timedCircularButton.inBounds(event)) {
+                Log.d("TCB", "PRESSED");
+                if (timedCircularButton.isActive()) {
+                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                }
+            }
         }
     }
 
@@ -53,7 +61,8 @@ public class JoystickScreen extends Screen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoystick.draw(g, Color.GREEN);
+        androidJoystick.draw(g, Color.DKGRAY);
+        timedCircularButton.draw(g, Color.GREEN);
     }
 
     @Override

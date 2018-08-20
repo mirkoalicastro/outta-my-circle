@@ -14,6 +14,8 @@ public interface Graphics {
 
     void drawLine(int x, int y, int x2, int y2, int color);
 
+    void drawArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean useCenter, int color);
+
     void drawRect(int x, int y, int width, int height, int color);
 
     void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY, int srcWidth, int srcHeight);
