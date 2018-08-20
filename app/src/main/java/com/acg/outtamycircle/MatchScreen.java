@@ -1,9 +1,11 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
+import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.JoyStick;
 import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidJoyStick;
@@ -17,8 +19,9 @@ import com.acg.outtamycircle.entitycomponent.impl.Character;
 import java.util.List;
 
 public class MatchScreen extends Screen {
-
-    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),300,300,100);
+    private Graphics graphics = game.getGraphics();
+    /*120 - 600*/
+    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),150,550,50);
 
     private class State{
         public Arena arena;
@@ -47,12 +50,14 @@ public class MatchScreen extends Screen {
         EntityFactory.setWorld(new World(0, 0));
         EntityFactory.setGraphics(game.getGraphics());
 
-        int h = game.getGraphics().getHeight();
-        int w = game.getGraphics().getWidth();
+        int h = graphics.getHeight();
+        int w = graphics.getWidth();
         int r = h/2 -10;
 
+        /*Inizializzazione Arena*/
         state.setArena(EntityFactory.createArena(r, w/2, h/2));
 
+        /*Inizializzazione Giocatori*/
         Character[] characters = {
                 EntityFactory.createDefaultCharacter(40, w/2, r/2 - 90, Color.GREEN),
                 EntityFactory.createDefaultCharacter(40, w/2, r + r/2 + 90, Color.WHITE),
@@ -64,7 +69,14 @@ public class MatchScreen extends Screen {
 
     @Override
     public void update(float deltaTime) {
+
         //world.step(); ??
+        List<Input.TouchEvent> events;
+        events = androidJoyStick.processAndRelease(game.getInput().getTouchEvents());
+
+        for (Input.TouchEvent event : events) {
+            Log.d("CICCIO", event.x +"  --  "+event.y);
+        }
     }
 
     @Override
@@ -77,6 +89,7 @@ public class MatchScreen extends Screen {
 
         state.drawCharacters();
 
+        androidJoyStick.draw(graphics, Color.GREEN);
     }
 
     @Override
