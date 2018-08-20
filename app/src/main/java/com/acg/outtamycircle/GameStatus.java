@@ -5,6 +5,7 @@ import com.acg.outtamycircle.entitycomponent.impl.GameObject;
 import java.util.LinkedList;
 import java.util.List;
 
+//TODO serve?
 public class GameStatus {
     private static final List<GameObject> gameObjectList;
     static {
