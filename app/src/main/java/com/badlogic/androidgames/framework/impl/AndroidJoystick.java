@@ -4,20 +4,20 @@ import android.util.Log;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.JoyStick;
+import com.badlogic.androidgames.framework.Joystick;
 import com.badlogic.androidgames.framework.Pixmap;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
+public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
     private final int radius;
     private int pointer = -1;
 
-    public AndroidJoyStick(Input input, int x, int y, int radius) {
+    public AndroidJoystick(Input input, int x, int y, int radius) {
         super(x, y, radius);
         this.radius = radius;
         this.input = input;
