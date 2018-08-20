@@ -34,6 +34,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
                 pointer = -1;
                 x = 0;
                 y = 0;
+                buffer.add(event);
             }
             if (event.pointer == pointer) {
                 x = event.x - getX();
@@ -48,6 +49,10 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
         if(!buffer.isEmpty())
             Log.d("JoyStickCore", "Angolo: " + getAngle());
         events.removeAll(buffer);
+        if(events.size() > 0) {
+            Log.d("LAST", "sono " + pointer  + "primo" + events.get(0).pointer);
+            Log.d("LAST", "sono " + pointer + "ultimo" + events.get(events.size() - 1).pointer);
+        }
         buffer.clear();
         return events;
     }
@@ -70,15 +75,16 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
     }
 
+    //TODO int color variadico e wow?
     @Override
     public void draw(Graphics graphics, int color) {
         super.draw(graphics, color);
-        graphics.drawCircle(getX()+x, getY()-y, radius/3, -1);
+        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
     }
 
     @Override
     public void draw(Graphics graphics, Pixmap pixmap) {
         super.draw(graphics, pixmap);
-        graphics.drawCircle(getX()+x, getY()-y, 50, -1);
+        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
     }
 }
