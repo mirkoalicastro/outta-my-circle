@@ -7,11 +7,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class AndroidFastRenderView extends SurfaceView implements Runnable {
-    final AndroidGame game;
-    final Bitmap framebuffer;
-    Thread renderThread = null;
-    final SurfaceHolder holder;
-    volatile boolean running = false;
+    private final AndroidGame game;
+    private final Bitmap framebuffer;
+    private Thread renderThread = null;
+    private final SurfaceHolder holder;
+    private volatile boolean running = false;
     private final Rect dstRect = new Rect();
 
     public AndroidFastRenderView(AndroidGame game, Bitmap framebuffer) {
@@ -31,7 +31,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
         long startTime = System.nanoTime();
         while(running) {  
             if(!holder.getSurface().isValid())
-                continue;           
+                continue;
             
             float deltaTime = (System.nanoTime()-startTime) / 1000000000.0f;
             startTime = System.nanoTime();
