@@ -19,29 +19,28 @@ import com.acg.outtamycircle.entitycomponent.impl.Character;
 import java.util.List;
 
 public class MatchScreen extends Screen {
-    private Graphics graphics = game.getGraphics();
+    private final Graphics graphics = game.getGraphics(); //TODO lo vogliamo mettere in Screen?
     /*120 - 600*/
     private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),150,550,50);
+    private final State state;
 
-    private class State{
-        public Arena arena;
-        public Character[] characters;
+    private class State { //TODO gamestatus
+        Arena arena;
+        Character[] characters;
 
-        public void setArena(Arena arena){
+        void setArena(Arena arena){
             this.arena = arena;
         }
 
-        public void setCharacters(Character[] characters) {
+        void setCharacters(Character[] characters) {
             this.characters = characters;
         }
 
-        public void drawCharacters(){
+        void drawCharacters(){
             for(int i=0 ; i<characters.length ; i++)
                 ((DrawableComponent)characters[i].getComponent(Component.Type.Drawable)).draw();
         }
     }
-
-    private State state;
 
     public MatchScreen(Game game){
         super(game);

@@ -1,13 +1,25 @@
 package com.acg.outtamycircle.network;
 
 public class GameMessage {
-    public Type type;
+    private Type type;
     private static int MAX_BUFFER_SIZE = 40;
 
-    byte buffer[];
+    private final byte[] buffer;
 
     public GameMessage(){
         buffer = new byte[MAX_BUFFER_SIZE];
+    }
+
+    public byte[] getBuffer() {
+        return buffer;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public void putInBuffer(byte dest[]){
@@ -16,6 +28,38 @@ public class GameMessage {
             dest[i] = buffer[i];
     }
 
+    /* STATIC FACTORY-LIKE METHOD */
+    // No allocation
+    // Object recycle
+
+    //TODO valutare dove spostare
+
+    /**
+     * Puts a short value into the message buffer.
+     * @param pos
+     */
+    void putShort(int pos, short value){
+
+    }
+
+
+    //TODO
+    static void makeMessage(GameMessage gameMessage, int gameObject, Type type){
+        byte buffer[] = gameMessage.buffer;
+        buffer[0] = type.toByte();
+    }
+
+    //TODO
+    //public static void makeCreateMessage(GameMessage gameMessage);
+
+    //TODO
+    //public static void makeDestroyMessage(GameMessage gameMessage);
+
+    //TODO
+    //public static void makeMoveMessage(GameMessage gameMessage);
+
+    //TODO
+    //public static void makePowerUpMessage(GameMessage gameMessage);
 
     public enum Type {
         //TODO draft
@@ -67,40 +111,5 @@ public class GameMessage {
         }
 
     }
-
-
-
-    /* STATIC FACTORY-LIKE METHOD */
-    // No allocation
-    // Object recycle
-
-    //TODO valutare dove spostare
-
-    /**
-     * Puts a short value into the message buffer.
-     * @param pos
-     */
-    void putShort(int pos, short value){
-
-    }
-
-
-    //TODO
-    static void makeMessage(GameMessage gameMessage, int gameObject, Type type){
-        byte buffer[] = gameMessage.buffer;
-        buffer[0] = type.toByte();
-    }
-
-    //TODO
-    //public static void makeCreateMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makeDestroyMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makeMoveMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makePowerUpMessage(GameMessage gameMessage);
 
 }
