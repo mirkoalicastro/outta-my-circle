@@ -1,9 +1,8 @@
 package com.acg.outtamycircle.network;
 
 public class GameMessage {
-    public GameMessageType type;
+    public Type type;
     private static int MAX_BUFFER_SIZE = 40;
-    int gameObject;
 
     byte buffer[];
 
@@ -12,13 +11,13 @@ public class GameMessage {
     }
 
     public void putInBuffer(byte dest[]){
-        int n = GameMessageType.lengthInBytes(type);
+        int n = Type.lengthInBytes(type);
         for(int i=0 ; i<n ; i++)
             dest[i] = buffer[i];
     }
 
 
-    public enum GameMessageType {
+    public enum Type {
         //TODO draft
         CREATE, DESTROY, MOVE, POWERUP, POWERUP_ASSING, END;
 
@@ -35,7 +34,7 @@ public class GameMessage {
         }
 
 
-        static GameMessageType fromByte(byte c){
+        static Type fromByte(byte c){
             switch(c){
                 case 'C': return CREATE;
                 case 'D': return DESTROY;
@@ -47,7 +46,7 @@ public class GameMessage {
             }
         }
 
-        public static int lengthInBytes(GameMessageType type){
+        public static int lengthInBytes(Type type){
             //TODO
             switch(type){
                 case CREATE:
@@ -70,9 +69,28 @@ public class GameMessage {
     }
 
 
+
     /* STATIC FACTORY-LIKE METHOD */
     // No allocation
     // Object recycle
+
+    //TODO valutare dove spostare
+
+    /**
+     * Puts a short value into the message buffer.
+     * @param pos
+     */
+    void putShort(int pos, short value){
+
+    }
+
+
+    //TODO
+    static void makeMessage(GameMessage gameMessage, int gameObject, Type type){
+        byte buffer[] = gameMessage.buffer;
+        buffer[0] = type.toByte();
+    }
+
     //TODO
     //public static void makeCreateMessage(GameMessage gameMessage);
 

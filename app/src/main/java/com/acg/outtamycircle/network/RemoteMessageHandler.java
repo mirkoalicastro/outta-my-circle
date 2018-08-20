@@ -17,7 +17,7 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
     private List<GameMessage> buffer;
     private List<GameMessage> second;
     private Pools.Pool<GameMessage> pool;
-    private Map<GameMessage.GameMessageType,byte[]> messageBuffers;
+    private Map<GameMessage.Type,byte[]> messageBuffers;
 
     public RemoteMessageHandler(int capacity){
         buffer = new ArrayList<>(capacity);
@@ -27,9 +27,9 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
         for(int i=0; i<capacity; i++)
             pool.release(new GameMessage());
 
-        messageBuffers = new EnumMap<GameMessage.GameMessageType, byte[]>(GameMessage.GameMessageType.class);
-        for(GameMessage.GameMessageType t : GameMessage.GameMessageType.values())
-            messageBuffers.put(t, new byte[GameMessage.GameMessageType.lengthInBytes(t)]);
+        messageBuffers = new EnumMap<GameMessage.Type, byte[]>(GameMessage.Type.class);
+        for(GameMessage.Type t : GameMessage.Type.values())
+            messageBuffers.put(t, new byte[GameMessage.Type.lengthInBytes(t)]);
 
     }
 
@@ -41,7 +41,7 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
     public void writeReliable(String player, GameMessage message) {
         //TODO parametri per GPGS
         //Games.getRealTimeMultiplayerClient()
-        GameMessage.GameMessageType t = message.type;
+        GameMessage.Type t = message.type;
         byte buffer[] = messageBuffers.get(t);
 
         message.putInBuffer(buffer);
@@ -82,7 +82,7 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
         byte[] messageData = realTimeMessage.getMessageData();
 
         //TODO getMessage
-        gameMessage.type = GameMessage.GameMessageType.fromByte(messageData[0]);
+        gameMessage.type = GameMessage.Type.fromByte(messageData[0]);
 
 
         buffer.add(gameMessage);

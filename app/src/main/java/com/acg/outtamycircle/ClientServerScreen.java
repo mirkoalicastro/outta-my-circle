@@ -7,6 +7,7 @@ public abstract class ClientServerScreen extends Screen {
 
     public ClientServerScreen(Game game) {
         super(game);
+        setup();
     }
 
     @Override
@@ -28,4 +29,6 @@ public abstract class ClientServerScreen extends Screen {
     public void dispose() {
 
     }
+
+    abstract void setup();
 }
