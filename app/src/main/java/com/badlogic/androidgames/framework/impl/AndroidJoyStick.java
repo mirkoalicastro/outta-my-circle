@@ -62,7 +62,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     }
 
     public double getNormY() {
-        return (double)x/radius;
+        return (double)y/radius;
     }
 
     @Override

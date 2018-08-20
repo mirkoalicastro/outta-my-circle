@@ -19,7 +19,7 @@ public class GameMessage {
 
     public enum Type {
         //TODO draft
-        CREATE, DESTROY, MOVE, POWERUP, POWERUP_ASSING, END;
+        CREATE, DESTROY, MOVE, POWERUP, POWERUP_ASSIGN, END;
 
         byte toByte(){
             switch (this){
@@ -27,7 +27,7 @@ public class GameMessage {
                 case DESTROY: return 'D';
                 case MOVE: return 'M';
                 case POWERUP: return 'P';
-                case POWERUP_ASSING: return 'A';
+                case POWERUP_ASSIGN: return 'A';
                 case END: return 'E';
                 default: return 0;
             }
@@ -40,7 +40,7 @@ public class GameMessage {
                 case 'D': return DESTROY;
                 case 'M': return MOVE;
                 case 'P': return POWERUP;
-                case 'A': return POWERUP_ASSING;
+                case 'A': return POWERUP_ASSIGN;
                 case 'E': return END;
                 default: return null;
             }
@@ -57,7 +57,7 @@ public class GameMessage {
                     return 0;
                 case POWERUP:
                     return 0;
-                case POWERUP_ASSING:
+                case POWERUP_ASSIGN:
                     return 0;
                 case END:
                     return 0;
