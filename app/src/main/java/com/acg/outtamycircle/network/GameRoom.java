@@ -1,10 +1,6 @@
 package com.acg.outtamycircle.network;
 
-import android.content.Context;
-
-import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
