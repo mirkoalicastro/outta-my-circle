@@ -13,7 +13,6 @@ import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
-import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
@@ -46,6 +45,7 @@ public class JoystickScreen extends Screen {
                 Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isActive()) {
                     Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                    game.setScreen(new CustomizeGameCharacterScreen(game));
                 }
             }
         }
