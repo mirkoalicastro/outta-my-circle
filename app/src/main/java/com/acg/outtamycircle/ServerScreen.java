@@ -16,7 +16,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     @Override
-    void setup(){
+    public void setup(){
 
     }
 }

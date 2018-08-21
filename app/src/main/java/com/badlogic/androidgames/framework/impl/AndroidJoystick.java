@@ -1,5 +1,6 @@
 package com.badlogic.androidgames.framework.impl;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Graphics;
@@ -75,16 +76,24 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
     }
 
-    //TODO int color variadico e wow?
     @Override
     public void draw(Graphics graphics, int color) {
-        super.draw(graphics, color);
-        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
+        draw(graphics, color, -1);
+    }
+
+    public void draw(Graphics graphics, int color1, int color2) {
+        super.draw(graphics, color1);
+        graphics.drawCircle(getX()+x, getY()-y, radius/2, color2);
     }
 
     @Override
     public void draw(Graphics graphics, Pixmap pixmap) {
-        super.draw(graphics, pixmap);
-        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
+        draw(graphics, Color.DKGRAY, -1, pixmap);
     }
+
+    public void draw(Graphics graphics, int color1, int color2, Pixmap pixmap) {
+        draw(graphics, color1, color2);
+        super.draw(graphics, pixmap);
+    }
+
 }

@@ -6,7 +6,7 @@ import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidPixmap implements Pixmap {
-    protected Bitmap bitmap; //TODO protected è sufficiente o getter?
+    Bitmap bitmap;
     private final PixmapFormat format;
     
     public AndroidPixmap(Bitmap bitmap, PixmapFormat format) {
