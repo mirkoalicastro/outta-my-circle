@@ -50,7 +50,7 @@ public class MainMenuScreen extends Screen {
                     //Start lobby
                 }
                 if(match.inBounds(event)){
-                    game.setScreen(new MatchScreen(game));
+                    game.setScreen(new ServerScreen(game, new long[]{0, 1, 2, 3})); //TODO generalizzare
                 }
             }
         }

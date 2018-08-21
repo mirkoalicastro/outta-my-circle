@@ -11,6 +11,7 @@ import com.google.fpl.liquidfun.World;
 public class DynamicCircle extends LiquidFunPhysicsComponent{
     public float radius;
 
+    //TODO valutare disattivazione sleeping mode (lezione 10, pg 20)
     public DynamicCircle(World world, float radius, int x, int y) {
         this.radius = radius;
 

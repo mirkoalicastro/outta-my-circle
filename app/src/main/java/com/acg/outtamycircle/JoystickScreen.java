@@ -24,7 +24,7 @@ public class JoystickScreen extends Screen {
     private final World world;
     private final Arena arena;
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
-  //  private final Character gameCharacter;
+  //  private final GameCharacter gameCharacter;
 
     public JoystickScreen(Game game) {
         super(game);
