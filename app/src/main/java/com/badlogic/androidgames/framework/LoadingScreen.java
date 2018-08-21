@@ -6,20 +6,10 @@ import java.util.Queue;
 public abstract class LoadingScreen extends Screen {
     private volatile int progressValue;
     private final Queue<Integer> animations;
-    private final int delay;
-    private final int duration;
     private final GradualProgress thread;
     public LoadingScreen(Game game) {
-        this(game, 0, 1000);
-    }
-    public LoadingScreen(Game game, int delay, int duration) {
-        //TODO raise exception
         super(game);
-        if(delay < 0 || duration < 0)
-            throw new IllegalArgumentException("Parameters delay and duration must be positive or zero");
-        this.progressValue = 0;
-        this.delay = delay;
-        this.duration = duration;
+        progressValue = 0;
         animations = new LinkedList<>();
         thread = new GradualProgress();
         thread.start();
@@ -72,23 +62,12 @@ public abstract class LoadingScreen extends Screen {
                         animations.remove();
                         continue;
                     }
-                    try {
-                        Thread.sleep(delay);
-                    } catch(InterruptedException ex) {
-
-                    }
-                    //TODO fix calculation
-                    int sleepingTime = duration / Math.abs(to - from);
                     int sign = from < to ? 1 : -1;
                     int delta = 1 * sign;
                     for (int i = from+delta; sign < 0 ? i >= to : i <= to; i += delta) {
                         progressValue = i;
                         onProgress(i);
-                        try {
-                            Thread.sleep(sleepingTime);
-                        } catch(InterruptedException ex) {
-
-                        }
+                        //TODO no serve la sleep? di 5 millessimi di secondi...
                     }
                     animations.remove();
                     animations.notifyAll();
@@ -96,5 +75,4 @@ public abstract class LoadingScreen extends Screen {
             }
         }
     }
-
 }

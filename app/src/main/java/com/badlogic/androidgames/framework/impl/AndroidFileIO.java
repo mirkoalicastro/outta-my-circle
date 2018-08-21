@@ -13,8 +13,8 @@ import android.os.Environment;
 import com.badlogic.androidgames.framework.FileIO;
 
 public class AndroidFileIO implements FileIO {
-    AssetManager assets;
-    String externalStoragePath;
+    private final AssetManager assets;
+    private final String externalStoragePath;
 
     public AndroidFileIO(AssetManager assets) {
         this.assets = assets;

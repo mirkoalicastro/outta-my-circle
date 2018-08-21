@@ -7,9 +7,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class AccelerometerHandler implements SensorEventListener {
-    float accelX;
-    float accelY;
-    float accelZ;
+    private float accelX;
+    private float accelY;
+    private float accelZ;
 
     public AccelerometerHandler(Context context) {
         SensorManager manager = (SensorManager) context

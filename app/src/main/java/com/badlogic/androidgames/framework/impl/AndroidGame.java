@@ -109,5 +109,6 @@ public abstract class AndroidGame extends Activity implements Game {
     public Screen getCurrentScreen() {
         return screen;
     }
+
     public abstract Screen getStartScreen();
 }

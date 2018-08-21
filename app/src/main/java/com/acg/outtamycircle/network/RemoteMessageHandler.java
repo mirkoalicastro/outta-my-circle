@@ -41,7 +41,7 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
     public void writeReliable(String player, GameMessage message) {
         //TODO parametri per GPGS
         //Games.getRealTimeMultiplayerClient()
-        GameMessage.Type t = message.type;
+        GameMessage.Type t = message.getType();
         byte buffer[] = messageBuffers.get(t);
 
         message.putInBuffer(buffer);
@@ -82,7 +82,7 @@ public class RemoteMessageHandler implements NetworkMessageHandler, OnRealTimeMe
         byte[] messageData = realTimeMessage.getMessageData();
 
         //TODO getMessage
-        gameMessage.type = GameMessage.Type.fromByte(messageData[0]);
+        gameMessage.setType(GameMessage.Type.fromByte(messageData[0]));
 
 
         buffer.add(gameMessage);

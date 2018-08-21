@@ -6,9 +6,9 @@ import android.util.Log;
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.JoyStick;
+import com.badlogic.androidgames.framework.Joystick;
 import com.badlogic.androidgames.framework.Screen;
-import com.badlogic.androidgames.framework.impl.AndroidJoyStick;
+import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
@@ -19,29 +19,28 @@ import com.acg.outtamycircle.entitycomponent.impl.Character;
 import java.util.List;
 
 public class MatchScreen extends Screen {
-    private Graphics graphics = game.getGraphics();
+    private final Graphics graphics = game.getGraphics(); //TODO lo vogliamo mettere in Screen?
     /*120 - 600*/
-    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),150,550,70);
+    private final Joystick androidJoystick = new AndroidJoystick(game.getInput(),150,550,50);
+    private final State state;
 
-    private class State{
-        public Arena arena;
-        public Character[] characters;
+    private class State { //TODO gamestatus
+        Arena arena;
+        Character[] characters;
 
-        public void setArena(Arena arena){
+        void setArena(Arena arena){
             this.arena = arena;
         }
 
-        public void setCharacters(Character[] characters) {
+        void setCharacters(Character[] characters) {
             this.characters = characters;
         }
 
-        public void drawCharacters(){
+        void drawCharacters(){
             for(int i=0 ; i<characters.length ; i++)
                 ((DrawableComponent)characters[i].getComponent(Component.Type.Drawable)).draw();
         }
     }
-
-    private State state;
 
     public MatchScreen(Game game){
         super(game);
@@ -72,7 +71,7 @@ public class MatchScreen extends Screen {
 
         //world.step(); ??
         List<Input.TouchEvent> events;
-        events = androidJoyStick.processAndRelease(game.getInput().getTouchEvents());
+        events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
             Log.d("CICCIO", event.x +"  --  "+event.y);
@@ -89,7 +88,7 @@ public class MatchScreen extends Screen {
 
         state.drawCharacters();
 
-        androidJoyStick.draw(graphics, Color.GREEN);
+        androidJoystick.draw(graphics, Color.GREEN);
     }
 
     @Override

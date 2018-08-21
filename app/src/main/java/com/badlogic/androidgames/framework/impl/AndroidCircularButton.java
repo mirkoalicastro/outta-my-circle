@@ -6,7 +6,7 @@ import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidCircularButton implements Button {
-    private final int x,y,radius;
+    private final int x, y, radius;
 
     public AndroidCircularButton(int x, int y, int radius) {
         this.x = x;
@@ -17,6 +17,10 @@ public class AndroidCircularButton implements Button {
     @Override
     public boolean inBounds(Input.TouchEvent event) {
         return Math.pow(event.x-x,2)+Math.pow(event.y-y,2)<Math.pow(radius,2);
+    }
+
+    public int getRadius() {
+        return radius;
     }
 
     @Override

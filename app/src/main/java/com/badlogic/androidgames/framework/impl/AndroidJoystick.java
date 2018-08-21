@@ -4,20 +4,20 @@ import android.util.Log;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.JoyStick;
+import com.badlogic.androidgames.framework.Joystick;
 import com.badlogic.androidgames.framework.Pixmap;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
+public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
     private final int radius;
     private int pointer = -1;
 
-    public AndroidJoyStick(Input input, int x, int y, int radius) {
+    public AndroidJoystick(Input input, int x, int y, int radius) {
         super(x, y, radius);
         this.radius = radius;
         this.input = input;
@@ -34,6 +34,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
                 pointer = -1;
                 x = 0;
                 y = 0;
+                buffer.add(event);
             }
             if (event.pointer == pointer) {
                 x = event.x - getX();
@@ -48,6 +49,10 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
         if(!buffer.isEmpty())
             Log.d("JoyStickCore", "Angolo: " + getAngle());
         events.removeAll(buffer);
+        if(events.size() > 0) {
+            Log.d("LAST", "sono " + pointer  + "primo" + events.get(0).pointer);
+            Log.d("LAST", "sono " + pointer + "ultimo" + events.get(events.size() - 1).pointer);
+        }
         buffer.clear();
         return events;
     }
@@ -62,7 +67,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     }
 
     public double getNormY() {
-        return (double)x/radius;
+        return (double)y/radius;
     }
 
     @Override
@@ -70,6 +75,7 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
         return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
     }
 
+    //TODO int color variadico e wow?
     @Override
     public void draw(Graphics graphics, int color) {
         super.draw(graphics, color);
@@ -79,6 +85,6 @@ public class AndroidJoyStick extends AndroidCircularButton implements JoyStick {
     @Override
     public void draw(Graphics graphics, Pixmap pixmap) {
         super.draw(graphics, pixmap);
-        graphics.drawCircle(getX()+x, getY()-y, 50, -1);
+        graphics.drawCircle(getX()+x, getY()-y, radius/2, -1);
     }
 }
