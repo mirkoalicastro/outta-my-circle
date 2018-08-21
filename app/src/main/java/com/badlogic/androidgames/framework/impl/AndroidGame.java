@@ -24,6 +24,10 @@ public abstract class AndroidGame extends Activity implements Game {
     private FileIO fileIO;
     private Screen screen;
 
+    /*static final float TIME_STEP = 1 / 50f; // 60 fps
+    static final int VELOCITY_ITERATIONS = 8;
+    static final int POSITION_ITERATIONS = 3;*/
+
     @Override
     public void display() {
         renderView.displayCanvas();

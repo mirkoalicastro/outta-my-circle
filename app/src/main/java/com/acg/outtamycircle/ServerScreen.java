@@ -37,7 +37,7 @@ public class ServerScreen extends ClientServerScreen {
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
-        //world.step(deltaTime);
+        //world.step(deltaTime?, 8, 3);
 
         //chiedi a body la posizione
         //aggiorna position

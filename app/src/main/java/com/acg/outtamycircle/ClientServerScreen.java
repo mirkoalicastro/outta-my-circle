@@ -32,7 +32,6 @@ public abstract class ClientServerScreen extends Screen {
     protected List<Input.TouchEvent> events;
     protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,50);
 
-
     public ClientServerScreen(Game game, long[] ids) {
         super(game);
         setup();
