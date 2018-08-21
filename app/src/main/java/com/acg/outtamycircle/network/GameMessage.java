@@ -16,7 +16,6 @@ public class GameMessage {
             dest[i] = buffer[i];
     }
 
-
     public enum Type {
         //TODO draft
         CREATE, DESTROY, MOVE, POWERUP, POWERUP_ASSING, END;
@@ -79,9 +78,23 @@ public class GameMessage {
     /**
      * Puts a short value into the message buffer.
      * @param pos
+     * @param value
      */
     void putShort(int pos, short value){
+        buffer[pos] = (byte)(value>>>8);
+        buffer[pos+1] = (byte)(value);
+    }
 
+    /**
+     * Puts a int value into the message buffer.
+     * @param pos
+     * @param value
+     */
+    void putInt(int pos, int value){
+        buffer[pos++] = (byte) (value>>>24);
+        buffer[pos++] = (byte) (value>>>16);
+        buffer[pos++] = (byte) (value>>>8);
+        buffer[pos] = (byte) value;
     }
 
 
