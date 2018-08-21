@@ -49,6 +49,7 @@ public class StartScreen extends LoadingScreen {
         } catch (IOException e) {
             throw new RuntimeException("Error opening assets");
         }
+        Assets.rightArrow = game.getGraphics().newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
         game.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         setProgress(70);
         Assets.click = game.getAudio().newSound("urto1.wav");
