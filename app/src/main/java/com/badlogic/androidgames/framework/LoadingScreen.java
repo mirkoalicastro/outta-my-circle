@@ -67,7 +67,6 @@ public abstract class LoadingScreen extends Screen {
                     for (int i = from+delta; sign < 0 ? i >= to : i <= to; i += delta) {
                         progressValue = i;
                         onProgress(i);
-                        //TODO no serve la sleep? di 5 millessimi di secondi...
                     }
                     animations.remove();
                     animations.notifyAll();

@@ -13,6 +13,7 @@ import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
+import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 

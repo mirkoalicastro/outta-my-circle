@@ -55,7 +55,7 @@ public class AndroidGraphics implements Graphics {
         Bitmap bitmap;
         try {
             in = assets.open(fileName);
-            bitmap = BitmapFactory.decodeStream(in); //TODO se uso BitmapFactory e salvo le opzioni allora le uso no!?
+            bitmap = BitmapFactory.decodeStream(in,null,options);
             if (bitmap == null)
                 throw new RuntimeException("Couldn't load bitmap from asset '"+ fileName + "'");
         } catch (IOException e) {
