@@ -6,25 +6,26 @@ import android.util.Log;
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.JoyStick;
+import com.badlogic.androidgames.framework.Joystick;
 import com.badlogic.androidgames.framework.Screen;
-import com.badlogic.androidgames.framework.impl.AndroidJoyStick;
+import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
-import com.acg.outtamycircle.entitycomponent.impl.Character;
+import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
 import java.util.List;
 
-public class JoyStickScreen extends Screen {
-    private final JoyStick androidJoyStick = new AndroidJoyStick(game.getInput(),300,300,100);
+public class JoystickScreen extends Screen {
+    private final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,100);
     private final World world;
     private final Arena arena;
-  //  private final Character gameCharacter;
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
+  //  private final GameCharacter gameCharacter;
 
-    public JoyStickScreen(Game game) {
+    public JoystickScreen(Game game) {
         super(game);
         world = new World(0,0);
         EntityFactory.setGraphics(game.getGraphics());
@@ -37,10 +38,16 @@ public class JoyStickScreen extends Screen {
     @Override
     public void update(float deltaTime) {
         List<Input.TouchEvent> events;
-        events = androidJoyStick.processAndRelease(game.getInput().getTouchEvents());
+        events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
-
+            if(timedCircularButton.inBounds(event)) {
+                Log.d("TCB", "PRESSED");
+                if (timedCircularButton.isActive()) {
+                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                    game.setScreen(new CustomizeGameCharacterScreen(game));
+                }
+            }
         }
     }
 
@@ -55,7 +62,8 @@ public class JoyStickScreen extends Screen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoyStick.draw(g, Color.GREEN);
+        androidJoystick.draw(g, Color.DKGRAY);
+        timedCircularButton.draw(g, Color.GREEN);
     }
 
     @Override

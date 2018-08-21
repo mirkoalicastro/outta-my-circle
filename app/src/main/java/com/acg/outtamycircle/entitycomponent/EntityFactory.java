@@ -2,11 +2,11 @@ package com.acg.outtamycircle.entitycomponent;
 
 import android.graphics.Color;
 
+import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.CircleDrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
-import com.acg.outtamycircle.entitycomponent.impl.Character;
 import com.google.fpl.liquidfun.World;
 
 public class EntityFactory{
@@ -19,8 +19,22 @@ public class EntityFactory{
 
     public static void setGraphics(Graphics graphics){ EntityFactory.graphics = graphics; }
 
-    public static Character createDefaultCharacter(int radius, int x, int y, int color){
-        Character c = new Character();
+    public static Arena createArena(int radius, int x, int y){
+        Arena arena = new Arena();
+
+        CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics, radius);
+        circleDrawableComponent.setColor(Color.CYAN);
+        arena.addComponent(circleDrawableComponent);
+
+        PositionComponent positionComponent = new PositionComponent(x,y);
+        positionComponent.owner = arena;
+        arena.addComponent(positionComponent);
+
+        return arena;
+    }
+
+    public static GameCharacter createServerDefaultCharacter(int radius, int x, int y, int color){
+        GameCharacter c = new GameCharacter();
 
         c.addComponent(new PositionComponent(x, y));
         c.addComponent(new DynamicCircle(world, radius, x, y));
@@ -32,17 +46,15 @@ public class EntityFactory{
         return c;
     }
 
-    public static Arena createArena(int radius, int x, int y){
-        Arena arena = new Arena();
+    public static GameCharacter createClientDefaultCharacter(int radius, int x, int y, int color){
+        GameCharacter c = new GameCharacter();
 
-        CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics, radius);
-        circleDrawableComponent.setColor(Color.CYAN);
-        arena.addComponent(circleDrawableComponent);
+        c.addComponent(new PositionComponent(x, y));
 
-        PositionComponent positionComponent = new PositionComponent(x,y);
-        positionComponent.owner = arena; //madaffacca ma che lo fai a fare
-        arena.addComponent(positionComponent);
+        CircleDrawableComponent drawable = new CircleDrawableComponent(graphics, radius);
+        drawable.setColor(color);
+        c.addComponent(drawable);
 
-        return arena;
+        return c;
     }
 }

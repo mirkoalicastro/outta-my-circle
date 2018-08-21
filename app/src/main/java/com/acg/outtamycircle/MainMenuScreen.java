@@ -1,7 +1,6 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.badlogic.androidgames.framework.Button;
 import com.badlogic.androidgames.framework.Game;
@@ -44,14 +43,14 @@ public class MainMenuScreen extends Screen {
                         colorStart = android.graphics.Color.MAGENTA;
                     else {
                         colorStart = android.graphics.Color.BLUE;
-                        game.setScreen(new JoyStickScreen(game));
+                        game.setScreen(new JoystickScreen(game));
                     }
     //                if(Settings.soundEnabled)
       //                  Assets.click.play(1);
                     //Start lobby
                 }
                 if(match.inBounds(event)){
-                    game.setScreen(new MatchScreen(game));
+                    game.setScreen(new ServerScreen(game, new long[]{0, 1, 2, 3})); //TODO generalizzare
                 }
             }
         }

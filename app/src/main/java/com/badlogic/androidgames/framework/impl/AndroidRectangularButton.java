@@ -6,7 +6,8 @@ import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidRectangularButton implements Button {
-    private final int x,y,width,height;
+    private final int x, y, width, height;
+
     public AndroidRectangularButton(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;

@@ -1,14 +1,17 @@
 package com.badlogic.androidgames.framework.impl;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
 import com.badlogic.androidgames.framework.Graphics;
+import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.Tile;
 
 public class AndroidTile implements Tile {
-    final Shader shader;
-    final AndroidPixmap pixmap;
+    protected final Shader shader;
+    private final AndroidPixmap pixmap;
+
     public AndroidTile(AndroidPixmap pixmap) {
         this.pixmap = pixmap;
         shader = new BitmapShader(pixmap.bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);

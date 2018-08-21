@@ -8,4 +8,5 @@ class Assets {
     public static Tile backgroundTile;
     public static Pixmap loading;
     public static Sound click;
+    public static Pixmap[] skins;
 }
