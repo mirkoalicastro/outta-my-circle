@@ -1,10 +1,18 @@
 package com.acg.outtamycircle.network;
 
 public class GameMessage {
-    public Type type;
+    private Type type;
     private static int MAX_BUFFER_SIZE = 40;
 
     byte buffer[];
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
 
     public GameMessage(){
         buffer = new byte[MAX_BUFFER_SIZE];

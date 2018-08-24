@@ -9,5 +9,7 @@ class Assets {
     public static Pixmap loading;
     public static Sound click;
     public static Pixmap[] skins;
+    public static Pixmap[] attacks;
     public static Pixmap rightArrow;
+    public static Pixmap leftArrow;
 }
