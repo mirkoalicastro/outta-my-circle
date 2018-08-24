@@ -1,9 +1,11 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
+import com.acg.outtamycircle.entitycomponent.PositionComponent;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.badlogic.androidgames.framework.Game;
@@ -11,6 +13,10 @@ import com.google.fpl.liquidfun.World;
 
 public class ServerScreen extends ClientServerScreen {
     private final World world;
+
+    private static final float TIME_STEP = 1 / 50f;   //60 fps
+    private static final int VELOCITY_ITERATIONS = 8;
+    private static final int POSITION_ITERATIONS = 3;
 
     public ServerScreen(Game game, long []ids) {
         super(game, ids);
@@ -35,14 +41,22 @@ public class ServerScreen extends ClientServerScreen {
         super.update(deltaTime);
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
+
+        Log.d("MOVE", String.valueOf(androidJoystick.getNormX()) + androidJoystick.getNormX());
+
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
-        //world.step(deltaTime?, 8, 3);
+        world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
-        //chiedi a body la posizione
-        //aggiorna position
-        //invia position
+        PositionComponent pos = (PositionComponent)status.characters[0].getComponent(Component.Type.Position);
+        int[] tmp = comp.getPosition();
 
+        Log.d("POSITION", String.valueOf(pos.x) + "--" + pos.y);
+
+        pos.x = tmp[0];
+        pos.y = tmp[1];
+
+        //TODO invia posizione
     }
 
     @Override

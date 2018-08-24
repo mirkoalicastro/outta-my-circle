@@ -3,6 +3,7 @@ package com.acg.outtamycircle;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.GameObject;
+import com.google.fpl.liquidfun.World;
 
 import java.util.LinkedList;
 import java.util.List;

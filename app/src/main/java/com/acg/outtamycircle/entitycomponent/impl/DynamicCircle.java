@@ -10,8 +10,6 @@ import com.google.fpl.liquidfun.World;
 
 public class DynamicCircle extends LiquidFunPhysicsComponent{
     public float radius;
-
-    //TODO valutare disattivazione sleeping mode (lezione 10, pg 20)
     public DynamicCircle(World world, float radius, int x, int y) {
         this.radius = radius;
 
@@ -20,7 +18,7 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
         bodyDef.setType(BodyType.dynamicBody);
 
         body = world.createBody(bodyDef);
-        body.setSleepingAllowed(false);
+        body.setSleepingAllowed(false); //TODO meglio senza?
 
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);
@@ -28,9 +26,9 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.setShape(shape);
-        fixtureDef.setFriction(0.1f);       // attrito (tra 0 e 1, default 0.2)
+        //fixtureDef.setFriction(1f);       // attrito (tra 0 e 1, default 0.2)
         fixtureDef.setRestitution(0.4f);    // elasticità (tra 0 e 1, default 0)
-        fixtureDef.setDensity(0.5f);        // densità (kg/m2, default 0)
+        //fixtureDef.setDensity(0f);        // densità (kg/m2, default 0) 0.3
         body.createFixture(fixtureDef);
 
         // release native objects
