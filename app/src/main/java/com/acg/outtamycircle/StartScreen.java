@@ -11,7 +11,6 @@ import com.badlogic.androidgames.framework.LoadingScreen;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGraphics;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -46,10 +45,19 @@ public class StartScreen extends LoadingScreen {
             Assets.skins = new Pixmap[skins.length];
             for(int i=0; i<skins.length; i++)
                 Assets.skins[i] = game.getGraphics().newPixmap("skins/"+skins[i], PixmapFormat.ARGB8888);
+
+            String[] attacks = assetManager.list("attacks");
+            if(attacks.length == 0)
+                throw new RuntimeException("Error no attack founded");
+            Arrays.sort(attacks);
+            Assets.attacks = new Pixmap[attacks.length];
+            for(int i=0; i<attacks.length; i++)
+                Assets.attacks[i] = game.getGraphics().newPixmap("attacks/"+attacks[i], PixmapFormat.ARGB8888);
         } catch (IOException e) {
             throw new RuntimeException("Error opening assets");
         }
         Assets.rightArrow = game.getGraphics().newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
+        Assets.leftArrow = game.getGraphics().newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
         game.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         setProgress(70);
         Assets.click = game.getAudio().newSound("urto1.wav");
