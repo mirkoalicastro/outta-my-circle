@@ -2,19 +2,17 @@ package com.acg.outtamycircle;
 
 import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.util.Log;
 
 import com.badlogic.androidgames.framework.Game;
-import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
-import com.badlogic.androidgames.framework.LoadingScreen;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGraphics;
+import com.badlogic.androidgames.framework.impl.AndroidLoadingScreen;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public class StartScreen extends LoadingScreen {
+public class StartScreen extends AndroidLoadingScreen {
     final AssetManager assetManager = ((AndroidGraphics) game.getGraphics()).getAssetManager();
 
     public StartScreen(Game game) {

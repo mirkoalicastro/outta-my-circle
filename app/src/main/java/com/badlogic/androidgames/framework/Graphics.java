@@ -24,7 +24,9 @@ public interface Graphics {
 
     void drawCircle(int x, int y, int radius, int color);
 
-    boolean drawTile(Tile tile, int x, int y, int width, int height);
+    void drawTile(Tile tile, int x, int y, int width, int height);
+
+    void drawText(String text, int x, int y, int fontSize, int color);
 
     int getWidth();
 

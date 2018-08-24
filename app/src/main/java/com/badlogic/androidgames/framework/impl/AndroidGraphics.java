@@ -147,11 +147,17 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public boolean drawTile(Tile tile, int x, int y, int width, int height) {
+    public void drawTile(Tile tile, int x, int y, int width, int height) {
         paint.setShader(((AndroidTile)tile).shader);
         canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
         paint.setShader(null);
-        return true;
+    }
+
+    @Override
+    public void drawText(String text, int x, int y, int fontSize, int color) {
+        paint.setTextSize(fontSize);
+        paint.setColor(color);
+        canvas.drawText(text, x, y, paint);
     }
 
     @Override
