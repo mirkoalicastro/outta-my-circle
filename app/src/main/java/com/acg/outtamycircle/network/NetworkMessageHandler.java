@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface NetworkMessageHandler {
 
-    void writeReliable(String player, GameMessage message);
+    void sendReliable();
 
-    void writeUnreliable(String player, GameMessage message);
+    void sendUnreliable();
 
-    void broadcastReliable(GameMessage message);
+    void broadcastReliable();
 
-    void broadcastUnreliable(GameMessage message);
+    void broadcastUnreliable();
+
+    void putInBuffer(GameMessage message);
 
     List<GameMessage> getMessages();
 }
