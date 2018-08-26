@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class StartScreen extends AndroidLoadingScreen {
-    final AssetManager assetManager = ((AndroidGraphics) game.getGraphics()).getAssetManager();
+    final AssetManager assetManager = ((AndroidGraphics) game.getGraphics()).getAssetManager(); //TODO oppure faccio cast ad androidgame e recupero con getAssets?
 
     public StartScreen(Game game) {
         super(game);
@@ -36,6 +36,7 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.backgroundTile = game.getGraphics().newTile("bgtile.png", PixmapFormat.ARGB8888);
         Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
         try {
+
             String[] skins = assetManager.list("skins");
             if(skins.length == 0)
                 throw new RuntimeException("Error no skin founded");

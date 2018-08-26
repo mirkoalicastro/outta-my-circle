@@ -1,5 +1,6 @@
 package com.acg.outtamycircle;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Button;
@@ -7,7 +8,15 @@ import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Screen;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
@@ -24,6 +33,8 @@ public class CustomizeGameCharacterScreen extends Screen {
 
     public CustomizeGameCharacterScreen(Game game) {
         super(game);
+        GoogleTest.createClient((AndroidGame)game);
+        GoogleTest.signIn();
     }
 
     @Override
