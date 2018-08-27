@@ -1,9 +1,9 @@
 package com.acg.outtamycircle;
 
-import com.badlogic.androidgames.framework.Game;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 
 public class ClientScreen extends ClientServerScreen {
-    public ClientScreen(Game game, long []ids) {
+    public ClientScreen(AndroidGame game, long []ids) {
         super(game, ids);
     }
 

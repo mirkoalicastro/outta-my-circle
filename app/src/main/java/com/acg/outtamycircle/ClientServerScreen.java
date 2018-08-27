@@ -14,13 +14,15 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Joystick;
 import com.badlogic.androidgames.framework.Screen;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
+import com.badlogic.androidgames.framework.impl.AndroidScreen;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
 import java.util.List;
 
-public abstract class ClientServerScreen extends Screen {
+public abstract class ClientServerScreen extends AndroidScreen {
     protected GameStatus status;
     protected int h, w, r; //height, width, radius
 
@@ -32,7 +34,7 @@ public abstract class ClientServerScreen extends Screen {
     protected List<Input.TouchEvent> events;
     protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,50);
 
-    public ClientServerScreen(Game game, long[] ids) {
+    public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
         setup();
         status = new GameStatus();
@@ -48,6 +50,7 @@ public abstract class ClientServerScreen extends Screen {
 
     @Override
     public void present(float deltaTime) {
+        //TODO
         Graphics g = game.getGraphics(); //se lo sfondo è un gameobject si può separare graphics da screen
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
 

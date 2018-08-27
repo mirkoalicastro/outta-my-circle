@@ -9,6 +9,7 @@ import com.acg.outtamycircle.entitycomponent.PositionComponent;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.badlogic.androidgames.framework.Game;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.fpl.liquidfun.World;
 
 public class ServerScreen extends ClientServerScreen {
@@ -18,7 +19,7 @@ public class ServerScreen extends ClientServerScreen {
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
 
-    public ServerScreen(Game game, long []ids) {
+    public ServerScreen(AndroidGame game, long []ids) {
         super(game, ids);
         setup();
 
@@ -42,8 +43,6 @@ public class ServerScreen extends ClientServerScreen {
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
 
-        Log.d("MOVE", String.valueOf(androidJoystick.getNormX()) + androidJoystick.getNormX());
-
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
         world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
@@ -51,7 +50,6 @@ public class ServerScreen extends ClientServerScreen {
         PositionComponent pos = (PositionComponent)status.characters[0].getComponent(Component.Type.Position);
         int[] tmp = comp.getPosition();
 
-        Log.d("POSITION", String.valueOf(pos.x) + "--" + pos.y);
 
         pos.x = tmp[0];
         pos.y = tmp[1];
