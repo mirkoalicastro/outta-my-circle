@@ -41,20 +41,20 @@ public class JoystickScreen extends AndroidScreen {
     public void update(float deltaTime) {
         List<Input.TouchEvent> events;
         events = androidJoystick.processAndRelease(androidGame.getInput().getTouchEvents());
-
-        try {
-            for (Input.TouchEvent event : events) {
-                if (timedCircularButton.inBounds(event)) {
-                    Log.d("TCB", "PRESSED");
-                    if (timedCircularButton.isActive()) {
-                        Log.d("TCB", "WOW ATTACKK WHOAAAA");
-                        androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
-                    }
+//        events = androidGame.getInput().getTouchEvents();
+        boolean customizeScreen = false;
+        for (Input.TouchEvent event : events) {
+            if (timedCircularButton.inBounds(event)) {
+                Log.d("TCB", "PRESSED");
+                if (timedCircularButton.isActive()) {
+                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                    customizeScreen = true;
+                    break;
                 }
             }
-        } catch(Exception e) {
-
         }
+        if(customizeScreen)
+            androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
     }
 
     @Override
