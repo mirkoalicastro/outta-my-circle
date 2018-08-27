@@ -102,6 +102,8 @@ public abstract class AndroidGame extends Activity implements Game {
         this.screen.pause();
         this.screen.dispose();
         screen.resume();
+        getInput().getTouchEvents(); //empty old events
+        getInput().getKeyEvents(); //empty old events
         screen.update(0);
         this.screen = screen;
     }

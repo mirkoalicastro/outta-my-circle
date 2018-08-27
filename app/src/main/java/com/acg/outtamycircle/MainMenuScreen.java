@@ -8,9 +8,11 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
+import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
-public class MainMenuScreen extends Screen {
+public class MainMenuScreen extends AndroidScreen {
     private final Button sound = new AndroidCircularButton(200,200,150);
     private final Button start = new AndroidRectangularButton(500,500,100,100);
 
@@ -20,18 +22,17 @@ public class MainMenuScreen extends Screen {
 
     private int colorMatch = Color.WHITE;
 
-    public MainMenuScreen(Game game) {
+    public MainMenuScreen(AndroidGame game) {
         super(game);
-        game.getInput().getTouchEvents(); //clear
     }
 
     @Override
     public void update(float deltaTime) {
-        Graphics g = game.getGraphics();
+        Graphics g = androidGame.getGraphics();
 
-        game.getInput().getKeyEvents(); //is it necessary?
+        androidGame.getInput().getKeyEvents(); //TODO is it necessary?
 
-        for(TouchEvent event: game.getInput().getTouchEvents()) {
+        for(TouchEvent event: androidGame.getInput().getTouchEvents()) {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(sound.inBounds(event)) {
                     Settings.soundEnabled = !Settings.soundEnabled;
@@ -43,14 +44,14 @@ public class MainMenuScreen extends Screen {
                         colorStart = android.graphics.Color.MAGENTA;
                     else {
                         colorStart = android.graphics.Color.BLUE;
-                        game.setScreen(new JoystickScreen(game));
+                        androidGame.setScreen(new JoystickScreen(androidGame));
                     }
     //                if(Settings.soundEnabled)
       //                  Assets.click.play(1);
                     //Start lobby
                 }
                 if(match.inBounds(event)){
-                    game.setScreen(new ServerScreen(game, new long[]{0, 1, 2, 3})); //TODO generalizzare
+                    androidGame.setScreen(new ServerScreen(androidGame, new long[]{0, 1, 2, 3})); //TODO generalizzare
                 }
             }
         }
@@ -58,7 +59,7 @@ public class MainMenuScreen extends Screen {
 
     @Override
     public void present(float deltaTime) {
-        Graphics g = game.getGraphics();
+        Graphics g = androidGame.getGraphics();
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         if(Settings.soundEnabled)
             sound.draw(g, android.graphics.Color.GREEN);

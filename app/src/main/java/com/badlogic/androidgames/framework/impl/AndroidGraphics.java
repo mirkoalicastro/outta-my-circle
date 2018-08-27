@@ -170,7 +170,4 @@ public class AndroidGraphics implements Graphics {
         return frameBuffer.getHeight();
     }
 
-    public AssetManager getAssetManager() {
-        return assets;
-    }
 }

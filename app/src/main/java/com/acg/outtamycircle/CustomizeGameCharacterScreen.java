@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Button;
+import com.badlogic.androidgames.framework.Color;
 import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
+import com.badlogic.androidgames.framework.impl.AndroidScreen;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -20,10 +22,10 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
-public class CustomizeGameCharacterScreen extends Screen {
+public class CustomizeGameCharacterScreen extends AndroidScreen {
     private int currentIdSkin = 0;
     private int currentIdAttack = 0;
-    private final Graphics g = game.getGraphics();
+    private final Graphics g = androidGame.getGraphics();
     private final Button rightSkin = new AndroidRectangularButton(790,200,74,80);
     private final Button leftSkin = new AndroidRectangularButton(490-74,200,74,80);
     private final Button rightAttack = new AndroidRectangularButton(790,400,74,80);
@@ -31,15 +33,15 @@ public class CustomizeGameCharacterScreen extends Screen {
 
     private boolean dontUpdate;
 
-    public CustomizeGameCharacterScreen(Game game) {
+    public CustomizeGameCharacterScreen(AndroidGame game) {
         super(game);
-        GoogleTest.createClient((AndroidGame)game);
+        GoogleTest.createClient(game);
         GoogleTest.signIn();
     }
 
     @Override
     public void update(float deltaTime) {
-        for (Input.TouchEvent event : game.getInput().getTouchEvents()) {
+        for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
             if (rightSkin.inBounds(event)) {
@@ -71,6 +73,7 @@ public class CustomizeGameCharacterScreen extends Screen {
         if(dontUpdate)
             return;
         dontUpdate = true;
+        g.drawText(androidGame.getString(R.string.select_player),0,0,30, android.graphics.Color.RED);
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);
         if(currentIdSkin != Assets.skins.length-1)
