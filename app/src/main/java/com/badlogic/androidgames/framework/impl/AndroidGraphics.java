@@ -140,7 +140,7 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void drawCircle(int x, int y, int radius, int color) {
+    public void drawCircle(int x, int y, float radius, int color) {
         paint.setColor(color);
         paint.setStyle(Style.FILL);
         canvas.drawCircle(x,y,radius,paint);
