@@ -29,7 +29,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
         body.applyForceToCenter(v, true);*/
 
         x *= 100_000;
-        y *= -100_000;
+        y *= 100_000;
         x -= body.getLinearVelocity().getX();
         y -= body.getLinearVelocity().getY();
         float mass = body.getMass();
