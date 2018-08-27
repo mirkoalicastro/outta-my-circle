@@ -33,9 +33,9 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     private boolean dontUpdate;
 
-    public CustomizeGameCharacterScreen(AndroidGame game) {
-        super(game);
-        GoogleTest.createClient(game);
+    public CustomizeGameCharacterScreen(AndroidGame androidGame) {
+        super(androidGame);
+        GoogleTest.createClient(androidGame);
         GoogleTest.signIn();
     }
 
@@ -73,8 +73,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         if(dontUpdate)
             return;
         dontUpdate = true;
-        g.drawText(androidGame.getString(R.string.select_player),0,0,30, android.graphics.Color.RED);
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
+        g.drawText(androidGame.getString(R.string.select_player),490,100,30, android.graphics.Color.RED);
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);
         if(currentIdSkin != Assets.skins.length-1)
             rightSkin.draw(g, Assets.rightArrow);

@@ -42,14 +42,18 @@ public class JoystickScreen extends AndroidScreen {
         List<Input.TouchEvent> events;
         events = androidJoystick.processAndRelease(androidGame.getInput().getTouchEvents());
 
-        for (Input.TouchEvent event : events) {
-            if(timedCircularButton.inBounds(event)) {
-                Log.d("TCB", "PRESSED");
-                if (timedCircularButton.isActive()) {
-                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
-                    androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+        try {
+            for (Input.TouchEvent event : events) {
+                if (timedCircularButton.inBounds(event)) {
+                    Log.d("TCB", "PRESSED");
+                    if (timedCircularButton.isActive()) {
+                        Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                        androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+                    }
                 }
             }
+        } catch(Exception e) {
+
         }
     }
 

@@ -2,4 +2,7 @@
     <string name="app_name">Outta My Circle!</string>
     <string name="action_settings">Settings</string>
     <string name="important_info">IMPORTANTINFO</string>
+    <string name="app_id">326807167896</string>
+    <string name="select_player">Select your skin</string>
+    <string name="select_attack">Select your attack</string>
 </resources>
