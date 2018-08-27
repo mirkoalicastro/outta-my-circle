@@ -5,4 +5,5 @@
     <string name="app_id">326807167896</string>
     <string name="select_player">Select your skin</string>
     <string name="select_attack">Select your attack</string>
+    <string name="google_error_signin">Cannot perform signin</string>
 </resources>

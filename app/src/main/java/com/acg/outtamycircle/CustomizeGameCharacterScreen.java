@@ -1,26 +1,12 @@
 package com.acg.outtamycircle;
 
-import android.app.Activity;
-import android.util.Log;
-
+import com.acg.outtamycircle.network.googleimpl.GoogleSign;
 import com.badlogic.androidgames.framework.Button;
-import com.badlogic.androidgames.framework.Color;
-import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.List;
 
 public class CustomizeGameCharacterScreen extends AndroidScreen {
     private int currentIdSkin = 0;
@@ -35,8 +21,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     public CustomizeGameCharacterScreen(AndroidGame androidGame) {
         super(androidGame);
-        GoogleTest.createClient(androidGame);
-        GoogleTest.signIn();
+        GoogleSign.createClient(androidGame);
+        GoogleSign.signIn();
     }
 
     @Override
@@ -74,7 +60,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         dontUpdate = true;
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
-        g.drawText(androidGame.getString(R.string.select_player),490,100,30, android.graphics.Color.RED);
+        g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
+        g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);
         if(currentIdSkin != Assets.skins.length-1)
             rightSkin.draw(g, Assets.rightArrow);

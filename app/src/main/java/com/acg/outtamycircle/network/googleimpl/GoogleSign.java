@@ -1,4 +1,4 @@
-package com.acg.outtamycircle;
+package com.acg.outtamycircle.network.googleimpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.acg.outtamycircle.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -13,22 +14,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-public class GoogleTest {
+public class GoogleSign {
     private static final GoogleSignInOptions OPTIONS = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     public static final int RC_SIGN_IN = 9_001;
     private static GoogleSignInClient client = null;
     private static Activity activity = null;
 
-    private GoogleTest() {}
+    private GoogleSign() {}
 
     public static void createClient(Activity activity) {
         client = GoogleSignIn.getClient(activity, OPTIONS);
-        GoogleTest.activity = activity;
+        GoogleSign.activity = activity;
     }
     public static boolean isSignedIn() {
         return GoogleSignIn.getLastSignedInAccount(activity) != null;
@@ -57,16 +56,12 @@ public class GoogleTest {
     }
     public static void handleSignInData(Intent data) {
         GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-        if (result.isSuccess()) {
-            // The signed in account is stored in the result.
-            Log.d("GoogleTest", "Tutto ok");
-        } else {
+        if (!result.isSuccess()) {
             String message = result.getStatus().getStatusMessage();
-            Log.d("GoogleTest", "signInResult:failed code=" + result.getStatus().getStatusCode() + "," + GoogleSignInStatusCodes.getStatusCodeString(result.getStatus().getStatusCode()));
-            if (message == null || message.isEmpty()) {
-                message = "BOOH";
-            }
-            new AlertDialog.Builder(activity).setMessage(message).setNeutralButton(android.R.string.ok, null).show();
+            new AlertDialog.Builder(activity)
+                    .setMessage(activity.getString(R.string.google_error_signin) + " (" + result.getStatus().getStatusCode() + ")")
+                    .setNeutralButton(android.R.string.ok, null)
+                    .show();
         }
     }
 
