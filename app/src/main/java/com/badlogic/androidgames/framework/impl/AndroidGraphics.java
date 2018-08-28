@@ -22,21 +22,17 @@ public class AndroidGraphics implements Graphics {
     private final AssetManager assets;
     private final Bitmap frameBuffer;
     private final Canvas canvas;
-    private final Paint paint;
-    private final Rect srcRect;
-    private final Rect dstRect;
-    private final Options options;
-    private final RectF rectF;
+    private final Paint paint = new Paint();
+    private final Rect srcRect = new Rect();
+    private final Rect dstRect = new Rect();
+    private final Options options = new Options();
+    private final RectF rectF = new RectF();
 
     public AndroidGraphics(AssetManager assets, Bitmap frameBuffer) {
         this.assets = assets;
         this.frameBuffer = frameBuffer;
-        this.canvas = new Canvas(frameBuffer);
-        this.paint = new Paint();
-        this.srcRect = new Rect();
-        this.dstRect = new Rect();
-        this.rectF = new RectF();
-        this.options = new Options();
+        canvas = new Canvas(frameBuffer);
+        paint.setAntiAlias(true);
     }
 
     @Override
