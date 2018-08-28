@@ -24,7 +24,7 @@ public class EntityFactory{
         Arena arena = new Arena();
 
         CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics, radius);
-        circleDrawableComponent.setColor(Color.CYAN);
+        circleDrawableComponent.setColor(Color.BLACK);
         arena.addComponent(circleDrawableComponent);
 
         PositionComponent positionComponent = new PositionComponent(x,y);

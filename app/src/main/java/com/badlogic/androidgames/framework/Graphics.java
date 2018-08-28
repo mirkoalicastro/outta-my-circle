@@ -22,7 +22,7 @@ public interface Graphics {
 
     void drawPixmap(Pixmap pixmap, int x, int y);
 
-    void drawCircle(int x, int y, int radius, int color);
+    void drawCircle(int x, int y, float radius, int color);
 
     void drawTile(Tile tile, int x, int y, int width, int height);
 
