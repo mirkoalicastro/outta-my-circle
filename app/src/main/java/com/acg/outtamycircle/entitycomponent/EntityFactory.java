@@ -3,6 +3,7 @@ package com.acg.outtamycircle.entitycomponent;
 import android.graphics.Color;
 
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
+import com.acg.outtamycircle.physicsutilities.Converter;
 import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.CircleDrawableComponent;
@@ -37,15 +38,20 @@ public class EntityFactory{
         GameCharacter c = new GameCharacter();
 
         c.addComponent(new PositionComponent(x, y));
-        c.addComponent(new DynamicCircle(world, radius, x, y));
 
         CircleDrawableComponent drawable = new CircleDrawableComponent(graphics, radius);
         drawable.setColor(color);
         c.addComponent(drawable);
 
+        c.addComponent(new DynamicCircle(world,
+                Converter.frameToPhysicsRadius(radius),
+                Converter.frameToPhysicsX(x),
+                Converter.frameToPhysicsY(y)));
+
         return c;
     }
 
+    //TODO privo di conversione
     public static GameCharacter createClientDefaultCharacter(int radius, int x, int y, int color){
         GameCharacter c = new GameCharacter();
 

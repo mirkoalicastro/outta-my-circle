@@ -10,7 +10,7 @@ import com.google.fpl.liquidfun.World;
 
 public class DynamicCircle extends LiquidFunPhysicsComponent{
     public float radius;
-    public DynamicCircle(World world, float radius, int x, int y) {
+    public DynamicCircle(World world, float radius, float x, float y) {
         this.radius = radius;
 
         BodyDef bodyDef = new BodyDef();
@@ -28,7 +28,7 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
         fixtureDef.setShape(shape);
         //fixtureDef.setFriction(1f);       // attrito (tra 0 e 1, default 0.2)
         fixtureDef.setRestitution(0.4f);    // elasticità (tra 0 e 1, default 0)
-        //fixtureDef.setDensity(0f);        // densità (kg/m2, default 0) 0.3
+        //fixtureDef.setDensity(0);        // densità (kg/m2, default 0)
         body.createFixture(fixtureDef);
 
         // release native objects
