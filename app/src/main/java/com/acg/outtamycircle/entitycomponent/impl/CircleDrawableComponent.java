@@ -31,5 +31,7 @@ public class CircleDrawableComponent extends DrawableComponent {
         PositionComponent pos = (PositionComponent) owner.getComponent(Type.Position);
 
         graphics.drawCircle(pos.x, pos.y, radius, color);
+
+        //graphics.drawCircle(pos.x, pos.y, radius, color);
     }
 }
