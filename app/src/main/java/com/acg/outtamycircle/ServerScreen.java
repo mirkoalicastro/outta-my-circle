@@ -59,6 +59,6 @@ public class ServerScreen extends ClientServerScreen {
 
     @Override
     public void setup(){
-
+        Converter.setScale(w, r);
     }
 }

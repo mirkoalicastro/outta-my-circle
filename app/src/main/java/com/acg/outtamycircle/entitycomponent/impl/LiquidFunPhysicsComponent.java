@@ -28,8 +28,10 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
         //body.applyLinearImpulse(v, body.getLocalCenter(),true);
         body.applyForceToCenter(v, true);*/
 
-        x *= 70;
-        y *= 70;
+        x *= 55;
+        y *= 55;
+
+        //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();
         y -= body.getLinearVelocity().getY();
 
