@@ -1,5 +1,7 @@
 package com.acg.outtamycircle;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.network.googleimpl.GoogleSign;
 import com.badlogic.androidgames.framework.Button;
 import com.badlogic.androidgames.framework.Graphics;
@@ -19,10 +21,12 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     private boolean dontUpdate;
 
+    private GoogleSign googleSign = GoogleSign.getInstance();
+
     public CustomizeGameCharacterScreen(AndroidGame androidGame) {
         super(androidGame);
-        GoogleSign.createClient(androidGame);
-        GoogleSign.signIn();
+        googleSign.createClient(androidGame);
+        googleSign.signIn();
     }
 
     @Override
@@ -58,6 +62,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     public void present(float deltaTime) {
         if(dontUpdate)
             return;
+        Log.d("BEBE", googleSign.getPlayerId() == null ? "null" : googleSign.getPlayerId());
         dontUpdate = true;
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);

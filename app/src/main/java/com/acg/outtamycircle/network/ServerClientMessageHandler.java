@@ -12,22 +12,20 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class ServerClientMessageHandler implements NetworkMessageHandler, OnRealTimeMessageReceivedListener{
+public class ServerClientMessageHandler implements NetworkMessageHandler {
     private RealTimeMultiplayerClient client;
     private List<GameMessage> first, second;
     private Pools.Pool<GameMessage> pool;
     private String player;
     private static final int MAX_BUFFER_SIZE = 400; //TODO
 
-    private final String roomId;
+    private String roomId;
 
     private byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
 
-    public ServerClientMessageHandler(String room, String player, int capacity){
-        roomId = room;
-        this.player = player;
-
+    public ServerClientMessageHandler(){
+        int capacity = 40;
         first = new ArrayList<>(capacity);
         second = new ArrayList<>(capacity);
         capacity = capacity*2;
