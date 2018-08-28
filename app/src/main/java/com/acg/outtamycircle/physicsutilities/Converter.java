@@ -15,22 +15,20 @@ public class Converter {
     }
 
     public static float physicsToFrameX(float x){
-        return x/SCALE_WIDTH;
-    }
-
-    public static float physicsToFrameY(float y){
-        return y/SCALE_HEIGHT;
-    }
-
-    public static float frameToPhysicsX(float x){
         return x*SCALE_WIDTH;
     }
 
-    public static float frameToPhysicsY(float y){
+    public static float physicsToFrameY(float y){
         return y*SCALE_HEIGHT;
     }
 
-    public static float frameToPhysicsRadius(float r){
-        return (r*SCALE_WIDTH);
+    public static float frameToPhysicsX(float x){
+        return x/SCALE_WIDTH;
     }
+
+    public static float frameToPhysicsY(float y){
+        return y/SCALE_HEIGHT;
+    }
+
+    public static float frameToPhysicsRadius(float r){ return r/SCALE_HEIGHT; }
 }

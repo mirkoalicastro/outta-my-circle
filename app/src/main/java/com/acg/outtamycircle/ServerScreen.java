@@ -54,11 +54,21 @@ public class ServerScreen extends ClientServerScreen {
         pos.x = (int)Converter.physicsToFrameX(comp.getX());
         pos.y = (int)Converter.physicsToFrameY(comp.getY());
 
+        if(status.collide(status.characters[0], status.characters[1]))
+            Log.d("COLLISIONE", "1");
+        if(status.collide(status.characters[0], status.characters[2]))
+            Log.d("COLLISIONE", "2");
+        if(status.collide(status.characters[0], status.characters[3]))
+            Log.d("COLLISIONE", "3");
+
+
+
         //TODO invia posizione
     }
 
     @Override
     public void setup(){
+        Log.d("INFO:", w+"--"+r);
         Converter.setScale(w, r);
     }
 }

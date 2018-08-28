@@ -26,10 +26,13 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.setShape(shape);
-        //fixtureDef.setFriction(1f);       // attrito (tra 0 e 1, default 0.2)
+        fixtureDef.setFriction(1f);       // attrito (tra 0 e 1, default 0.2)
         fixtureDef.setRestitution(0.4f);    // elasticità (tra 0 e 1, default 0)
-        //fixtureDef.setDensity(0);        // densità (kg/m2, default 0)
+        fixtureDef.setDensity(1);        // densità (kg/m2, default 0)
         body.createFixture(fixtureDef);
+
+        body.setBullet(true);
+
 
         // release native objects
         bodyDef.delete();
