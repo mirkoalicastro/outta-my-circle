@@ -16,20 +16,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
 
 
     public void move(float x, float y){
-
-       /* v.set(x * 500, -y * 50);
-
-        Log.d("VEC2", String.valueOf(x)+"--"+y);
-
-
-        //controlla che non raggiunga il limite
-        //body.getLinearVelocity
-
-        //body.applyLinearImpulse(v, body.getLocalCenter(),true);
-        body.applyForceToCenter(v, true);*/
-
-        x *= 45;
-        y *= 45;
+        x *= 45; y *= 45;
 
         //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();

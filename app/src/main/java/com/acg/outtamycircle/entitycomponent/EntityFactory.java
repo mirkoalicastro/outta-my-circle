@@ -25,11 +25,8 @@ public class EntityFactory{
 
         CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics, radius);
         circleDrawableComponent.setColor(Color.BLACK);
+        circleDrawableComponent.setPosition(x, y);
         arena.addComponent(circleDrawableComponent);
-
-        PositionComponent positionComponent = new PositionComponent(x,y);
-        positionComponent.owner = arena;
-        arena.addComponent(positionComponent);
 
         return arena;
     }
@@ -37,10 +34,9 @@ public class EntityFactory{
     public static GameCharacter createServerDefaultCharacter(int radius, int x, int y, int color){
         GameCharacter c = new GameCharacter();
 
-        c.addComponent(new PositionComponent(x, y));
-
         CircleDrawableComponent drawable = new CircleDrawableComponent(graphics, radius);
         drawable.setColor(color);
+        drawable.setPosition(x, y);
         c.addComponent(drawable);
 
         c.addComponent(new DynamicCircle(world,
@@ -55,10 +51,9 @@ public class EntityFactory{
     public static GameCharacter createClientDefaultCharacter(int radius, int x, int y, int color){
         GameCharacter c = new GameCharacter();
 
-        c.addComponent(new PositionComponent(x, y));
-
         CircleDrawableComponent drawable = new CircleDrawableComponent(graphics, radius);
         drawable.setColor(color);
+        drawable.setPosition(x, y);
         c.addComponent(drawable);
 
         return c;
