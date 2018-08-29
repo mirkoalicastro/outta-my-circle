@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.entitycomponent.impl;
 
-import com.acg.outtamycircle.entitycomponent.Entity;
-import com.acg.outtamycircle.entitycomponent.PositionComponent;
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
@@ -20,9 +18,6 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
 
         body = world.createBody(bodyDef);
         body.setSleepingAllowed(false); //TODO meglio senza?
-
-       // PolygonShape shape = new PolygonShape();
-       // shape.setAsBox(radius, radius);
 
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);

@@ -4,13 +4,11 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
+import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
-import com.acg.outtamycircle.entitycomponent.PositionComponent;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.physicsutilities.Converter;
-import com.badlogic.androidgames.framework.Game;
-import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.fpl.liquidfun.World;
 
@@ -30,10 +28,10 @@ public class ServerScreen extends ClientServerScreen {
 
         /*Inizializzazione Giocatori*/
         GameCharacter[] characters = {
-                EntityFactory.createServerDefaultCharacter(40, w/2, r/2 - 90, Color.GREEN),
-                EntityFactory.createServerDefaultCharacter(40, w/2, r + r/2 + 90, Color.WHITE),
-                EntityFactory.createServerDefaultCharacter(40, w/2 + r/2 + 90, h/2, Color.YELLOW),
-                EntityFactory.createServerDefaultCharacter(40, w/2 - r/2 - 90, h/2, Color.RED),
+                EntityFactory.createServerDefaultCharacter(40, spawnPositions[0][0], spawnPositions[0][1], Color.GREEN),
+                EntityFactory.createServerDefaultCharacter(40, spawnPositions[1][0], spawnPositions[1][1], Color.WHITE),
+                EntityFactory.createServerDefaultCharacter(40, spawnPositions[2][0], spawnPositions[2][1], Color.YELLOW),
+                EntityFactory.createServerDefaultCharacter(40, spawnPositions[3][0], spawnPositions[3][1], Color.RED),
         };
         status.setCharacters(characters);
     }
@@ -52,27 +50,17 @@ public class ServerScreen extends ClientServerScreen {
         for(int i=0; i<status.characters.length; i++) {
             comp = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
 
-            PositionComponent pos = (PositionComponent) status.characters[i].getComponent(Component.Type.Position);
+            DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
 
-            pos.x = (int) Converter.physicsToFrameX(comp.getX());
-            pos.y = (int) Converter.physicsToFrameY(comp.getY());
+            shape.setPosition((int) Converter.physicsToFrameX(comp.getX()),
+                            (int) Converter.physicsToFrameY(comp.getY()));
         }
-
-        if(status.collide(status.characters[0], status.characters[1]))
-            Log.d("COLLISIONE", "1");
-        if(status.collide(status.characters[0], status.characters[2]))
-            Log.d("COLLISIONE", "2");
-        if(status.collide(status.characters[0], status.characters[3]))
-            Log.d("COLLISIONE", "3");
-
-
 
         //TODO invia posizione
     }
 
     @Override
     public void setup(){
-        Log.d("INFO:", w+"--"+r);
-        Converter.setScale(w, r);
+        Converter.setScale(w, h);
     }
 }

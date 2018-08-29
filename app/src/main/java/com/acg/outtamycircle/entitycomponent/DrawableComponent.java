@@ -8,6 +8,7 @@ import com.badlogic.androidgames.framework.Pixmap;
 
 public abstract class DrawableComponent extends Component {
     protected final Graphics graphics;
+    protected int x, y;
 
     public DrawableComponent(Graphics graphics){
         this.graphics = graphics;
@@ -17,4 +18,10 @@ public abstract class DrawableComponent extends Component {
     public Component.Type type() { return Component.Type.Drawable; }
 
     public abstract void draw();
+
+    public void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
 }

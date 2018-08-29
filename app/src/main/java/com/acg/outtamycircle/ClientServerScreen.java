@@ -29,10 +29,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
     private final Graphics graphics = game.getGraphics();
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
 
+    protected int[][] spawnPositions;
+
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
-    protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,50);
+    protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,100);
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
@@ -43,9 +45,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         h = graphics.getHeight();
         w = graphics.getWidth();
-        r = h/2 - 10;
+        r = h/2 - 40;
 
         status.setArena(EntityFactory.createArena(r, w/2, h/2));
+
+
+        spawnPositions = getSpawnPositions(r-40, w/2, h/2, 4);
     }
 
     @Override
@@ -96,5 +101,37 @@ public abstract class ClientServerScreen extends AndroidScreen {
     private void drawCharacters(){
         for(int i=0 ; i<status.characters.length ; i++)
             ((DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable)).draw();
+    }
+
+    /**
+     * Calcolo delle posizioni di spawn dei giocatori
+     *
+     * @param r raggio
+     * @param w fattore di shift sull'asse x
+     * @param h fattore di shift sull'asse y
+     * @param n numero di giocatori
+     * @return
+     */
+    private int[][] getSpawnPositions(int r, int w, int h, int n){
+        int[][] spwns = new int[n][2];
+        double x, y;
+        double p = (Math.PI*2)/n;
+        double theta = Math.PI/2;
+
+        System.out.println("TAG: "+" W:"+w+" H: "+h);
+        for(int i=0 ; i<n ; i++){
+            x = Math.cos(theta)*r;
+            y = Math.sin(theta)*r;
+
+
+            spwns[i][0] = (int)x + w;
+            spwns[i][1] = (int)y + h;
+
+            theta += p;
+        }
+
+
+
+        return spwns;
     }
 }
