@@ -1,10 +1,11 @@
 package com.acg.outtamycircle;
 
+import android.graphics.Color;
 import android.util.Log;
 
+import com.acg.outtamycircle.network.googleimpl.GoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.badlogic.androidgames.framework.Button;
-import com.badlogic.androidgames.framework.Color;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
@@ -20,7 +21,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final Button leftSkin = new AndroidRectangularButton(490-74,200,74,80);
     private final Button rightAttack = new AndroidRectangularButton(790,400,74,80);
     private final Button leftAttack = new AndroidRectangularButton(490-74,400,74,80);
-    private final Button quickGame = new AndroidCircularButton(50,50,50);
+    private final Button quickGame = new AndroidCircularButton(150,150,50);
 
     private boolean dontUpdate;
 
@@ -34,10 +35,13 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     @Override
     public void update(float deltaTime) {
+        boolean rom = false;
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
-            if (rightSkin.inBounds(event)) {
+            if(quickGame.inBounds(event)) {
+                rom = true;
+            } else if(rightSkin.inBounds(event)) {
                 if(currentIdSkin < Assets.skins.length-1) {
                     currentIdSkin++;
                     dontUpdate = false;
@@ -59,6 +63,10 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 }
             }
         }
+        if(rom) {
+            GoogleRoom googleRoom = new GoogleRoom(androidGame, myGoogleSignIn);
+            googleRoom.quickGame();
+        }
     }
 
     @Override
@@ -67,8 +75,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         Log.d("BEBE", myGoogleSignIn.getPlayerId() == null ? "null" : myGoogleSignIn.getPlayerId());
         dontUpdate = true;
-        quickGame.draw(g, Color.convert(50,20,10,100));
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
+        quickGame.draw(g, Color.RED);
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
         g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);

@@ -6,4 +6,5 @@
     <string name="select_player">Select your skin</string>
     <string name="select_attack">Select your attack</string>
     <string name="google_error_signin">Cannot perform signin</string>
+    <string name="google_error">There was a fuckin\' problem</string>
 </resources>
