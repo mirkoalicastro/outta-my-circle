@@ -7,13 +7,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.acg.outtamycircle.R;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.Player;
@@ -23,28 +20,28 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-public class GoogleSign {
+public class MyGoogleSignIn {
     private static final GoogleSignInOptions OPTIONS = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient client;
     private final Activity activity;
     private String playerId;
-    private static GoogleSign instance;
+    private static MyGoogleSignIn instance;
 
     public String getPlayerId() {
         return playerId;
     }
 
     public static void createInstance(Activity activity) {
-        instance = new GoogleSign(activity);
+        instance = new MyGoogleSignIn(activity);
     }
 
-    public static GoogleSign getInstance() {
+    public static MyGoogleSignIn getInstance() {
         if(instance == null)
             throw new IllegalStateException("first create");
         return instance;
     }
 
-    private GoogleSign(Activity activity) {
+    private MyGoogleSignIn(Activity activity) {
         this.activity = activity;
     }
 
@@ -78,7 +75,7 @@ public class GoogleSign {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         playerId = null;
-                        Log.d("GS",e.toString());
+                        Log.d("GoogleS",e.toString());
                     }
                 });
 

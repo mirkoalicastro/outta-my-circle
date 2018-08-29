@@ -4,8 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.acg.outtamycircle.network.googleimpl.GoogleRC;
-import com.acg.outtamycircle.network.googleimpl.GoogleSign;
-import com.badlogic.androidgames.framework.Game;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 
@@ -14,7 +13,8 @@ public class OuttaMyCircleGame extends AndroidGame {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GoogleSign.createInstance(this);
+        MyGoogleSignIn.createInstance(this);
+
     }
 
     //TODO unica soluzione?
@@ -22,7 +22,7 @@ public class OuttaMyCircleGame extends AndroidGame {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GoogleRC.RC_SIGN_IN) {
-            GoogleSign.getInstance().handleSignData(requestCode, resultCode, data);
+            MyGoogleSignIn.getInstance().handleSignData(requestCode, resultCode, data);
         }
     }
 
