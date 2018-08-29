@@ -49,10 +49,14 @@ public class ServerScreen extends ClientServerScreen {
 
         world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
-        PositionComponent pos = (PositionComponent)status.characters[0].getComponent(Component.Type.Position);
+        for(int i=0; i<status.characters.length; i++) {
+            comp = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
 
-        pos.x = (int)Converter.physicsToFrameX(comp.getX());
-        pos.y = (int)Converter.physicsToFrameY(comp.getY());
+            PositionComponent pos = (PositionComponent) status.characters[i].getComponent(Component.Type.Position);
+
+            pos.x = (int) Converter.physicsToFrameX(comp.getX());
+            pos.y = (int) Converter.physicsToFrameY(comp.getY());
+        }
 
         if(status.collide(status.characters[0], status.characters[1]))
             Log.d("COLLISIONE", "1");

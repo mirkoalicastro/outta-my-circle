@@ -30,5 +30,5 @@ public class Converter {
         return y/SCALE_HEIGHT;
     }
 
-    public static float frameToPhysicsRadius(float r){ return r/(SCALE_WIDTH); }
+    public static float frameToPhysicsRadius(float r){ return r/SCALE_WIDTH; }
 }
