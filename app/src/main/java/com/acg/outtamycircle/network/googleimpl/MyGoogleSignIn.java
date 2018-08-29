@@ -101,7 +101,7 @@ public class MyGoogleSignIn {
         Intent signInIntent = client.getSignInIntent();
         activity.startActivityForResult(signInIntent, GoogleRC.RC_SIGN_IN);
     }
-    public void handleSignData(int requestCode, int resultCode, Intent data) {
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GoogleRC.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {

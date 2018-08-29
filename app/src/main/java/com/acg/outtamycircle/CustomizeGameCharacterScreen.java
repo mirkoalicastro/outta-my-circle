@@ -64,8 +64,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             }
         }
         if(rom) {
-            GoogleRoom googleRoom = new GoogleRoom(androidGame, myGoogleSignIn);
-            googleRoom.quickGame();
+            GoogleRoom.getInstance().quickGame();
         }
     }
 
