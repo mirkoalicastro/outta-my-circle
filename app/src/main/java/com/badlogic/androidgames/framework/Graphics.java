@@ -4,7 +4,6 @@ public interface Graphics {
     enum PixmapFormat {
         ARGB8888, ARGB4444, RGB565
     }
-    Effect newTile(Pixmap pixmap);
 
     Pixmap newPixmap(String fileName, PixmapFormat format);
 

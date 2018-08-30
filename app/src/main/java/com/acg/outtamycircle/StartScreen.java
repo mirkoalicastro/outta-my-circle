@@ -5,7 +5,9 @@ import android.graphics.Color;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
+import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.AndroidSplashScreen;
+import com.badlogic.androidgames.framework.impl.AndroidTileEffect;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ public class StartScreen extends AndroidSplashScreen {
     @Override
     public void update(float deltaTime) {
         Assets.background = game.getGraphics().newPixmap("bgtile.png", PixmapFormat.ARGB8888);
-        Assets.backgroundTile = game.getGraphics().newTile(Assets.background);
+        Assets.backgroundTile = new AndroidTileEffect((AndroidPixmap)Assets.background);
         androidGame.getGraphics().drawEffect(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
         try {

@@ -76,10 +76,6 @@ public class AndroidGraphics implements Graphics {
         return new AndroidPixmap(bitmap, format);
     }
 
-    public Effect newTile(Pixmap pixmap) {
-        return new AndroidTileEffect((AndroidPixmap)pixmap);
-    }
-
     @Override
     public void clear(int color) {
         canvas.drawRGB((color & 0xff0000) >> 16, (color & 0xff00) >> 8, (color & 0xff));
