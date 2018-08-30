@@ -1,6 +1,7 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.graphics.Shader;
 import android.util.Log;
 
 import com.badlogic.androidgames.framework.Game;
@@ -15,6 +16,7 @@ import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
@@ -22,7 +24,13 @@ import java.util.List;
 import java.util.Set;
 
 public class JoystickScreen extends AndroidScreen {
-    private final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,580,100);
+    private final AndroidJoystick androidJoystick =
+            new AndroidJoystick(androidGame.getGraphics(),200,580,100,
+                    new RadialGradientEffect(200,580,100,
+                            new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
+                            new float[]{0f,1f}, Shader.TileMode.CLAMP
+                    )
+            );
     private final World world;
     private final Arena arena;
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),2000,1080,580,100);
@@ -70,7 +78,7 @@ public class JoystickScreen extends AndroidScreen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoystick.draw(Color.DKGRAY, Settings.WHITE_50ALFA,8,Settings.DKGRAY);
+        androidJoystick.draw(Color.DKGRAY, Settings.WHITE50ALFA,15,Settings.DKGRAY);
         if(timedCircularButton.isEnabled())
             timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_black, 15,Settings.DKGRAY);
         else

@@ -77,7 +77,7 @@ public class AndroidGraphics implements Graphics {
     }
 
     public Effect newTile(Pixmap pixmap) {
-        return new AndroidTile((AndroidPixmap)pixmap);
+        return new AndroidTileEffect((AndroidPixmap)pixmap);
     }
 
     @Override
@@ -167,9 +167,7 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public void drawEffect(Effect effect, int x, int y, int width, int height) {
-        paint.setShader(((AndroidEffect)effect).shader);
-        canvas.drawRect(x, y, x + width, y + height, paint);
-        paint.setShader(null);
+        ((AndroidEffect)effect).apply(canvas,paint,x,y,width,height);
     }
 
     @Override

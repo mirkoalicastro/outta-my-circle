@@ -3,6 +3,7 @@ package com.badlogic.androidgames.framework.impl;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Joystick;
@@ -13,16 +14,21 @@ import java.util.List;
 
 public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private int x, y;
-    private final List<Input.TouchEvent> buffer;
+    private final List<Input.TouchEvent> buffer = new LinkedList<>();
     private final int radius;
+    private final Effect effect;
     private int pointer = -1;
+
     private static final int DEFAULT_PRIMARY_COLOR = Color.DKGRAY;
     private static final int DEFAULT_SECONDARY_COLOR = Color.WHITE;
 
-    public AndroidJoystick(Graphics graphics, int x, int y, int radius) {
+    public AndroidJoystick(Graphics graphics, int x, int y, int radius, Effect effect) {
         super(graphics, x, y, radius);
         this.radius = radius;
-        buffer = new LinkedList<>();
+        this.effect = effect;
+    }
+    public AndroidJoystick(Graphics graphics, int x, int y, int radius) {
+        this(graphics,x,y,radius,null);
     }
 
     @Override
@@ -79,7 +85,13 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
 
     public void draw(int color1, int color2) {
         super.draw(color1);
+        drawEffect();
         graphics.drawCircle(getX()+x, getY()-y, radius/2, color2);
+    }
+
+    private void drawEffect() {
+        if(effect != null)
+            graphics.drawEffect(effect,super.getX(), super.getY(), radius*2, radius*2);
     }
 
     public void draw(int color1, int color2, int strokeWidth, int colorStroke) {

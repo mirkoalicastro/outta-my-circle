@@ -8,5 +8,8 @@ public class Settings {
     public static final int DKGREEN = Color.parseColor("#0b4d10");
     public static final int DKRED = Color.parseColor("#621219");
     public static final int DKGRAY = Color.parseColor("#171d25");
-    public static final int WHITE_50ALFA = com.badlogic.androidgames.framework.Color.convert(255,255,255,230);
+    public static final int WHITE50ALFA = 0xEBCACACA;
+    public static final int INTERNAL_GRADIENT = Color.parseColor("#5a5a5a");
+    public static final int EXTERNAL_GRADIENT = Color.parseColor("#060606");
+
 }
