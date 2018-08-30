@@ -7,5 +7,13 @@ import com.acg.outtamycircle.entitycomponent.*;
  */
 public abstract class GameObject extends Entity{
     //protected String name;
-    public int id;
+    public enum TYPE {CHARACTER, POWERUP, WALL}
+
+    //public int id;
+    private TYPE type;
+
+    public TYPE getType(){
+        return type;
+    }
+
 }

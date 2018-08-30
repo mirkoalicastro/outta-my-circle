@@ -17,7 +17,8 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
         bodyDef.setType(BodyType.dynamicBody);
 
         body = world.createBody(bodyDef);
-        body.setSleepingAllowed(false); //TODO meglio senza?
+        body.setSleepingAllowed(false);
+        body.setUserData(owner);
 
         CircleShape shape = new CircleShape();
         shape.setRadius(radius);
@@ -31,7 +32,6 @@ public class DynamicCircle extends LiquidFunPhysicsComponent{
         body.createFixture(fixtureDef);
 
         body.setBullet(true);
-
 
         // release native objects
         bodyDef.delete();

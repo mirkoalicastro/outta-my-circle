@@ -1,53 +1,57 @@
 package com.acg.outtamycircle.entitycomponent.impl;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.acg.outtamycircle.physicsutilities.Converter;
+import com.badlogic.androidgames.framework.Graphics;
+import com.google.fpl.liquidfun.Body;
+import com.google.fpl.liquidfun.BodyDef;
+import com.google.fpl.liquidfun.CircleShape;
+import com.google.fpl.liquidfun.FixtureDef;
+import com.google.fpl.liquidfun.World;
+
+/*Classe da eliminare*/
 public class BoundsTest {
-    /*private Paint paint = new Paint();
-    private float xmin, xmax, ymin, ymax;
-    private float screen_xmin, screen_xmax, screen_ymin, screen_ymax;
+    Graphics graphics;
+    int x, y, radius;
+    Body body;
+    private Paint paint = new Paint();
 
-    public BoundsTest()
-    {
-        super(gw);
-        this.xmin = xmin; this.xmax = xmax; this.ymin = ymin; this.ymax = ymax;
-        this.screen_xmin = gw.toPixelsX(xmin+THICKNESS);
-        this.screen_xmax = gw.toPixelsX(xmax-THICKNESS);
-        this.screen_ymin = gw.toPixelsY(ymin+THICKNESS);
-        this.screen_ymax = gw.toPixelsY(ymax-THICKNESS);
+    public BoundsTest(Graphics g, World world, int radius, int x, int y){
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        graphics = g;
 
-        // a body definition: position and type
         BodyDef bdef = new BodyDef();
-        // default position is (0,0) and default type is staticBody
-        this.body = gw.world.createBody(bdef);
-        this.name = "Enclosure";
-        body.setUserData(this);
+        bdef.setPosition(Converter.frameToPhysicsX(x), Converter.frameToPhysicsY(y));
+        //default type is staticBody
+        body = world.createBody(bdef);
 
-        PolygonShape box = new PolygonShape();
-        // top
-        box.setAsBox(xmax-xmin, THICKNESS, xmin+(xmax-xmin)/2, ymin, 0); // last is rotation angle
-        body.createFixture(box, 0); // no density needed
-        // bottom
-        box.setAsBox(xmax-xmin, THICKNESS, xmin+(xmax-xmin)/2, ymax, 0);
-        body.createFixture(box, 0);
-        // left
-        box.setAsBox(THICKNESS, ymax-ymin, xmin, ymin+(ymax-ymin)/2, 0);
-        body.createFixture(box, 0);
-        // right
-        box.setAsBox(THICKNESS, ymax-ymin, xmax, ymin+(ymax - ymin) / 2, 0);
-        body.createFixture(box, 0);
+        CircleShape circle = new CircleShape();
+        circle.setRadius(radius);
 
-        // clean up native objects
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.setShape(circle);
+        body.createFixture(fixtureDef);
+
+        // release native objects
         bdef.delete();
-        box.delete();
+        circle.delete();
+        fixtureDef.delete();
     }
 
-    @Override
-    public void draw(Bitmap buffer, float x, float y, float angle) {
+    /*public void draw(Bitmap buffer, float x, float y, float angle) {
         paint.setARGB(255, 0, 0, 255);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(2);
         Canvas canvas = new Canvas(buffer);
         canvas.drawRect(screen_xmin, screen_ymin, screen_xmax, screen_ymax, paint);
     }*/
+
+    public void draw(){
+        graphics.drawCircle(x, y, radius, Color.YELLOW);
+    }
 }

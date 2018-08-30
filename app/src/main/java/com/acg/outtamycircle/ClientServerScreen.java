@@ -6,6 +6,7 @@ import android.util.Log;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
+import com.acg.outtamycircle.entitycomponent.impl.BoundsTest;
 import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
@@ -26,7 +27,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected GameStatus status;
     protected int h, w, r; //height, width, radius
 
-    private final Graphics graphics = game.getGraphics();
+    /*TODO una volta cancellato boundtest cambiare a private*/
+    protected final Graphics graphics = game.getGraphics();
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
 
     protected int[][] spawnPositions;
@@ -48,7 +50,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         r = h/2 - 40;
 
         status.setArena(EntityFactory.createArena(r, w/2, h/2));
-
 
         spawnPositions = getSpawnPositions(r-40, w/2, h/2, 4);
     }

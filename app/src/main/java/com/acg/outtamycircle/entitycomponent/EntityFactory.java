@@ -2,6 +2,7 @@ package com.acg.outtamycircle.entitycomponent;
 
 import android.graphics.Color;
 
+import com.acg.outtamycircle.entitycomponent.impl.BoundsTest;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.physicsutilities.Converter;
 import com.badlogic.androidgames.framework.Graphics;

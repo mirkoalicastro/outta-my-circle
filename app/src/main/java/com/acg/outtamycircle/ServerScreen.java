@@ -6,6 +6,7 @@ import android.util.Log;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
+import com.acg.outtamycircle.entitycomponent.impl.BoundsTest;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.physicsutilities.Converter;
@@ -14,6 +15,8 @@ import com.google.fpl.liquidfun.World;
 
 public class ServerScreen extends ClientServerScreen {
     private final World world;
+
+    private BoundsTest bt;
 
     private static final float TIME_STEP = 1 / 60f;   //60 fps
     private static final int VELOCITY_ITERATIONS = 8;
@@ -25,6 +28,9 @@ public class ServerScreen extends ClientServerScreen {
 
         world = new World(0, 0);
         EntityFactory.setWorld(world);
+
+        /*Testcode*/
+        //bt = new BoundsTest(graphics, world, r+ 10, w/2, h/2);
 
         /*Inizializzazione Giocatori*/
         GameCharacter[] characters = {
@@ -62,5 +68,12 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void setup(){
         Converter.setScale(w, h);
+    }
+
+    /*TODO Non serve*/
+    @Override
+    public void present(float deltaTime){
+        super.present(deltaTime);
+        world.setContactListener(new ContactHandler());
     }
 }

@@ -14,7 +14,6 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
     protected Body body;
     private final Vec2 v = new Vec2();
 
-
     public void move(float x, float y){
         x *= 45; y *= 45;
 
