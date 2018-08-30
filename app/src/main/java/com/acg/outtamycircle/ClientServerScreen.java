@@ -91,8 +91,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         for (Input.TouchEvent event : events) {
             if (timedCircularButton.inBounds(event)) {
                 Log.d("TCB", "PRESSED");
-                if (timedCircularButton.isActive()) {
+                if (timedCircularButton.isEnabled()) {
                     Log.d("TCB", "WOW ATTACKK WHOAAAA");
+                    timedCircularButton.resetTime();
                 }
             }
         }

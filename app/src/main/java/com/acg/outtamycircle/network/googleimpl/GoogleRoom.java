@@ -32,12 +32,19 @@ public class GoogleRoom {
     private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler();
 
     private volatile Room room;
+    private volatile boolean startingMessageReceived;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
+    private RoomConfig config;
 
     private static String TAG = "GoogleS";
 
     public static void createInstance(Activity activity, MyGoogleSignIn myGoogleSignIn) {
         instance = new GoogleRoom(activity, myGoogleSignIn);
+    }
+
+    private void reset() {
+        room = null;
+        startingMessageReceived = false;
     }
 
     public static GoogleRoom getInstance() {
@@ -53,9 +60,15 @@ public class GoogleRoom {
             realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
     }
 
+    private void onStartGameMessageReceived() {
+        startingMessageReceived = true;
+        activity.finishActivity(GoogleRC.RC_WAITING_ROOM);
+    }
+
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GoogleRC.RC_SIGN_IN) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (requestCode == GoogleRC.RC_WAITING_ROOM) {
+            if(startingMessageReceived || resultCode == Activity.RESULT_OK) {
+                Log.d(TAG,"OK");
                 // (start game)
                 // startGame(mParticipants.size());
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -65,10 +78,12 @@ public class GoogleRoom {
                 // continue to connect in the background.
 
                 // in this example, we take the simple approach and just leave the room:
-                // Games.RealTimeMultiplayer.leave(getApiClient(), this, mRoomId);
+                Log.d(TAG,"CANCELLED");
+//                realTimeMultiplayerClient.leave(config, room.getRoomId());
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
+                Log.d(TAG,"LEFT");
                 // player wants to leave the room.
-                // Games.RealTimeMultiplayer.leave(getApiClient(), this, mRoomId);
+ //               realTimeMultiplayerClient.leave(config, room.getRoomId());
             }
         }
     }
@@ -108,10 +123,11 @@ public class GoogleRoom {
     public void quickGame() {
         if(!myGoogleSignIn.isSignedIn())
             throw new IllegalStateException("first login bitch");
+        reset();
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_PLAYERS-1, MAX_PLAYERS-1, 0);
 
-        RoomConfig config = RoomConfig.builder(myRoomUpdatedCallback)
+        config = RoomConfig.builder(myRoomUpdatedCallback)
                 .setOnMessageReceivedListener(serverClientMessageHandler)
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
                 .setAutoMatchCriteria(autoMatchCriteria)

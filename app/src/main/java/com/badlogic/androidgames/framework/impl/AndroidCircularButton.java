@@ -7,11 +7,17 @@ import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidCircularButton implements Button {
     private final int x, y, radius;
+    private boolean enabled;
 
     public AndroidCircularButton(int x, int y, int radius) {
         this.x = x;
         this.y = y;
         this.radius = radius;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
@@ -41,6 +47,11 @@ public class AndroidCircularButton implements Button {
     @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
