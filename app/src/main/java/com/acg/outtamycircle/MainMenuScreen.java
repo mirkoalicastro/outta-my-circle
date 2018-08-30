@@ -28,7 +28,6 @@ public class MainMenuScreen extends AndroidScreen {
 
     @Override
     public void update(float deltaTime) {
-        androidGame.getInput().getKeyEvents(); //TODO is it necessary?
 
         for(TouchEvent event: androidGame.getInput().getTouchEvents()) {
             if(event.type == TouchEvent.TOUCH_UP) {

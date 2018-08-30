@@ -11,7 +11,6 @@ import java.util.Calendar;
 public class TimedCircularButton extends AndroidCircularButton {
     private long millis;
     private long validTime;
-    private Graphics graphics;
 
     public TimedCircularButton(Graphics graphics, long millis, int x, int y, int radius) {
         super(graphics, x, y, radius);
