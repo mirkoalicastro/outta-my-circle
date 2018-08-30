@@ -7,12 +7,18 @@ import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidRectangularButton implements Button {
     private final int x, y, width, height;
+    private boolean enabled;
 
     public AndroidRectangularButton(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
@@ -38,6 +44,11 @@ public class AndroidRectangularButton implements Button {
     @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

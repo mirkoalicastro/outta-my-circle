@@ -39,7 +39,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
-            if(quickGame.inBounds(event)) {
+            if(quickGame.inBounds(event) && quickGame.isEnabled()) {
                 rom = true;
             } else if(rightSkin.inBounds(event)) {
                 if(currentIdSkin < Assets.skins.length-1) {
@@ -64,8 +64,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             }
         }
         if(rom) {
-            GoogleRoom googleRoom = new GoogleRoom(androidGame, myGoogleSignIn);
-            googleRoom.quickGame();
+            quickGame.setEnabled(false);
+            GoogleRoom.getInstance().quickGame(3,3);
         }
     }
 
@@ -93,12 +93,14 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     @Override
     public void pause() {
-
+        Log.d("GoogleS", "pause");
+        quickGame.setEnabled(false);
     }
 
     @Override
     public void resume() {
-
+        Log.d("GoogleS", "resume");
+        quickGame.setEnabled(true);
     }
 
     @Override

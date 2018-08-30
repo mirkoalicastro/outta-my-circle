@@ -27,7 +27,7 @@ public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
     // Called when we get disconnected from the room. We return to the main screen.
     @Override
     public void onDisconnectedFromRoom(Room room) {
-        googleRoom.setRoom(GoogleRoom.EMPTY);
+        googleRoom.setRoom(null);
         googleRoom.showGameError();
     }
 
