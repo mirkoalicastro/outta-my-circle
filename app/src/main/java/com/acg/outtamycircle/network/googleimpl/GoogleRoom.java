@@ -119,13 +119,16 @@ public class GoogleRoom {
                 });
     }
 
-
-    public void quickGame() {
+    public void quickGame(int min_players, int max_players) {
         if(!myGoogleSignIn.isSignedIn())
             throw new IllegalStateException("first login bitch");
+        if(min_players < MIN_PLAYERS)
+            throw new IllegalArgumentException("Min players must be at least " + MIN_PLAYERS);
+        if(max_players > MAX_PLAYERS)
+            throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
         reset();
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(MIN_PLAYERS-1, MAX_PLAYERS-1, 0);
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 
         config = RoomConfig.builder(myRoomUpdatedCallback)
                 .setOnMessageReceivedListener(serverClientMessageHandler)
