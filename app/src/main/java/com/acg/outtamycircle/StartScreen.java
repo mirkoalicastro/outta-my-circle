@@ -31,9 +31,9 @@ public class StartScreen extends AndroidSplashScreen {
     @Override
     public void update(float deltaTime) {
         Assets.backgroundTile = game.getGraphics().newTile("bgtile.png", PixmapFormat.ARGB8888);
+        androidGame.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
         try {
-
             String[] skins = androidGame.getAssets().list("skins");
             if(skins.length == 0)
                 throw new RuntimeException("Error no skin founded");
@@ -54,7 +54,8 @@ public class StartScreen extends AndroidSplashScreen {
         }
         Assets.rightArrow = androidGame.getGraphics().newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
         Assets.leftArrow = androidGame.getGraphics().newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
-        androidGame.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
+        Assets.swords_black = androidGame.getGraphics().newPixmap("swords_black.png", PixmapFormat.ARGB8888);
+        Assets.swords_white = androidGame.getGraphics().newPixmap("swords_white.png", PixmapFormat.ARGB8888);
         setProgress(70);
         Assets.click = androidGame.getAudio().newSound("urto1.wav");
         // Settings.load(game.getFileIO());

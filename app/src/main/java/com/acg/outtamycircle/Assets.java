@@ -12,4 +12,6 @@ class Assets {
     public static Pixmap[] attacks;
     public static Pixmap rightArrow;
     public static Pixmap leftArrow;
+    public static Pixmap swords_white;
+    public static Pixmap swords_black;
 }

@@ -28,7 +28,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected int h, w, r; //height, width, radius
 
     /*TODO una volta cancellato boundtest cambiare a private*/
-    protected final Graphics graphics = game.getGraphics();
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(game.getGraphics(),2000,1080,580,100);
 
     protected int[][] spawnPositions;
@@ -45,8 +44,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         EntityFactory.setGraphics(game.getGraphics());
 
-        h = graphics.getHeight();
-        w = graphics.getWidth();
+        h = game.getGraphics().getHeight();
+        w = game.getGraphics().getWidth();
         r = h/2 - 40;
 
         status.setArena(EntityFactory.createArena(r, w/2, h/2));
@@ -119,21 +118,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
         double x, y;
         double p = (Math.PI*2)/n;
         double theta = Math.PI/2;
-
-        System.out.println("TAG: "+" W:"+w+" H: "+h);
+        Log.d("TAG","W:" + w + " H: " + h);
         for(int i=0 ; i<n ; i++){
             x = Math.cos(theta)*r;
             y = Math.sin(theta)*r;
-
-
             spwns[i][0] = (int)x + w;
             spwns[i][1] = (int)y + h;
-
             theta += p;
         }
-
-
-
         return spwns;
     }
 }
