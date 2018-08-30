@@ -4,7 +4,7 @@ public interface Graphics {
     enum PixmapFormat {
         ARGB8888, ARGB4444, RGB565
     }
-    Tile newTile(String fileName, PixmapFormat format);
+    Effect newTile(Pixmap pixmap);
 
     Pixmap newPixmap(String fileName, PixmapFormat format);
 
@@ -30,7 +30,7 @@ public interface Graphics {
 
     void drawCircleBorder(int x, int y, float radius, int strokeWidth, int color);
 
-    void drawTile(Tile tile, int x, int y, int width, int height);
+    void drawEffect(Effect effect, int x, int y, int width, int height);
 
     void drawText(String text, int x, int y, int fontSize, int color);
 

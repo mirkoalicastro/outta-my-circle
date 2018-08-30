@@ -35,7 +35,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
-    protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),game.getGraphics(),200,580,100);
+    protected final Joystick androidJoystick = new AndroidJoystick(game.getGraphics(),200,580,100);
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
@@ -57,7 +57,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     public void present(float deltaTime) {
         //TODO
         Graphics g = game.getGraphics(); //se lo sfondo è un gameobject si può separare graphics da screen
-        g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
+        g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
 
         DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
         arenaDrawable.draw();

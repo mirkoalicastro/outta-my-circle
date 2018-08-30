@@ -75,7 +75,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         Log.d("BEBE", myGoogleSignIn.getPlayerId() == null ? "null" : myGoogleSignIn.getPlayerId());
         dontUpdate = true;
-        g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
+        g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         quickGame.draw(Color.RED);
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
         g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);

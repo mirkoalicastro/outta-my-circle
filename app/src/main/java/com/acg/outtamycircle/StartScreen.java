@@ -30,8 +30,9 @@ public class StartScreen extends AndroidSplashScreen {
 
     @Override
     public void update(float deltaTime) {
-        Assets.backgroundTile = game.getGraphics().newTile("bgtile.png", PixmapFormat.ARGB8888);
-        androidGame.getGraphics().drawTile(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
+        Assets.background = game.getGraphics().newPixmap("bgtile.png", PixmapFormat.ARGB8888);
+        Assets.backgroundTile = game.getGraphics().newTile(Assets.background);
+        androidGame.getGraphics().drawEffect(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
         Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
         try {
             String[] skins = androidGame.getAssets().list("skins");

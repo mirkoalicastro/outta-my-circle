@@ -1,6 +1,6 @@
 package com.badlogic.androidgames.framework;
 
-public interface Tile extends Pixmap {
+public interface Effect {
     /*
     TAG INTERFACE
      */

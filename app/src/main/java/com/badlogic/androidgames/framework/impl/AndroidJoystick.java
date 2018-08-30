@@ -19,7 +19,7 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private static final int DEFAULT_PRIMARY_COLOR = Color.DKGRAY;
     private static final int DEFAULT_SECONDARY_COLOR = Color.WHITE;
 
-    public AndroidJoystick(Input input, Graphics graphics, int x, int y, int radius) {
+    public AndroidJoystick(Graphics graphics, int x, int y, int radius) {
         super(graphics, x, y, radius);
         this.radius = radius;
         buffer = new LinkedList<>();
@@ -50,10 +50,6 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
         if(!buffer.isEmpty())
             Log.d("JoyStickCore", "Angolo: " + getAngle());
         events.removeAll(buffer);
-        if(events.size() > 0) {
-            Log.d("LAST", "sono " + pointer  + "primo" + events.get(0).pointer);
-            Log.d("LAST", "sono " + pointer + "ultimo" + events.get(events.size() - 1).pointer);
-        }
         buffer.clear();
         return events;
     }
@@ -87,13 +83,13 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     }
 
     public void draw(int color1, int color2, int strokeWidth, int colorStroke) {
-        draw(color1,color2);
         super.drawStroke(strokeWidth,colorStroke);
+        draw(color1,color2);
     }
 
     public void draw(int color1, int color2, Pixmap pixmap, int strokeWidth, int colorStroke) {
-        draw(color1, color2, pixmap);
         super.drawStroke(strokeWidth, colorStroke);
+        draw(color1, color2, pixmap);
     }
 
     @Override

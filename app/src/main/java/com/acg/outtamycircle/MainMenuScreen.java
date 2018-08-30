@@ -57,7 +57,7 @@ public class MainMenuScreen extends AndroidScreen {
     @Override
     public void present(float deltaTime) {
         Graphics g = androidGame.getGraphics();
-        g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
+        g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         if(Settings.soundEnabled)
             sound.draw(Color.GREEN);
         else

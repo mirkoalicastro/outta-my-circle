@@ -14,9 +14,9 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
-import com.badlogic.androidgames.framework.Tile;
 
 public class AndroidGraphics implements Graphics {
     private final AssetManager assets;
@@ -76,8 +76,8 @@ public class AndroidGraphics implements Graphics {
         return new AndroidPixmap(bitmap, format);
     }
 
-    public Tile newTile(String fileName, PixmapFormat format) {
-        return new AndroidTile((AndroidPixmap) newPixmap(fileName, format));
+    public Effect newTile(Pixmap pixmap) {
+        return new AndroidTile((AndroidPixmap)pixmap);
     }
 
     @Override
@@ -166,8 +166,8 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void drawTile(Tile tile, int x, int y, int width, int height) {
-        paint.setShader(((AndroidTile)tile).shader);
+    public void drawEffect(Effect effect, int x, int y, int width, int height) {
+        paint.setShader(((AndroidEffect)effect).shader);
         canvas.drawRect(x, y, x + width, y + height, paint);
         paint.setShader(null);
     }
