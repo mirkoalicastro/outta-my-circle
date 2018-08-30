@@ -6,6 +6,9 @@ import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceiv
 
 import java.util.List;
 
+/**
+ * Handles the sending and the receiving of messages.
+ */
 public interface NetworkMessageHandler extends OnRealTimeMessageReceivedListener {
 
     void sendReliable();
@@ -18,5 +21,5 @@ public interface NetworkMessageHandler extends OnRealTimeMessageReceivedListener
 
     void putInBuffer(GameMessage message);
 
-    List<GameMessage> getMessages();
+    Iterable<GameMessage> getMessages();
 }

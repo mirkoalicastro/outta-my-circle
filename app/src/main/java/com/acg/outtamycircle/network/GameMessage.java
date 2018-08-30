@@ -11,23 +11,40 @@ public class GameMessage {
         buffer = new byte[MAX_BUFFER_SIZE];
     }
 
+    /**
+     * Puts the content of the message into a byte array from the specified position.
+     * @param dest the array into which put the message.
+     * @param start the position of the array at which the message must be put.
+     */
     public void putInBuffer(byte dest[], int start){
         int n = type.length;
         for(int i=0 ; i<n ; i++)
             dest[start++] = buffer[i];
     }
 
+    /**
+     * Copy the content of a byte array into the GameMessage instance, from the specified position interval.
+     * @param buffer the array from which copy the message.
+     * @param start the starting position of the message.
+     * @param end the ending position of the message.
+     */
     public void copyBuffer(byte buffer[], int start, int end){
         for( ; start<=end ; start++){
             this.buffer[start] = buffer[start];
         }
     }
 
+    /**
+     * The class of all message type.
+     * Each type determines the length of the message in bytes.
+     */
     public enum Type {
-        //TODO message length
-        PLAYER((byte)0),
+        //TODO message length and type description
+        INIT_CLIENT((byte)0),
+        CREATE((byte)0),
         DESTROY((byte)0),
-        MOVE((byte)0),
+        MOVE_SERVER((byte)0),
+        MOVE_CLIENT((byte)0),
         POWERUP((byte)0),
         POWERUP_ASSIGN((byte)0),
         ATTACK((byte)0),
@@ -35,38 +52,64 @@ public class GameMessage {
 
         final byte length;
 
-        Type(byte length){
-            this.length = length;
-        }
+        Type(byte length){ this.length = length; }
     }
 
-
-    /* STATIC FACTORY-LIKE METHOD */
-    // No allocation
-    // Object recycle
-
-    //TODO valutare dove spostare
+    /**
+     * Puts a byte value into the message buffer.
+     * @param pos
+     * @param value
+     * @return the instance itself.
+     */
+    GameMessage putByte(int pos, byte value){
+        buffer[pos] = value;
+        return this;
+    }
 
     /**
      * Puts a short value into the message buffer.
      * @param pos
      * @param value
+     * @return the instance itself
      */
-    private void putShort(int pos, short value){
+    GameMessage putShort(int pos, short value){
         buffer[pos] = (byte)(value>>>8);
         buffer[pos+1] = (byte)(value);
+        return this;
     }
 
     /**
      * Puts a int value into the message buffer.
      * @param pos
      * @param value
+     * @return the instance itself
      */
-    private void putInt(int pos, int value){
+    GameMessage putInt(int pos, int value){
         buffer[pos++] = (byte) (value>>>24);
         buffer[pos++] = (byte) (value>>>16);
         buffer[pos++] = (byte) (value>>>8);
         buffer[pos] = (byte) value;
+        return this;
+    }
+
+    /**
+     * Puts a float value into the message buffer.
+     * @param pos
+     * @param value
+     * @return the istance itself
+     */
+    GameMessage putFloat(int pos, float value){
+        putInt(pos, Float.floatToRawIntBits(value));
+        return this;
+    }
+
+    /**
+     * Get the byte value at the specified position of the message buffer.
+     * @param pos
+     * @return
+     */
+    byte getByteAt(int pos){
+        return buffer[pos];
     }
 
     /**
@@ -88,10 +131,10 @@ public class GameMessage {
     }
 
     /**
-     * Gets the short value at the specified position of the message buffer.
+     * Gets the int value at the specified position of the message buffer.
      * @param pos
      */
-    protected int getIntAt(int pos){
+    int getIntAt(int pos){
         int value = 0, tmp, i;
 
         for(i=0; i<4 ; i++){
@@ -105,22 +148,15 @@ public class GameMessage {
         return value;
     }
 
-    //TODO
-    static void makeMessage(GameMessage gameMessage, int gameObject, Type type){
-        byte buffer[] = gameMessage.buffer;
-        buffer[0] = (byte)type.ordinal();
+    /**
+     * Get the float value at the specified position.
+     * @param pos
+     * @return
+     */
+    float getFloatAt(int pos){
+        int rawBits = getIntAt(pos);
+        return Float.intBitsToFloat(rawBits);
     }
 
-    //TODO
-    //public static void makeCreateMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makeDestroyMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makeMoveMessage(GameMessage gameMessage);
-
-    //TODO
-    //public static void makePowerUpMessage(GameMessage gameMessage);
 
 }
