@@ -49,7 +49,8 @@ public class GoogleRoom {
     private GoogleRoom(Activity activity, MyGoogleSignIn myGoogleSignIn) {
         this.activity = activity;
         this.myGoogleSignIn = myGoogleSignIn;
-        realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
+        if(myGoogleSignIn.isSignedIn())
+            realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
     }
 
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
@@ -65,11 +66,9 @@ public class GoogleRoom {
 
                 // in this example, we take the simple approach and just leave the room:
                 // Games.RealTimeMultiplayer.leave(getApiClient(), this, mRoomId);
-                // getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 // player wants to leave the room.
                 // Games.RealTimeMultiplayer.leave(getApiClient(), this, mRoomId);
-                // getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
         }
     }
