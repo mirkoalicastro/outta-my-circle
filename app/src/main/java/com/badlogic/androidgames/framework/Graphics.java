@@ -18,11 +18,17 @@ public interface Graphics {
 
     void drawRect(int x, int y, int width, int height, int color);
 
-    void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY, int srcWidth, int srcHeight);
+    void drawRectBorder(int x, int y, int width, int height, int strokeWidth, int color);
+
+    void drawPixmap(Pixmap pixmap, int dstX, int dstY, int dstWidth, int dstHeight, int srcX, int srcY, int srcWidth, int srcHeight);
 
     void drawPixmap(Pixmap pixmap, int x, int y);
 
+    void drawPixmap(Pixmap pixmap, int dstX, int dstY, int dstWidth, int dstHeight);
+
     void drawCircle(int x, int y, float radius, int color);
+
+    void drawCircleBorder(int x, int y, float radius, int strokeWidth, int color);
 
     void drawTile(Tile tile, int x, int y, int width, int height);
 

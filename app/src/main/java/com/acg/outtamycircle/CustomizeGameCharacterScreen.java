@@ -79,12 +79,12 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         quickGame.draw(Color.RED);
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
         g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
-        g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);
+        g.drawPixmap(Assets.skins[currentIdSkin], 590, 190);
         if(currentIdSkin != Assets.skins.length-1)
             rightSkin.draw(Assets.rightArrow);
         if(currentIdSkin != 0)
             leftSkin.draw(Assets.leftArrow);
-        g.drawPixmap(Assets.attacks[currentIdAttack], 590, 390, 0,0,200,200);
+        g.drawPixmap(Assets.attacks[currentIdAttack], 590, 390);
         if(currentIdAttack != Assets.attacks.length-1)
             rightAttack.draw(Assets.rightArrow);
         if(currentIdAttack != 0)

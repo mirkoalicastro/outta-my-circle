@@ -10,4 +10,5 @@ public interface Button {
     void setEnabled(boolean enabled);
     void draw(int color);
     void draw(Pixmap pixmap);
+    void drawStroke(int strokeWidth, int colorStroke);
 }

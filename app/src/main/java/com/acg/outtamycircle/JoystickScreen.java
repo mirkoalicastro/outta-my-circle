@@ -19,9 +19,10 @@ import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
 import java.util.List;
+import java.util.Set;
 
 public class JoystickScreen extends AndroidScreen {
-    private final Joystick androidJoystick = new AndroidJoystick(androidGame.getInput(), androidGame.getGraphics(),200,580,100);
+    private final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getInput(), androidGame.getGraphics(),200,580,100);
     private final World world;
     private final Arena arena;
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),2000,1080,580,100);
@@ -48,7 +49,8 @@ public class JoystickScreen extends AndroidScreen {
                 Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
                     Log.d("TCB", "WOW ATTACKK WHOAAAA");
-                    customizeScreen = true;
+                    timedCircularButton.resetTime();
+//                    customizeScreen = true;
                     break;
                 }
             }
@@ -68,8 +70,11 @@ public class JoystickScreen extends AndroidScreen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoystick.draw(Color.DKGRAY);
-        timedCircularButton.draw(Color.GREEN);
+        androidJoystick.draw(Color.DKGRAY, Color.WHITE,8,Settings.DKGRAY);
+        if(timedCircularButton.isEnabled())
+            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_black, 8,Settings.DKGRAY);
+        else
+            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_white, 8,Settings.DKGRAY);
     }
 
     @Override

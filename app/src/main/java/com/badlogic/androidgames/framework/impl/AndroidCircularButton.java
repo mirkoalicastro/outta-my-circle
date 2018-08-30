@@ -10,6 +10,12 @@ public class AndroidCircularButton implements Button {
     private boolean enabled;
     protected final Graphics graphics;
 
+    /**
+     * @param graphics
+     * @param x position of the center of the button
+     * @param y position of the center of the button
+     * @param radius
+     */
     public AndroidCircularButton(Graphics graphics, int x, int y, int radius) {
         this.graphics = graphics;
         this.x = x;
@@ -63,6 +69,12 @@ public class AndroidCircularButton implements Button {
 
     @Override
     public void draw(Pixmap pixmap) {
-        graphics.drawPixmap(pixmap, x, y);
+        graphics.drawPixmap(pixmap, x-radius, y-radius, radius*2,radius*2);
+   }
+
+    @Override
+    public void drawStroke(int strokeWidth, int colorStroke) {
+        graphics.drawCircleBorder(x,y,radius,strokeWidth,colorStroke);
     }
+
 }

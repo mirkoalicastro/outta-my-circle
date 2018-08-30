@@ -42,8 +42,7 @@ public class TimedCircularButton extends AndroidCircularButton {
 
     @Override
     public void draw(Pixmap pixmap) {
-        draw(Color.GREEN, Color.RED);
-        super.draw(pixmap);
+        draw(Color.GREEN, Color.RED, pixmap);
     }
 
     public void draw(int color1, int color2, Pixmap pixmap) {
@@ -51,10 +50,19 @@ public class TimedCircularButton extends AndroidCircularButton {
         super.draw(pixmap);
     }
 
+    public void draw(int color1, int color2, Pixmap pixmap, int strokeWidth, int colorStroke) {
+        draw(color1, color2, pixmap);
+        super.drawStroke(strokeWidth, colorStroke);
+    }
 
     @Override
     public void draw(int color) {
         draw(color, Color.RED);
+    }
+
+    public void draw(int color1, int color2, int strokeWidth, int colorStroke) {
+        draw(color1, color2);
+        super.drawStroke(strokeWidth, colorStroke);
     }
 
     public void draw(int color1, int color2) {

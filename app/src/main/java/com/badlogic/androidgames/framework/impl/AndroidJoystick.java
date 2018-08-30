@@ -12,16 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AndroidJoystick extends AndroidCircularButton implements Joystick {
-    private final Input input;
     private int x, y;
     private final List<Input.TouchEvent> buffer;
     private final int radius;
     private int pointer = -1;
+    private static final int DEFAULT_PRIMARY_COLOR = Color.DKGRAY;
+    private static final int DEFAULT_SECONDARY_COLOR = Color.WHITE;
 
     public AndroidJoystick(Input input, Graphics graphics, int x, int y, int radius) {
         super(graphics, x, y, radius);
         this.radius = radius;
-        this.input = input;
         buffer = new LinkedList<>();
     }
 
@@ -60,7 +60,7 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
 
     @Override
     public double getAngle() {
-        getDistance(); return Math.toDegrees(Math.atan2(y,x));
+        return Math.toDegrees(Math.atan2(y,x));
     }
 
     public double getNormX() {
@@ -78,7 +78,7 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
 
     @Override
     public void draw(int color) {
-        draw(color, -1);
+        draw(color, DEFAULT_SECONDARY_COLOR);
     }
 
     public void draw(int color1, int color2) {
@@ -86,9 +86,19 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
         graphics.drawCircle(getX()+x, getY()-y, radius/2, color2);
     }
 
+    public void draw(int color1, int color2, int strokeWidth, int colorStroke) {
+        draw(color1,color2);
+        super.drawStroke(strokeWidth,colorStroke);
+    }
+
+    public void draw(int color1, int color2, Pixmap pixmap, int strokeWidth, int colorStroke) {
+        draw(color1, color2, pixmap);
+        super.drawStroke(strokeWidth, colorStroke);
+    }
+
     @Override
     public void draw(Pixmap pixmap) {
-        draw(Color.DKGRAY, -1, pixmap);
+        draw(DEFAULT_PRIMARY_COLOR, DEFAULT_SECONDARY_COLOR, pixmap);
     }
 
     public void draw(int color1, int color2, Pixmap pixmap) {

@@ -60,6 +60,12 @@ public class AndroidRectangularButton implements Button {
 
     @Override
     public void draw(Pixmap pixmap) {
-        graphics.drawPixmap(pixmap, x, y, 0,0, width, height);
+        AndroidPixmap tmp = (AndroidPixmap) pixmap;
+        graphics.drawPixmap(pixmap,x,y,width,height);
+    }
+
+    @Override
+    public void drawStroke(int strokeWidth, int colorStroke) {
+        graphics.drawRectBorder(x,y,width,height,strokeWidth,colorStroke);
     }
 }

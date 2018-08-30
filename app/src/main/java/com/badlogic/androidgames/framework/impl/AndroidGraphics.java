@@ -116,29 +116,52 @@ public class AndroidGraphics implements Graphics {
     }
 
     @Override
-    public void drawPixmap(Pixmap pixmap, int x, int y, int srcX, int srcY, int srcWidth, int srcHeight) {
+    public void drawRectBorder(int x, int y, int width, int height, int strokeWidth, int color) {
+        paint.setColor(color);
+        paint.setStyle(Style.STROKE);
+        paint.setStrokeWidth(strokeWidth);
+        canvas.drawRect(x, y, x + width - 1, y + height - 1, paint);
+    }
+
+
+    @Override
+    public void drawPixmap(Pixmap pixmap, int dstX, int dstY, int dstWidth, int dstHeight, int srcX, int srcY, int srcWidth, int srcHeight) {
         srcRect.left = srcX;
         srcRect.top = srcY;
         srcRect.right = srcX + srcWidth - 1;
         srcRect.bottom = srcY + srcHeight - 1;
 
-        dstRect.left = x;
-        dstRect.top = y;
-        dstRect.right = x + srcWidth - 1;
-        dstRect.bottom = y + srcHeight - 1;
+        dstRect.left = dstX;
+        dstRect.top = dstY;
+        dstRect.right = dstX + dstWidth - 1;
+        dstRect.bottom = dstY + dstHeight - 1;
 
         canvas.drawBitmap(((AndroidPixmap) pixmap).bitmap, srcRect, dstRect,null);
     }
-    
+
     @Override
     public void drawPixmap(Pixmap pixmap, int x, int y) {
         canvas.drawBitmap(((AndroidPixmap)pixmap).bitmap, x, y, null);
     }
 
     @Override
+    public void drawPixmap(Pixmap pixmap, int dstX, int dstY, int dstWidth, int dstHeight) {
+        AndroidPixmap tmp = (AndroidPixmap) pixmap;
+        drawPixmap(pixmap, dstX, dstY, dstWidth, dstHeight, 0,0,tmp.getWidth(),tmp.getHeight());
+    }
+
+    @Override
     public void drawCircle(int x, int y, float radius, int color) {
         paint.setColor(color);
         paint.setStyle(Style.FILL);
+        canvas.drawCircle(x,y,radius,paint);
+    }
+
+    @Override
+    public void drawCircleBorder(int x, int y, float radius, int strokeWidth, int color) {
+        paint.setColor(color);
+        paint.setStyle(Style.STROKE);
+        paint.setStrokeWidth(strokeWidth);
         canvas.drawCircle(x,y,radius,paint);
     }
 
