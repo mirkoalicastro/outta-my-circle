@@ -13,12 +13,12 @@ import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
 public class MainMenuScreen extends AndroidScreen {
-    private final Button sound = new AndroidCircularButton(200,200,150);
-    private final Button start = new AndroidRectangularButton(500,500,100,100);
+    private final Button sound = new AndroidCircularButton(androidGame.getGraphics(),200,200,150);
+    private final Button start = new AndroidRectangularButton(androidGame.getGraphics(),500,500,100,100);
 
-    private final Button match = new AndroidRectangularButton(500,200,100,100);
+    private final Button match = new AndroidRectangularButton(androidGame.getGraphics(), 500,200,100,100);
 
-    private int colorStart = android.graphics.Color.BLUE;
+    private int colorStart = Color.BLUE;
 
     private int colorMatch = Color.WHITE;
 
@@ -28,8 +28,6 @@ public class MainMenuScreen extends AndroidScreen {
 
     @Override
     public void update(float deltaTime) {
-        Graphics g = androidGame.getGraphics();
-
         androidGame.getInput().getKeyEvents(); //TODO is it necessary?
 
         for(TouchEvent event: androidGame.getInput().getTouchEvents()) {
@@ -40,10 +38,10 @@ public class MainMenuScreen extends AndroidScreen {
   //                      Assets.click.play(1);
                 }
                 if(start.inBounds(event)) {
-                    if(colorStart == android.graphics.Color.BLUE)
-                        colorStart = android.graphics.Color.MAGENTA;
+                    if(colorStart == Color.BLUE)
+                        colorStart = Color.MAGENTA;
                     else {
-                        colorStart = android.graphics.Color.BLUE;
+                        colorStart = Color.BLUE;
                         androidGame.setScreen(new JoystickScreen(androidGame));
                     }
     //                if(Settings.soundEnabled)
@@ -62,12 +60,12 @@ public class MainMenuScreen extends AndroidScreen {
         Graphics g = androidGame.getGraphics();
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         if(Settings.soundEnabled)
-            sound.draw(g, android.graphics.Color.GREEN);
+            sound.draw(Color.GREEN);
         else
-            sound.draw(g, android.graphics.Color.RED);
-        start.draw(g, colorStart);
+            sound.draw(Color.RED);
+        start.draw(colorStart);
 
-        match.draw(g, colorMatch);
+        match.draw(colorMatch);
     }
 
     @Override

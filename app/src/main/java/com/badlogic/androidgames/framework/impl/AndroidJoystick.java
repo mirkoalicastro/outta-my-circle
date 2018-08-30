@@ -18,8 +18,8 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private final int radius;
     private int pointer = -1;
 
-    public AndroidJoystick(Input input, int x, int y, int radius) {
-        super(x, y, radius);
+    public AndroidJoystick(Input input, Graphics graphics, int x, int y, int radius) {
+        super(graphics, x, y, radius);
         this.radius = radius;
         this.input = input;
         buffer = new LinkedList<>();
@@ -77,23 +77,23 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     }
 
     @Override
-    public void draw(Graphics graphics, int color) {
-        draw(graphics, color, -1);
+    public void draw(int color) {
+        draw(color, -1);
     }
 
-    public void draw(Graphics graphics, int color1, int color2) {
-        super.draw(graphics, color1);
+    public void draw(int color1, int color2) {
+        super.draw(color1);
         graphics.drawCircle(getX()+x, getY()-y, radius/2, color2);
     }
 
     @Override
-    public void draw(Graphics graphics, Pixmap pixmap) {
-        draw(graphics, Color.DKGRAY, -1, pixmap);
+    public void draw(Pixmap pixmap) {
+        draw(Color.DKGRAY, -1, pixmap);
     }
 
-    public void draw(Graphics graphics, int color1, int color2, Pixmap pixmap) {
-        draw(graphics, color1, color2);
-        super.draw(graphics, pixmap);
+    public void draw(int color1, int color2, Pixmap pixmap) {
+        draw(color1, color2);
+        super.draw(pixmap);
     }
 
 }

@@ -11,9 +11,10 @@ import java.util.Calendar;
 public class TimedCircularButton extends AndroidCircularButton {
     private long millis;
     private long validTime;
+    private Graphics graphics;
 
-    public TimedCircularButton(long millis, int x, int y, int radius) {
-        super(x, y, radius);
+    public TimedCircularButton(Graphics graphics, long millis, int x, int y, int radius) {
+        super(graphics, x, y, radius);
         setMillis(millis);
     }
 
@@ -41,24 +42,24 @@ public class TimedCircularButton extends AndroidCircularButton {
     }
 
     @Override
-    public void draw(Graphics graphics, Pixmap pixmap) {
-        draw(graphics, Color.GREEN, Color.RED);
-        super.draw(graphics, pixmap);
+    public void draw(Pixmap pixmap) {
+        draw(Color.GREEN, Color.RED);
+        super.draw(pixmap);
     }
 
-    public void draw(Graphics graphics, int color1, int color2, Pixmap pixmap) {
-        draw(graphics, color1, color2);
-        super.draw(graphics, pixmap);
+    public void draw(int color1, int color2, Pixmap pixmap) {
+        draw(color1, color2);
+        super.draw(pixmap);
     }
 
 
     @Override
-    public void draw(Graphics graphics, int color) {
-        draw(graphics, color, Color.RED);
+    public void draw(int color) {
+        draw(color, Color.RED);
     }
 
-    public void draw(Graphics graphics, int color1, int color2) {
-        super.draw(graphics, color1);
+    public void draw(int color1, int color2) {
+        super.draw(color1);
         graphics.drawArc(getX()-getRadius(), getY()-getRadius(), getX()+getRadius(), getY()+getRadius(), 270, calculateProgress()*360, true, color2);
     }
 

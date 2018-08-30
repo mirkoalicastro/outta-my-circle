@@ -21,10 +21,10 @@ import com.google.fpl.liquidfun.World;
 import java.util.List;
 
 public class JoystickScreen extends AndroidScreen {
-    private final Joystick androidJoystick = new AndroidJoystick(androidGame.getInput(),200,580,100);
+    private final Joystick androidJoystick = new AndroidJoystick(androidGame.getInput(), androidGame.getGraphics(),200,580,100);
     private final World world;
     private final Arena arena;
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),2000,1080,580,100);
   //  private final GameCharacter gameCharacter;
 
     public JoystickScreen(AndroidGame game) {
@@ -68,8 +68,8 @@ public class JoystickScreen extends AndroidScreen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoystick.draw(g, Color.DKGRAY);
-        timedCircularButton.draw(g, Color.GREEN);
+        androidJoystick.draw(Color.DKGRAY);
+        timedCircularButton.draw(Color.GREEN);
     }
 
     @Override

@@ -74,6 +74,6 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void present(float deltaTime){
         super.present(deltaTime);
-        world.setContactListener(new ContactHandler());
+        // world.setContactListener(new ContactHandler());
     }
 }

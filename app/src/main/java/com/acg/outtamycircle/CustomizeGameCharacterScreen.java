@@ -17,11 +17,11 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private int currentIdSkin = 0;
     private int currentIdAttack = 0;
     private final Graphics g = androidGame.getGraphics();
-    private final Button rightSkin = new AndroidRectangularButton(790,200,74,80);
-    private final Button leftSkin = new AndroidRectangularButton(490-74,200,74,80);
-    private final Button rightAttack = new AndroidRectangularButton(790,400,74,80);
-    private final Button leftAttack = new AndroidRectangularButton(490-74,400,74,80);
-    private final Button quickGame = new AndroidCircularButton(150,150,50);
+    private final Button rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
+    private final Button leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
+    private final Button rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
+    private final Button leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
+    private final Button quickGame = new AndroidCircularButton(androidGame.getGraphics(),150,150,50);
 
     private boolean dontUpdate;
 
@@ -76,19 +76,19 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         Log.d("BEBE", myGoogleSignIn.getPlayerId() == null ? "null" : myGoogleSignIn.getPlayerId());
         dontUpdate = true;
         g.drawTile(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
-        quickGame.draw(g, Color.RED);
+        quickGame.draw(Color.RED);
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
         g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190, 0,0,200,200);
         if(currentIdSkin != Assets.skins.length-1)
-            rightSkin.draw(g, Assets.rightArrow);
+            rightSkin.draw(Assets.rightArrow);
         if(currentIdSkin != 0)
-            leftSkin.draw(g, Assets.leftArrow);
+            leftSkin.draw(Assets.leftArrow);
         g.drawPixmap(Assets.attacks[currentIdAttack], 590, 390, 0,0,200,200);
         if(currentIdAttack != Assets.attacks.length-1)
-            rightAttack.draw(g, Assets.rightArrow);
+            rightAttack.draw(Assets.rightArrow);
         if(currentIdAttack != 0)
-            leftAttack.draw(g, Assets.leftArrow);
+            leftAttack.draw(Assets.leftArrow);
     }
 
     @Override

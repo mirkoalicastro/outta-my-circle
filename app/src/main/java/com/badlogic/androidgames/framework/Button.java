@@ -8,6 +8,6 @@ public interface Button {
     int getX();
     int getY();
     void setEnabled(boolean enabled);
-    void draw(Graphics graphics, int color);
-    void draw(Graphics graphics, Pixmap pixmap);
+    void draw(int color);
+    void draw(Pixmap pixmap);
 }

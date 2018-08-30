@@ -29,14 +29,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     /*TODO una volta cancellato boundtest cambiare a private*/
     protected final Graphics graphics = game.getGraphics();
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(2000,1080,580,100);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(game.getGraphics(),2000,1080,580,100);
 
     protected int[][] spawnPositions;
 
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
-    protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),200,580,100);
+    protected final Joystick androidJoystick = new AndroidJoystick(game.getInput(),game.getGraphics(),200,580,100);
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
@@ -65,8 +65,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         drawCharacters();
 
-        androidJoystick.draw(graphics, Color.GREEN);
-        timedCircularButton.draw(g, Color.GREEN);
+        androidJoystick.draw(Color.GREEN);
+        timedCircularButton.draw(Color.GREEN);
     }
 
     @Override

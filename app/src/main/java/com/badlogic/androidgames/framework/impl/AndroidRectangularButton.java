@@ -7,9 +7,11 @@ import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidRectangularButton implements Button {
     private final int x, y, width, height;
+    protected final Graphics graphics;
     private boolean enabled;
 
-    public AndroidRectangularButton(int x, int y, int width, int height) {
+    public AndroidRectangularButton(Graphics graphics, int x, int y, int width, int height) {
+        this.graphics = graphics;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -52,12 +54,12 @@ public class AndroidRectangularButton implements Button {
     }
 
     @Override
-    public void draw(Graphics graphics, int color) {
+    public void draw(int color) {
         graphics.drawRect(x,y,width,height,color);
     }
 
     @Override
-    public void draw(Graphics graphics, Pixmap pixmap) {
+    public void draw(Pixmap pixmap) {
         graphics.drawPixmap(pixmap, x, y, 0,0, width, height);
     }
 }

@@ -8,8 +8,10 @@ import com.badlogic.androidgames.framework.Pixmap;
 public class AndroidCircularButton implements Button {
     private final int x, y, radius;
     private boolean enabled;
+    protected final Graphics graphics;
 
-    public AndroidCircularButton(int x, int y, int radius) {
+    public AndroidCircularButton(Graphics graphics, int x, int y, int radius) {
+        this.graphics = graphics;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -55,12 +57,12 @@ public class AndroidCircularButton implements Button {
     }
 
     @Override
-    public void draw(Graphics graphics, int color) {
+    public void draw(int color) {
         graphics.drawCircle(x,y,radius,color);
     }
 
     @Override
-    public void draw(Graphics graphics, Pixmap pixmap) {
+    public void draw(Pixmap pixmap) {
         graphics.drawPixmap(pixmap, x, y);
     }
 }
