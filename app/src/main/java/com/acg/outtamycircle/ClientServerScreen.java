@@ -35,7 +35,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                     new RadialGradientEffect(200,580,100,
                             new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
                             new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    ),200,580,100,null,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
+                    ),200,580,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
             );
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
