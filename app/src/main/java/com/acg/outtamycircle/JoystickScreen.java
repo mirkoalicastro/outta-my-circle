@@ -78,7 +78,7 @@ public class JoystickScreen extends AndroidScreen {
         gameCharacterDrawable.setColor(Color.RED);
         gameCharacterDrawable.drawColor();
 */
-        androidJoystick.draw(Color.DKGRAY, Settings.WHITE50ALFA,15,Settings.DKGRAY);
+        androidJoystick.draw(Color.DKGRAY, Settings.WHITE50ALFA,15, Settings.DKGRAY);
         if(timedCircularButton.isEnabled())
             timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_black, 15,Settings.DKGRAY);
         else
