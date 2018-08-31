@@ -3,6 +3,7 @@ package com.acg.outtamycircle.network;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pools;
 
+import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.network.googleimpl.MessageReceiver;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceivedListener;
@@ -24,36 +25,12 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     private MessageReceiver first, second;
     private Pools.Pool<GameMessage> pool;
     private String roomId;
-    private String player;
 
     private byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
 
-    /**
-     * //TODO move in interface implementation
-     * @param //capacity estimated number of message received. //TODO in a round?
-     */
-    /*public ServerClientMessageHandler(int capacity){
-        first = new ArrayList<>(capacity);
-        second = new ArrayList<>(capacity);
-        capacity = capacity*2;
-        pool = new Pools.SimplePool<>(capacity);
-        for(int i=0; i<capacity; i++)
-            pool.release(new GameMessage());
-
-    }*/
-
-    /*public ServerClientMessageHandler(){
-        this(DEFAULT_CAPACITY);
-    }*/
-
     public ServerClientMessageHandler setRoomId(String roomId){
         this.roomId = roomId;
-        return this;
-    }
-
-    public ServerClientMessageHandler setPlayerId(String playerId){
-        this.player = playerId;
         return this;
     }
 
@@ -63,7 +40,7 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     }
 
     @Override
-    public void sendReliable() {
+    public void sendReliable(String player) {
 
         final Task<Integer> sendTask = client.sendReliableMessage(buffer, roomId, player, null);
         //TODO Check
@@ -89,22 +66,18 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     }
 
     @Override
-    public void sendUnreliable() {
+    public void sendUnreliable(String player) {
         client.sendUnreliableMessage(buffer, roomId, player);
-        cleanBuffer();
     }
 
     @Override
     public void broadcastReliable(){
         //TODO
-        // se si specificasse il player nei metodi sarebbe più facile,
-        // ma il buffer andrebbe svuotato solo alla fine
     }
 
     @Override
     public void broadcastUnreliable() {
         client.sendUnreliableMessageToOthers(buffer,roomId);
-        cleanBuffer();
     }
 
     @Override
@@ -138,7 +111,8 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
         }
     }
 
-    public void cleanBuffer(){
+    @Override
+    public void clearBuffer(){
         currentBufferSize = 0;
         buffer[0] = ENDING_CHAR;
     }
