@@ -17,11 +17,12 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private int currentIdSkin = 0;
     private int currentIdAttack = 0;
     private final Graphics g = androidGame.getGraphics();
-    private final Button rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
-    private final Button leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
-    private final Button rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
-    private final Button leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
-    private final Button quickGame = new AndroidCircularButton(androidGame.getGraphics(),150,150,50);
+
+    private final Button leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),null,490-74,200,74,80,null,Assets.leftArrow,0,null);
+    private final Button leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),null,490-74,400,74,80,null,Assets.leftArrow,0,null);
+    private final Button rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),null,790,200,74,80,null,Assets.rightArrow,0,null);
+    private final Button rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),null,790,400,74,80,null,Assets.rightArrow,0,null);
+    private final Button quickGame = new AndroidCircularButton(androidGame.getGraphics(),null,150,150,50,Color.RED,null,0,null);
 
     private boolean dontUpdate;
 
@@ -64,7 +65,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             }
         }
         if(rom) {
-            quickGame.setEnabled(false);
+            quickGame.enable(false);
             GoogleRoom.getInstance().quickGame(3,3);
         }
     }
@@ -76,31 +77,31 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         Log.d("BEBE", myGoogleSignIn.getPlayerId() == null ? "null" : myGoogleSignIn.getPlayerId());
         dontUpdate = true;
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
-        quickGame.draw(Color.RED);
+        quickGame.draw();
         g.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
         g.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
         g.drawPixmap(Assets.skins[currentIdSkin], 590, 190);
         if(currentIdSkin != Assets.skins.length-1)
-            rightSkin.draw(Assets.rightArrow);
+            rightSkin.draw();
         if(currentIdSkin != 0)
-            leftSkin.draw(Assets.leftArrow);
+            leftSkin.draw();
         g.drawPixmap(Assets.attacks[currentIdAttack], 590, 390);
         if(currentIdAttack != Assets.attacks.length-1)
-            rightAttack.draw(Assets.rightArrow);
+            rightAttack.draw();
         if(currentIdAttack != 0)
-            leftAttack.draw(Assets.leftArrow);
+            leftAttack.draw();
     }
 
     @Override
     public void pause() {
         Log.d("GoogleS", "pause");
-        quickGame.setEnabled(false);
+        quickGame.enable(false);
     }
 
     @Override
     public void resume() {
         Log.d("GoogleS", "resume");
-        quickGame.setEnabled(true);
+        quickGame.enable(true);
     }
 
     @Override

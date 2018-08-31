@@ -7,8 +7,6 @@ public interface Button {
     int getHeight();
     int getX();
     int getY();
-    void setEnabled(boolean enabled);
-    void draw(int color);
-    void draw(Pixmap pixmap);
-    void drawStroke(int strokeWidth, int colorStroke);
+    void enable(boolean enabled);
+    void draw();
 }

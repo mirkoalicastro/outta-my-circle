@@ -7,21 +7,13 @@ import android.util.Log;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
-import com.acg.outtamycircle.entitycomponent.impl.BoundsTest;
-import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
-import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
-import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
-import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.Joystick;
-import com.badlogic.androidgames.framework.Screen;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
-import com.google.fpl.liquidfun.World;
 
 import java.util.List;
 
@@ -30,7 +22,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected int h, w, r; //height, width, radius
 
     /*TODO una volta cancellato boundtest cambiare a private*/
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(game.getGraphics(),2000,1080,580,100);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,580,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Settings.DKGRAY);
 
     protected int[][] spawnPositions;
 
@@ -39,13 +31,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected List<Input.TouchEvent> events;
 
     protected final AndroidJoystick androidJoystick =
-            new AndroidJoystick(androidGame.getGraphics(),200,580,100,
+            new AndroidJoystick(androidGame.getGraphics(),
                     new RadialGradientEffect(200,580,100,
                             new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
                             new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    )
+                    ),200,580,100,null,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
             );
-
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
@@ -74,11 +65,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         drawCharacters();
 
-        androidJoystick.draw(Color.DKGRAY, Settings.WHITE50ALFA,15, Settings.DKGRAY);
-        if(timedCircularButton.isEnabled())
-            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_black, 15,Settings.DKGRAY);
-        else
-            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_white, 15,Settings.DKGRAY);
+        androidJoystick.draw();
+        timedCircularButton.draw();
     }
 
     @Override

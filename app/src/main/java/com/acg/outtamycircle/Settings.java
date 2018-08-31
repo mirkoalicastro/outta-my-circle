@@ -11,5 +11,4 @@ public class Settings {
     public static final int WHITE50ALFA = 0xEBCACACA;
     public static final int INTERNAL_GRADIENT = Color.parseColor("#5a5a5a");
     public static final int EXTERNAL_GRADIENT = Color.parseColor("#060606");
-
 }

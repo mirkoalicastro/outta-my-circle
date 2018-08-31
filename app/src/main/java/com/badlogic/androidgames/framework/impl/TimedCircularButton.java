@@ -1,8 +1,6 @@
 package com.badlogic.androidgames.framework.impl;
 
-import android.graphics.Color;
-import android.util.Log;
-
+import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
 
@@ -11,9 +9,14 @@ import java.util.Calendar;
 public class TimedCircularButton extends AndroidCircularButton {
     private long millis;
     private long validTime;
+    protected Integer secondaryColor;
+    protected Pixmap primaryPixmap, secondaryPixmap;
 
-    public TimedCircularButton(Graphics graphics, long millis, int x, int y, int radius) {
-        super(graphics, x, y, radius);
+    public TimedCircularButton(Graphics graphics, Effect effect, long millis, int x, int y, int radius, Integer activeColor, Integer secondaryColor, Pixmap primaryPixmap, Pixmap secondaryPixmap, int strokeWidth, Integer strokeColor) {
+        super(graphics, effect, x, y, radius, activeColor, null, strokeWidth, strokeColor);
+        this.secondaryColor = secondaryColor;
+        this.primaryPixmap = primaryPixmap;
+        this.secondaryPixmap = secondaryPixmap;
         setMillis(millis);
     }
 
@@ -33,41 +36,25 @@ public class TimedCircularButton extends AndroidCircularButton {
     }
 
     @Override
-    public void setEnabled(boolean enabled) {
+    public void enable(boolean enabled) {
         if(enabled)
             resetTime();
         else
             validTime = -1;
     }
 
-    @Override
-    public void draw(Pixmap pixmap) {
-        draw(Color.GREEN, Color.RED, pixmap);
-    }
-
-    public void draw(int color1, int color2, Pixmap pixmap) {
-        draw(color1, color2);
-        super.draw(pixmap);
-    }
-
-    public void draw(int color1, int color2, Pixmap pixmap, int strokeWidth, int colorStroke) {
-        super.drawStroke(strokeWidth, colorStroke);
-        draw(color1, color2, pixmap);
+    private void drawPixmap(Pixmap pixmap) {
+        graphics.drawPixmap(pixmap, x-radius, y-radius, radius*2,radius*2);
     }
 
     @Override
-    public void draw(int color) {
-        draw(color, Color.RED);
-    }
-
-    public void draw(int color1, int color2, int strokeWidth, int colorStroke) {
-        super.drawStroke(strokeWidth, colorStroke);
-        draw(color1, color2);
-    }
-
-    public void draw(int color1, int color2) {
-        super.draw(color1);
-        graphics.drawArc(getX()-getRadius(), getY()-getRadius(), getX()+getRadius(), getY()+getRadius(), 270, calculateProgress()*360, true, color2);
+    public void draw() {
+        super.draw();
+        graphics.drawArc(x-radius, y-radius, x+radius, y+radius, 270, calculateProgress()*360, true, secondaryColor);
+        if(isEnabled())
+            drawPixmap(primaryPixmap);
+        else
+            drawPixmap(secondaryPixmap);
     }
 
     private float calculateProgress() {

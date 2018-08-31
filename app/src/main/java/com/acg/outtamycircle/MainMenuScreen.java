@@ -13,14 +13,13 @@ import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
 public class MainMenuScreen extends AndroidScreen {
-    private final Button sound = new AndroidCircularButton(androidGame.getGraphics(),200,200,150);
-    private final Button start = new AndroidRectangularButton(androidGame.getGraphics(),500,500,100,100);
-
-    private final Button match = new AndroidRectangularButton(androidGame.getGraphics(), 500,200,100,100);
-
     private int colorStart = Color.BLUE;
 
     private int colorMatch = Color.WHITE;
+
+    private final Button sound = new AndroidCircularButton(androidGame.getGraphics(),null, 200,200,150,Color.GREEN,null,0,null);
+    private final Button start = new AndroidRectangularButton(androidGame.getGraphics(),null,500,500,100,100, colorStart, null, 0, null);
+    private final Button match = new AndroidRectangularButton(androidGame.getGraphics(),null, 500,200,100,100, colorMatch, null, 0, null);
 
     public MainMenuScreen(AndroidGame game) {
         super(game);
@@ -58,13 +57,10 @@ public class MainMenuScreen extends AndroidScreen {
     public void present(float deltaTime) {
         Graphics g = androidGame.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
-        if(Settings.soundEnabled)
-            sound.draw(Color.GREEN);
-        else
-            sound.draw(Color.RED);
-        start.draw(colorStart);
+        sound.draw();
+        start.draw();
 
-        match.draw(colorMatch);
+        match.draw();
     }
 
     @Override

@@ -25,15 +25,16 @@ import java.util.Set;
 
 public class JoystickScreen extends AndroidScreen {
     private final AndroidJoystick androidJoystick =
-            new AndroidJoystick(androidGame.getGraphics(),200,580,100,
+            new AndroidJoystick(androidGame.getGraphics(),
                     new RadialGradientEffect(200,580,100,
                             new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
                             new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    )
+                    ),200,580,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Color.BLACK
             );
+
     private final World world;
     private final Arena arena;
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),2000,1080,580,100);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,580,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Color.BLACK);
   //  private final GameCharacter gameCharacter;
 
     public JoystickScreen(AndroidGame game) {
@@ -71,18 +72,8 @@ public class JoystickScreen extends AndroidScreen {
     public void present(float deltaTime) {
         Graphics g = androidGame.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
-        DrawableComponent arenaDrawable = (DrawableComponent) arena.getComponent(Component.Type.Drawable);
-        //arenaDrawable.setColor(Color.BLUE);
-        //arenaDrawable.drawColor();
-/*        DrawableComponent gameCharacterDrawable = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
-        gameCharacterDrawable.setColor(Color.RED);
-        gameCharacterDrawable.drawColor();
-*/
-        androidJoystick.draw(Color.DKGRAY, Settings.WHITE50ALFA,15, Settings.DKGRAY);
-        if(timedCircularButton.isEnabled())
-            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_black, 15,Settings.DKGRAY);
-        else
-            timedCircularButton.draw(Settings.DKGREEN, Settings.DKRED, Assets.swords_white, 15,Settings.DKGRAY);
+        androidJoystick.draw();
+        timedCircularButton.draw();
     }
 
     @Override
