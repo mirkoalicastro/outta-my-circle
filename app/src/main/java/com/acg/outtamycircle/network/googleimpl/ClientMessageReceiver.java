@@ -6,7 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientMessageReceiver implements MessageReceiver {
-    private List<GameMessage> messages = new ArrayList<>();//TODO capacity
+    private List<GameMessage> messages;
+    private static final int DEFAULT_CAPACITY = 40; //TODO
+
+    public ClientMessageReceiver(int capacity){
+        this.messages = new ArrayList<>(capacity);
+    }
+
+    public ClientMessageReceiver(){
+        this(DEFAULT_CAPACITY);
+    }
 
     @Override
     public void storeMessage(GameMessage message) {

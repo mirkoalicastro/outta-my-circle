@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ServerMessageReceiver implements MessageReceiver {
-    private GameMessage messages[][];
+    private final GameMessage messages[][];
     private GameMessageInterpreter interpreter;
 
     public ServerMessageReceiver(GameMessageInterpreter interpreter, int numberOfPlayers) {
@@ -17,7 +17,7 @@ public class ServerMessageReceiver implements MessageReceiver {
         messages = new GameMessage[numberOfPlayers][2];
     }
 
-    private Iterable<GameMessage> iterable = new Iterable<GameMessage>() {
+    private final Iterable<GameMessage> iterable = new Iterable<GameMessage>() {
         private Iterator<GameMessage> iterator = new Iterator<GameMessage>() {
             int player=0, message=0;
             @Override

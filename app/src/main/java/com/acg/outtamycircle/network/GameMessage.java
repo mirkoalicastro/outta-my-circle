@@ -40,15 +40,15 @@ public class GameMessage {
      */
     public enum Type {
         //TODO message length and type description
-        INIT_CLIENT((byte)0),
-        CREATE((byte)0),
-        DESTROY((byte)0),
-        MOVE_SERVER((byte)0),
-        MOVE_CLIENT((byte)0),
-        POWERUP((byte)0),
-        POWERUP_ASSIGN((byte)0),
-        ATTACK((byte)0),
-        END((byte)0);
+        INIT_CLIENT((byte)4),
+        CREATE((byte)13),
+        DESTROY((byte)3),
+        MOVE_SERVER((byte)15),
+        MOVE_CLIENT((byte)11),
+        POWERUP((byte)12),
+        POWERUP_ASSIGN((byte)0), //TODO
+        ATTACK((byte)3),
+        END((byte)3);
 
         final byte length;
 
@@ -157,6 +157,5 @@ public class GameMessage {
         int rawBits = getIntAt(pos);
         return Float.intBitsToFloat(rawBits);
     }
-
 
 }
