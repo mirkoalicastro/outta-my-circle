@@ -13,6 +13,8 @@ import com.acg.outtamycircle.physicsutilities.Converter;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.fpl.liquidfun.World;
 
+import java.util.Calendar;
+
 public class ServerScreen extends ClientServerScreen {
     private final World world;
 
@@ -42,24 +44,26 @@ public class ServerScreen extends ClientServerScreen {
         status.setCharacters(characters);
     }
 
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        Log.d("ServerScreen",""+deltaTime);
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
 
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
-        world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
+        //TODO deltaTime
+        world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         for(int i=0; i<status.characters.length; i++) {
             comp = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
 
             DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
 
-            shape.setPosition((int) Converter.physicsToFrameX(comp.getX()),
-                            (int) Converter.physicsToFrameY(comp.getY()));
+            shape.setX((int) Converter.physicsToFrameX(comp.getX()))
+                    .setY((int) Converter.physicsToFrameY(comp.getY()));
         }
 
         //TODO invia posizione
@@ -70,10 +74,17 @@ public class ServerScreen extends ClientServerScreen {
         Converter.setScale(w, h);
     }
 
+    int num = 0;
+    double sum = 0;
     /*TODO Non serve*/
     @Override
     public void present(float deltaTime){
+        long start = Calendar.getInstance().getTimeInMillis();
         super.present(deltaTime);
+        sum += Calendar.getInstance().getTimeInMillis()-start;
+        num++;
+        Log.d("ServerScreen","vale " + (sum/num) + " (" + num + ")");
+
         // world.setContactListener(new ContactHandler());
     }
 }

@@ -32,7 +32,7 @@ public class AndroidGraphics implements Graphics {
         this.assets = assets;
         this.frameBuffer = frameBuffer;
         canvas = new Canvas(frameBuffer);
-        paint.setAntiAlias(true);
+        paint.setAntiAlias(false);
     }
 
     @Override

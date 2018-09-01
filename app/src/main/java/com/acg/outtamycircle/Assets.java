@@ -8,9 +8,12 @@ import com.badlogic.androidgames.framework.Sound;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 
-class Assets {
+public class Assets {
+    public static Pixmap joystick;
     public static Pixmap background;
     public static Effect backgroundTile;
+    public static Pixmap arena;
+    public static Effect arenaTile;
     public static Pixmap loading;
     public static Sound click;
     public static Pixmap[] skins;

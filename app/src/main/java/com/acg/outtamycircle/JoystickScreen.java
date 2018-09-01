@@ -20,6 +20,7 @@ import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import com.google.fpl.liquidfun.World;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -32,19 +33,10 @@ public class JoystickScreen extends AndroidScreen {
                     ),200,580,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Color.BLACK
             );
 
-    private final World world;
-    private final Arena arena;
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,580,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Color.BLACK);
-  //  private final GameCharacter gameCharacter;
 
     public JoystickScreen(AndroidGame game) {
         super(game);
-        world = new World(0,0);
-        EntityFactory.setGraphics(game.getGraphics());
-        EntityFactory.setWorld(world);
-
-        arena = EntityFactory.createArena(300,500,400);
-    //    gameCharacter = EntityFactory.createDefaultCharacter(30, 500,400);
     }
 
     @Override
@@ -59,21 +51,38 @@ public class JoystickScreen extends AndroidScreen {
                 if (timedCircularButton.isEnabled()) {
                     Log.d("TCB", "WOW ATTACKK WHOAAAA");
                     timedCircularButton.resetTime();
-//                    customizeScreen = true;
+                    customizeScreen = true;
                     break;
                 }
             }
         }
-        if(customizeScreen)
-            androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+        if(customizeScreen) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(3000);
+                    } catch(InterruptedException e) {
+
+                    }
+                    androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+                }
+            }).start();
+        }
     }
 
+    int num = 0;
+    double sum = 0;
     @Override
     public void present(float deltaTime) {
+        long start = Calendar.getInstance().getTimeInMillis();
         Graphics g = androidGame.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         androidJoystick.draw();
         timedCircularButton.draw();
+        sum += Calendar.getInstance().getTimeInMillis()-start;
+        num++;
+        Log.d("Media","vale " + (sum/num) + " (" + num + ")");
     }
 
     @Override
