@@ -9,10 +9,10 @@ import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
 
-public class AndroidTileEffect extends AndroidEffect {
+public class RectangularTileAndroidEffect extends TileAndroidEffect {
 
-    public AndroidTileEffect(AndroidPixmap pixmap) {
-        shader = new BitmapShader(pixmap.bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+    public RectangularTileAndroidEffect(AndroidPixmap pixmap) {
+        super(pixmap);
     }
 
     @Override

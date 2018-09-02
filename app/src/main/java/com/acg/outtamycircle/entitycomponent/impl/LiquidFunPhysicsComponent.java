@@ -15,7 +15,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
     private final Vec2 v = new Vec2();
 
     public void move(float x, float y){
-        x *= 30; y *= 30;
+        x *= 15; y *= 15;
 
         //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();

@@ -41,7 +41,6 @@ public class ServerScreen extends ClientServerScreen {
         //TODO comunica posizioni etc.
     }
 
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -50,6 +49,7 @@ public class ServerScreen extends ClientServerScreen {
 
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
+        //TODO deltaTime
         world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         for(int i=0; i<status.characters.length; i++) {
@@ -57,8 +57,8 @@ public class ServerScreen extends ClientServerScreen {
 
             DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
 
-            shape.setPosition((int) Converter.physicsToFrameX(comp.getX()),
-                            (int) Converter.physicsToFrameY(comp.getY()));
+            shape.setX((int) Converter.physicsToFrameX(comp.getX()))
+                    .setY((int) Converter.physicsToFrameY(comp.getY()));
         }
 
         checkStatus();
@@ -122,7 +122,7 @@ public class ServerScreen extends ClientServerScreen {
         float arenaY = Converter.frameToPhysicsY(arenaDrawable.getY());
 
         /*int r = Converter.frameToPhysicsRadius(status.arena.) - ch1.getRadius();
-        
+
         return Math.pow(circle1.getX()-circle2.getX(), 2)
                 + Math.pow(circle1.getY()-circle2.getY(), 2)
                 < Math.pow(circle1.radius+circle2.radius, 2);*/

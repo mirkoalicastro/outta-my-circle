@@ -2,12 +2,14 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 
+import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.AndroidSplashScreen;
-import com.badlogic.androidgames.framework.impl.AndroidTileEffect;
+import com.badlogic.androidgames.framework.impl.CircularTileAndroidEffect;
+import com.badlogic.androidgames.framework.impl.RectangularTileAndroidEffect;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -32,10 +34,15 @@ public class StartScreen extends AndroidSplashScreen {
 
     @Override
     public void update(float deltaTime) {
-        Assets.background = game.getGraphics().newPixmap("bgtile.png", PixmapFormat.ARGB8888);
-        Assets.backgroundTile = new AndroidTileEffect((AndroidPixmap)Assets.background);
-        androidGame.getGraphics().drawEffect(Assets.backgroundTile, 0,0, game.getGraphics().getWidth(), game.getGraphics().getHeight());
-        Assets.loading = game.getGraphics().newPixmap("loading.png", PixmapFormat.ARGB8888);
+        final Graphics graphics = androidGame.getGraphics();
+        Assets.joystick = graphics.newPixmap("joystick.png", PixmapFormat.ARGB8888);
+        Assets.background = graphics.newPixmap("bgtile.png", PixmapFormat.ARGB8888);
+        Assets.backgroundTile = new RectangularTileAndroidEffect((AndroidPixmap)Assets.background);
+        graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
+        Assets.loading = graphics.newPixmap("loading.png", PixmapFormat.ARGB8888);
+        Assets.arena = graphics.newPixmap("arenatile.png", PixmapFormat.ARGB8888);
+        Assets.arenaTile = new CircularTileAndroidEffect((AndroidPixmap)Assets.arena);
+        Assets.arena = graphics.newPixmap("arena.png", PixmapFormat.ARGB8888);
         try {
             String[] skins = androidGame.getAssets().list("skins");
             if(skins.length == 0)
@@ -43,7 +50,7 @@ public class StartScreen extends AndroidSplashScreen {
             Arrays.sort(skins);
             Assets.skins = new Pixmap[skins.length];
             for(int i=0; i<skins.length; i++)
-                Assets.skins[i] = androidGame.getGraphics().newPixmap("skins/"+skins[i], PixmapFormat.ARGB8888);
+                Assets.skins[i] = graphics.newPixmap("skins/"+skins[i], PixmapFormat.ARGB8888);
 
             String[] attacks = androidGame.getAssets().list("attacks");
             if(attacks.length == 0)
@@ -51,14 +58,14 @@ public class StartScreen extends AndroidSplashScreen {
             Arrays.sort(attacks);
             Assets.attacks = new Pixmap[attacks.length];
             for(int i=0; i<attacks.length; i++)
-                Assets.attacks[i] = androidGame.getGraphics().newPixmap("attacks/"+attacks[i], PixmapFormat.ARGB8888);
+                Assets.attacks[i] = graphics.newPixmap("attacks/"+attacks[i], PixmapFormat.ARGB8888);
         } catch (IOException e) {
             throw new RuntimeException("Error opening assets");
         }
-        Assets.rightArrow = androidGame.getGraphics().newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
-        Assets.leftArrow = androidGame.getGraphics().newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
-        Assets.swords_black = androidGame.getGraphics().newPixmap("swords_black.png", PixmapFormat.ARGB8888);
-        Assets.swords_white = androidGame.getGraphics().newPixmap("swords_white.png", PixmapFormat.ARGB8888);
+        Assets.rightArrow = graphics.newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
+        Assets.leftArrow = graphics.newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
+        Assets.swords_black = graphics.newPixmap("swords_black.png", PixmapFormat.ARGB8888);
+        Assets.swords_white = graphics.newPixmap("swords_white.png", PixmapFormat.ARGB8888);
         setProgress(70);
         Assets.click = androidGame.getAudio().newSound("urto1.wav");
         // Settings.load(game.getFileIO());
