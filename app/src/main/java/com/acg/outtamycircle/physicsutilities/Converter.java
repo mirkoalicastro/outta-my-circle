@@ -1,6 +1,6 @@
 package com.acg.outtamycircle.physicsutilities;
 
-import android.util.Log;
+//TODO valutare posizione nei package
 
 /**
  * Convertitore di cordinate da mondo fisico a mondo grafico.
@@ -15,6 +15,7 @@ public class Converter {
     private static float BALANCE = 1f;
     private static float SCALE;
 
+    //TODO KSF
     public static void setScale(int frameWidth, int frameHeight){
         SCALE = (float)(Math.pow(frameWidth/PHYSIC_WIDTH, 1f - BALANCE)*
                 Math.pow(frameHeight/PHYSIC_HEIGHT, BALANCE));

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
+import com.acg.outtamycircle.entitycomponent.impl.CircleDrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
@@ -49,7 +50,7 @@ public class ServerScreen extends ClientServerScreen {
 
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
-        //TODO deltaTime
+        //TODO deltaTime?
         world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         for(int i=0; i<status.characters.length; i++) {
@@ -113,7 +114,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private boolean isOut(GameCharacter ch1){
-        LiquidFunPhysicsComponent circle = (LiquidFunPhysicsComponent)ch1.getComponent(Component.Type.Physics);
+        CircleDrawableComponent circle = (CircleDrawableComponent)ch1.getComponent(Component.Type.Physics);
         float chX = circle.getX();
         float chY = circle.getY();
 
@@ -121,11 +122,10 @@ public class ServerScreen extends ClientServerScreen {
         float arenaX = Converter.frameToPhysicsX(arenaDrawable.getX());
         float arenaY = Converter.frameToPhysicsY(arenaDrawable.getY());
 
-        /*int r = Converter.frameToPhysicsRadius(status.arena.) - ch1.getRadius();
+        float deltaX = (chX - arenaX)*(chX - arenaX);
+        float deltaY = (chY - arenaY)*(chY- arenaY);
 
-        return Math.pow(circle1.getX()-circle2.getX(), 2)
-                + Math.pow(circle1.getY()-circle2.getY(), 2)
-                < Math.pow(circle1.radius+circle2.radius, 2);*/
-        return false;
+        float delta = (float)Math.sqrt(deltaX + deltaY);
+        return delta > arenaRadius + circle.getRadius();
     }
 }

@@ -12,6 +12,9 @@ import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
 import com.google.fpl.liquidfun.Fixture;
 
+//TODO valutare posizione nei package
+//l'idea è di creare un package per ogni fase di gioco
+
 public class ContactHandler extends ContactListener{
     private Audio audio;
     private SparseArray<ContactType> map;

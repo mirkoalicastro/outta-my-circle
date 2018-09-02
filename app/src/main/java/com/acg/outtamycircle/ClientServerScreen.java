@@ -99,9 +99,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
         }
     }
 
+    //TODO così il personaggio sparisce improvvisamente, inoltre continua ad esserci il corpo fisico
     private void drawCharacters(){
         for(int i=0 ; i<status.characters.length ; i++)
-            ((DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable)).draw();
+            if(status.alives[i])
+                ((DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable)).draw();
     }
 
     /**

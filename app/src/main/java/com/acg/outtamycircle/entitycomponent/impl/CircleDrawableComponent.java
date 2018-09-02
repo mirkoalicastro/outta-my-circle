@@ -5,7 +5,7 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 
 public class CircleDrawableComponent extends DrawableComponent {
-    protected int radius;
+    private int radius; //TODO prima era protected, perchè?
 
     public CircleDrawableComponent(Graphics graphics){
         super(graphics);
@@ -28,6 +28,9 @@ public class CircleDrawableComponent extends DrawableComponent {
         return this;
     }
 
+    public int getRadius(){ return radius; }
+
+    //TODO mi piaceva più il design precedente :S
     @Override
     public void draw() {
         if(strokeWidth > 0 && strokeColor != null)
