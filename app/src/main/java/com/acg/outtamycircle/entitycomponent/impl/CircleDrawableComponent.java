@@ -3,7 +3,6 @@ package com.acg.outtamycircle.entitycomponent.impl;
 import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 
-
 public class CircleDrawableComponent extends DrawableComponent {
     private int radius, color;
 

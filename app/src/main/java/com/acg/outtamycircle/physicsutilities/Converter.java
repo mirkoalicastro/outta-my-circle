@@ -6,21 +6,27 @@ import android.util.Log;
  * Convertitore di cordinate da mondo fisico a mondo grafico.
  */
 public class Converter {
-    private static final float PHYSIC_WIDTH = 32, PHYSIC_HEIGHT = 18;
-    private static float SCALE_WIDTH = 40, SCALE_HEIGHT = 40;
+    private static final float PHYSIC_WIDTH = 32, PHYSIC_HEIGHT = 15;
 
-    public static void setScale(float FRAME_WIDTH, float FRAME_HEIGHT){
-        SCALE_WIDTH = FRAME_WIDTH/PHYSIC_WIDTH;
-        SCALE_HEIGHT = FRAME_HEIGHT/PHYSIC_HEIGHT;
+    /**
+     * Fattore di bilanciamento:
+     * https://forum.unity.com/threads/canvas-scaler-scale-with-screen-size-same-as-setting-ui-objects-to-stretch.512005/
+     */
+    private static float BALANCE = 1f;
+    private static float SCALE;
+
+    public static void setScale(int frameWidth, int frameHeight){
+        SCALE = (float)(Math.pow(frameWidth/PHYSIC_WIDTH, 1f - BALANCE)*
+                Math.pow(frameHeight/PHYSIC_HEIGHT, BALANCE));
     }
 
-    public static float physicsToFrameX(float x){ return x*SCALE_WIDTH; }
+    public static float physicsToFrameX(float x){ return x*SCALE; }
 
-    public static float physicsToFrameY(float y){ return y*SCALE_HEIGHT; }
+    public static float physicsToFrameY(float y){ return y*SCALE; }
 
-    public static float frameToPhysicsX(float x){ return x/SCALE_WIDTH; }
+    public static float frameToPhysicsX(float x){ return x/SCALE; }
 
-    public static float frameToPhysicsY(float y){ return y/SCALE_HEIGHT; }
+    public static float frameToPhysicsY(float y){ return y/SCALE; }
 
-    public static float frameToPhysicsRadius(float r){ return r/SCALE_WIDTH; }
+    public static float frameToPhysicsRadius(float r){ return r/SCALE; }
 }

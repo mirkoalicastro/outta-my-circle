@@ -1,6 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.graphics.Color;
 import android.graphics.Shader;
 import android.util.Log;
 
@@ -19,10 +18,9 @@ import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
     protected GameStatus status;
-    protected int h, w, r; //height, width, radius
+    protected int frameHeight, frameWeight, arenaRadius; //height, width, radius
 
-    /*TODO una volta cancellato boundtest cambiare a private*/
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,580,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Settings.DKGRAY);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,520,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Settings.DKGRAY);
 
     protected int[][] spawnPositions;
 
@@ -32,26 +30,27 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     protected final AndroidJoystick androidJoystick =
             new AndroidJoystick(androidGame.getGraphics(),
-                    new RadialGradientEffect(200,580,100,
+                    new RadialGradientEffect(200,520,100,
                             new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
                             new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    ),200,580,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
+                    ),200,520,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
             );
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
+
+        frameHeight = game.getGraphics().getHeight();
+        frameWeight = game.getGraphics().getWidth();
+        arenaRadius = frameHeight /2 - 40;
+
         setup();
         status = new GameStatus();
 
         EntityFactory.setGraphics(game.getGraphics());
 
-        h = game.getGraphics().getHeight();
-        w = game.getGraphics().getWidth();
-        r = h/2 - 40;
+        status.setArena(EntityFactory.createArena(arenaRadius, frameWeight/2, frameHeight /2));
 
-        status.setArena(EntityFactory.createArena(r, w/2, h/2));
-
-        spawnPositions = getSpawnPositions(r-40, w/2, h/2, 4);
+        spawnPositions = getSpawnPositions(arenaRadius-40, frameWeight/2, frameHeight /2, 4);
     }
 
     @Override
@@ -108,22 +107,22 @@ public abstract class ClientServerScreen extends AndroidScreen {
     /**
      * Calcolo delle posizioni di spawn dei giocatori
      *
-     * @param r raggio
-     * @param w fattore di shift sull'asse x
+     * @param arenaRadius raggio
+     * @param frameWeight fattore di shift sull'asse x
      * @param h fattore di shift sull'asse y
      * @param n numero di giocatori
      * @return
      */
-    private int[][] getSpawnPositions(int r, int w, int h, int n){
+    private int[][] getSpawnPositions(int arenaRadius, int frameWeight, int h, int n){
         int[][] spwns = new int[n][2];
         double x, y;
         double p = (Math.PI*2)/n;
         double theta = Math.PI/2;
-        Log.d("TAG","W:" + w + " H: " + h);
+        Log.d("TAG","frameWeight:" + frameWeight + " H: " + h);
         for(int i=0 ; i<n ; i++){
-            x = Math.cos(theta)*r;
-            y = Math.sin(theta)*r;
-            spwns[i][0] = (int)x + w;
+            x = Math.cos(theta)*arenaRadius;
+            y = Math.sin(theta)*arenaRadius;
+            spwns[i][0] = (int)x + frameWeight;
             spwns[i][1] = (int)y + h;
             theta += p;
         }

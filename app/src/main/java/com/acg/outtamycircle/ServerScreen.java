@@ -1,12 +1,11 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.EntityFactory;
-import com.acg.outtamycircle.entitycomponent.impl.BoundsTest;
+import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.physicsutilities.Converter;
@@ -16,23 +15,21 @@ import com.google.fpl.liquidfun.World;
 public class ServerScreen extends ClientServerScreen {
     private final World world;
 
-    private BoundsTest bt;
-
     private static final float TIME_STEP = 1 / 60f;   //60 fps
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
 
+    private int[][] spawnPositions;
+
     public ServerScreen(AndroidGame game, long []ids) {
         super(game, ids);
-        setup();
 
         world = new World(0, 0);
         EntityFactory.setWorld(world);
 
-        /*Testcode*/
-        //bt = new BoundsTest(graphics, world, r+ 10, w/2, h/2);
-
         /*Inizializzazione Giocatori*/
+        spawnPositions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, 4);
+
         GameCharacter[] characters = {
                 EntityFactory.createServerDefaultCharacter(40, spawnPositions[0][0], spawnPositions[0][1], Color.GREEN),
                 EntityFactory.createServerDefaultCharacter(40, spawnPositions[1][0], spawnPositions[1][1], Color.WHITE),
@@ -40,6 +37,8 @@ public class ServerScreen extends ClientServerScreen {
                 EntityFactory.createServerDefaultCharacter(40, spawnPositions[3][0], spawnPositions[3][1], Color.RED),
         };
         status.setCharacters(characters);
+
+        //TODO comunica posizioni etc.
     }
 
 
@@ -62,18 +61,71 @@ public class ServerScreen extends ClientServerScreen {
                             (int) Converter.physicsToFrameY(comp.getY()));
         }
 
+        checkStatus();
+
         //TODO invia posizione
     }
 
     @Override
     public void setup(){
-        Converter.setScale(w, h);
+        Converter.setScale(frameWeight, frameHeight);
     }
 
     /*TODO Non serve*/
     @Override
     public void present(float deltaTime){
         super.present(deltaTime);
-        // world.setContactListener(new ContactHandler());
+        //world.setContactListener(new ContactHandler());
+    }
+
+    /**
+     * Distribuzione di n cordinate equidistanti su di una circonferenza
+     *
+     * @param r raggio
+     * @param w fattore di shift sull'asse x
+     * @param h fattore di shift sull'asse y
+     * @param n numero di giocatori
+     * @return
+     */
+    private int[][] distributePoints(int r, int w, int h, int n){
+        int[][] points = new int[n][2];
+        double x, y;
+        double p = (Math.PI*2)/n;
+        double theta = Math.PI/2;
+
+        for(int i=0 ; i<n ; i++){
+            x = Math.cos(theta)*r;
+            y = Math.sin(theta)*r;
+
+
+            points[i][0] = (int)x + w;
+            points[i][1] = (int)y + h;
+
+            theta += p;
+        }
+        return points;
+    }
+
+    private void checkStatus(){
+        for(int i=0 ; i<spawnPositions.length ; i++)
+            if(isOut(status.characters[i]))
+                status.alives[i] = false;
+    }
+
+    private boolean isOut(GameCharacter ch1){
+        LiquidFunPhysicsComponent circle = (LiquidFunPhysicsComponent)ch1.getComponent(Component.Type.Physics);
+        float chX = circle.getX();
+        float chY = circle.getY();
+
+        DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
+        float arenaX = Converter.frameToPhysicsX(arenaDrawable.getX());
+        float arenaY = Converter.frameToPhysicsY(arenaDrawable.getY());
+
+        /*int r = Converter.frameToPhysicsRadius(status.arena.) - ch1.getRadius();
+        
+        return Math.pow(circle1.getX()-circle2.getX(), 2)
+                + Math.pow(circle1.getY()-circle2.getY(), 2)
+                < Math.pow(circle1.radius+circle2.radius, 2);*/
+        return false;
     }
 }

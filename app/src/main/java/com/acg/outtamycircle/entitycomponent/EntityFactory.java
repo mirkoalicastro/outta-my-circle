@@ -59,4 +59,10 @@ public class EntityFactory{
 
         return c;
     }
+
+    /*public static Wall createWall(int radius, int color){
+        Wall w = new Wall();
+
+        return w;
+    }*/
 }

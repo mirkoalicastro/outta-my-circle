@@ -24,4 +24,6 @@ public abstract class DrawableComponent extends Component {
         this.y = y;
     }
 
+    public int getX(){ return x; }
+    public int getY(){ return y; }
 }

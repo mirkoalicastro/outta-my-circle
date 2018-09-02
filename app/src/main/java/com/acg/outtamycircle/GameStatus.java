@@ -12,10 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GameStatus {
-    private final List<GameObject> gameObjectList = new LinkedList<>();
-
     Arena arena;
-    GameCharacter[] characters; //main character at pos 0
+    GameCharacter[] characters;
+    boolean[] alives;
 
     void setArena(Arena arena){
         this.arena = arena;
@@ -23,19 +22,8 @@ public class GameStatus {
 
     void setCharacters(GameCharacter[] characters) {
         this.characters = characters;
-    }
-
-    //TODO serve synch?
-    public synchronized void addGameObject(GameObject gameObject) {
-        gameObjectList.add(gameObject);
-    }
-
-    public boolean collide(GameCharacter ch1, GameCharacter ch2){
-        DynamicCircle circle1 = (DynamicCircle)ch1.getComponent(Component.Type.Physics);
-        DynamicCircle circle2 = (DynamicCircle)ch2.getComponent(Component.Type.Physics);
-
-        return Math.pow(circle1.getX()-circle2.getX(), 2)
-                + Math.pow(circle1.getY()-circle2.getY(), 2)
-                < Math.pow(circle1.radius+circle2.radius, 2);
+        alives = new boolean[characters.length];
+        for(int i=0; i<alives.length ; i++)
+            alives[i] = true;
     }
 }
