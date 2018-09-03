@@ -66,7 +66,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         }
         if(rom) {
             quickGame.enable(false);
-            GoogleRoom.getInstance().quickGame(3,3);
+            GoogleRoom.getInstance().quickGame(2,2);
         }
     }
 

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.acg.outtamycircle.R;
 import com.acg.outtamycircle.network.ServerClientMessageHandler;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
@@ -26,25 +27,25 @@ public class GoogleRoom {
     private static GoogleRoom instance;
 
     private final MyGoogleSignIn myGoogleSignIn;
-    private final Activity activity;
+    private final GoogleAndroidGame googleAndroidGame;
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
     private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler();
 
     private volatile Room room;
-    private volatile boolean startingMessageReceived;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
     private RoomConfig config;
 
     private static String TAG = "GoogleS";
 
-    public static void createInstance(Activity activity, MyGoogleSignIn myGoogleSignIn) {
-        instance = new GoogleRoom(activity, myGoogleSignIn);
+    public static void createInstance(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
+        instance = new GoogleRoom(googleAndroidGame, myGoogleSignIn);
     }
 
     private void reset() {
         room = null;
-        startingMessageReceived = false;
+        config = null;
+        realTimeMultiplayerClient = null;
     }
 
     public static GoogleRoom getInstance() {
@@ -53,48 +54,33 @@ public class GoogleRoom {
         return instance;
     }
 
-    private GoogleRoom(Activity activity, MyGoogleSignIn myGoogleSignIn) {
-        this.activity = activity;
+    private GoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
+        this.googleAndroidGame = googleAndroidGame;
         this.myGoogleSignIn = myGoogleSignIn;
         if(myGoogleSignIn.isSignedIn())
-            realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
-    }
-
-    private void onStartGameMessageReceived() {
-        startingMessageReceived = true;
-        activity.finishActivity(GoogleRC.RC_WAITING_ROOM);
+            realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
     }
 
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GoogleRC.RC_WAITING_ROOM) {
-            if(startingMessageReceived || resultCode == Activity.RESULT_OK) {
+            if(resultCode == Activity.RESULT_OK) {
                 Log.d(TAG,"OK");
-                // (start game)
-                // startGame(mParticipants.size());
+                googleAndroidGame.startGame();
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                // Waiting room was dismissed with the back button. The meaning of this
-                // action is up to the game. You may choose to leave the room and cancel the
-                // match, or do something else like minimize the waiting room and
-                // continue to connect in the background.
-
-                // in this example, we take the simple approach and just leave the room:
                 Log.d(TAG,"CANCELLED");
-//                realTimeMultiplayerClient.leave(config, room.getRoomId());
+                realTimeMultiplayerClient.leave(config, room.getRoomId());
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 Log.d(TAG,"LEFT");
-                // player wants to leave the room.
- //               realTimeMultiplayerClient.leave(config, room.getRoomId());
+                realTimeMultiplayerClient.leave(config, room.getRoomId());
             }
         }
     }
 
-
     void showGameError() {
         Log.d(TAG, "GAME ERROR WTF");
-        new AlertDialog.Builder(activity)
-                .setMessage(activity.getString(R.string.google_error))
+        new AlertDialog.Builder(googleAndroidGame)
+                .setMessage(googleAndroidGame.getString(R.string.google_error))
                 .setNeutralButton(android.R.string.ok, null).create().show();
-        //switchToMainScreen();
     }
 
     void updateRoom(Room room) {
@@ -103,12 +89,12 @@ public class GoogleRoom {
 
     void showWaitingRoom(Room room) {
         Log.d(TAG, "SHOW WAITING ROOM");
-        Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount())
+        Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount())
                 .getWaitingRoomIntent(room, MAX_PLAYERS-1)
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                        activity.startActivityForResult(intent, GoogleRC.RC_WAITING_ROOM);
+                        googleAndroidGame.startActivityForResult(intent, GoogleRC.RC_WAITING_ROOM);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -127,7 +113,7 @@ public class GoogleRoom {
         if(max_players > MAX_PLAYERS)
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
         reset();
-        realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(activity, myGoogleSignIn.getAccount());
+        realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 
         config = RoomConfig.builder(myRoomUpdatedCallback)

@@ -5,7 +5,7 @@ import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 
 public class CircleDrawableComponent extends DrawableComponent {
-    private int radius; //TODO prima era protected, perchè?
+    protected int radius;
 
     public CircleDrawableComponent(Graphics graphics){
         super(graphics);

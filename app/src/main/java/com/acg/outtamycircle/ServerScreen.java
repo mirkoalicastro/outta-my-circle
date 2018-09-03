@@ -114,7 +114,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private boolean isOut(GameCharacter ch1){
-        CircleDrawableComponent circle = (CircleDrawableComponent)ch1.getComponent(Component.Type.Physics);
+        DynamicCircle circle = (DynamicCircle)ch1.getComponent(Component.Type.Physics);
         float chX = circle.getX();
         float chY = circle.getY();
 
@@ -126,6 +126,6 @@ public class ServerScreen extends ClientServerScreen {
         float deltaY = (chY - arenaY)*(chY- arenaY);
 
         float delta = (float)Math.sqrt(deltaX + deltaY);
-        return delta > arenaRadius + circle.getRadius();
+        return delta > arenaRadius + circle.radius;
     }
 }

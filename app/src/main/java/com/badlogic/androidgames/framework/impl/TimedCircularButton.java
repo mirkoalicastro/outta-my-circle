@@ -27,12 +27,12 @@ public class TimedCircularButton extends AndroidCircularButton {
     }
 
     public void resetTime() {
-        validTime = Calendar.getInstance().getTimeInMillis()+millis;
+        validTime = System.currentTimeMillis()+millis;
     }
 
     @Override
     public boolean isEnabled() {
-        return validTime != -1 && Calendar.getInstance().getTimeInMillis() >= validTime;
+        return validTime != -1 && System.currentTimeMillis() >= validTime;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TimedCircularButton extends AndroidCircularButton {
     private float calculateProgress() {
         if(validTime == -1)
             return 1;
-        long tmp = validTime - Calendar.getInstance().getTimeInMillis();
+        long tmp = validTime - System.currentTimeMillis();
         if(tmp < 0)
             return 0;
         return (float)tmp/(float)millis;
