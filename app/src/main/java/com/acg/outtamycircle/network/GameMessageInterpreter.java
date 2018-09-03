@@ -35,4 +35,5 @@ public interface GameMessageInterpreter {
 
     void makeEndMessage(GameMessage gameMessage, short winnerId);
 
+    void makeHostOrClientMessage(GameMessage message, int time);
 }
