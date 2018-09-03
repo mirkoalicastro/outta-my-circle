@@ -48,8 +48,6 @@ public class ServerScreen extends ClientServerScreen {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        Log.d("ServerScreen",""+deltaTime);
-
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
 
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
@@ -74,16 +72,16 @@ public class ServerScreen extends ClientServerScreen {
         Converter.setScale(w, h);
     }
 
-    int num = 0;
-    double sum = 0;
+  //  int num = 0;
+  //  double sum = 0;
     /*TODO Non serve*/
     @Override
     public void present(float deltaTime){
-        long start = Calendar.getInstance().getTimeInMillis();
+  //      long start = Calendar.getInstance().getTimeInMillis();
         super.present(deltaTime);
-        sum += Calendar.getInstance().getTimeInMillis()-start;
+  /*      sum += Calendar.getInstance().getTimeInMillis()-start;
         num++;
-        Log.d("ServerScreen","vale " + (sum/num) + " (" + num + ")");
+        Log.d("ServerScreen","vale " + (sum/num) + " (" + num + ")");*/
 
         // world.setContactListener(new ContactHandler());
     }

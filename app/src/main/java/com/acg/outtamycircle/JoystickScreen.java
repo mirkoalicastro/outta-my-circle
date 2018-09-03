@@ -71,18 +71,18 @@ public class JoystickScreen extends AndroidScreen {
         }
     }
 
-    int num = 0;
-    double sum = 0;
+  //  int num = 0;
+  //  double sum = 0;
     @Override
     public void present(float deltaTime) {
-        long start = Calendar.getInstance().getTimeInMillis();
+  //      long start = Calendar.getInstance().getTimeInMillis();
         Graphics g = androidGame.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         androidJoystick.draw();
         timedCircularButton.draw();
-        sum += Calendar.getInstance().getTimeInMillis()-start;
+/*        sum += Calendar.getInstance().getTimeInMillis()-start;
         num++;
-        Log.d("Media","vale " + (sum/num) + " (" + num + ")");
+        Log.d("Media","vale " + (sum/num) + " (" + num + ")");*/
     }
 
     @Override

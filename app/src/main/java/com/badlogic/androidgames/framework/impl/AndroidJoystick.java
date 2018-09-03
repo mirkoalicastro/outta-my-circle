@@ -48,8 +48,6 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
                 buffer.add(event);
             }
         }
-        if(!buffer.isEmpty())
-            Log.d("JoyStickCore", "Angolo: " + getAngle());
         events.removeAll(buffer);
         buffer.clear();
         return events;
@@ -61,7 +59,7 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     }
 
     public double getNormX() {
-        return (double) xPad /radius;
+        return (double) xPad / radius;
     }
 
     public double getNormY() {
