@@ -20,9 +20,12 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     // POWERUP
     private static final int POWER_UP_IDX = 11;
 
+    // HOST_OR_CLIENT
+    private static final int HOST_OR_CLIENT_IDX = 1;
+
     @Override
     public GameMessage.Type getType(GameMessage message){
-        return message.type;
+        return message.getType();
     }
 
     @Override
@@ -58,6 +61,10 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
         return message.getByteAt(POWER_UP_IDX);
     }
 
+    public int getTimeMillis(GameMessage message){
+        return message.getIntAt(HOST_OR_CLIENT_IDX);
+    }
+
     /*------------ WRITER ------------*/
 
     public void makeMessage(GameMessage message, GameMessage.Type type) {
@@ -71,7 +78,7 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
 
     @Override
     public void makeInitClientMessage(GameMessage message, short skinId, byte attackId) {
-        makeMessage(message, message.type.INIT_CLIENT);
+        makeMessage(message, GameMessage.Type.INIT_CLIENT);
         message.putShort(INIT_SKIN_ID_IDX, skinId).putByte(ATTACK_ID_IDX, attackId);
     }
 
@@ -120,4 +127,36 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
         makeMessage(message, GameMessage.Type.END, winnerId);
     }
 
+    @Override
+    public void makeHostOrClientMessage(GameMessage message, int time){
+        makeMessage(message, GameMessage.Type.HOST_OR_CLIENT);
+        message.putInt(HOST_OR_CLIENT_IDX, time);
+    }
+
+
+    //TODO remove
+    public String toString(GameMessage message){
+        StringBuilder builder = new StringBuilder();
+        switch (message.getType()){
+            case MOVE_SERVER:
+                builder.append("type->")
+                        .append(message.getType().name())
+                        .append(", objectId->")
+                        .append(getObjectId(message))
+                        .append(", posX->")
+                        .append(getPosX(message))
+                        .append(", posY->")
+                        .append(getPosY(message));
+                break;
+            case POWERUP:
+                builder.append("type->")
+                        .append(message.getType().name())
+                        .append(", posX->").append(getPosX(message))
+                        .append(", posY->").append(getPosY(message))
+                        .append(", powerupId").append(getPowerUpId(message));
+                break;
+            default: System.out.println("Che tipo strano : " + message.getType().name());
+        }
+        return builder.toString();
+    }
 }

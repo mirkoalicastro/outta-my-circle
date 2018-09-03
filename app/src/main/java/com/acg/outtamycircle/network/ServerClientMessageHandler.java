@@ -25,8 +25,10 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     private MessageReceiver first, second;
     private Pools.Pool<GameMessage> pool;
     private String roomId;
+    private List<String> players;
 
-    private byte[] buffer = new byte[MAX_BUFFER_SIZE];
+    //TODO visibility
+    byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
 
     public ServerClientMessageHandler setRoomId(String roomId){
@@ -36,6 +38,18 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
 
     public ServerClientMessageHandler setClient(RealTimeMultiplayerClient client){
         this.client = client;
+        return this;
+    }
+
+    public ServerClientMessageHandler setPlayerList(List<String> players){
+        this.players = players;
+        return this;
+    }
+
+    //TODO change
+    ServerClientMessageHandler setReceivers(MessageReceiver first, MessageReceiver second){
+        this.first = first;
+        this.second = second;
         return this;
     }
 
@@ -73,6 +87,9 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     @Override
     public void broadcastReliable(){
         //TODO
+        for(String player : players){
+            sendReliable(player);
+        }
     }
 
     @Override
@@ -83,8 +100,9 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     @Override
     public void putInBuffer(GameMessage message) {
         //TODO se ci sono troppi messaggi? RuntimeException?
-        message.copyBuffer(buffer, currentBufferSize, message.type.length);
-        currentBufferSize += message.type.length;
+        GameMessage.Type type = message.getType();
+        message.putInBuffer(buffer, currentBufferSize);
+        currentBufferSize += type.length;
         buffer[currentBufferSize] = ENDING_CHAR;
     }
 
@@ -104,6 +122,7 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
 
         while( cursor < messageData.length && messageData[cursor]!=ENDING_CHAR) {
             GameMessage gameMessage = pool.acquire();
+            gameMessage.setSender(realTimeMessage.getSenderParticipantId());
             int length = GameMessage.Type.values()[messageData[cursor]].length;
             gameMessage.copyBuffer(messageData, cursor, cursor + length - 1); //TODO check
             first.storeMessage(gameMessage);

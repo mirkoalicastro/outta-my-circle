@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ServerMessageReceiver implements MessageReceiver {
-    private final GameMessage messages[][];
+    private final GameMessage[][] messages;
     private GameMessageInterpreter interpreter;
 
     public ServerMessageReceiver(GameMessageInterpreter interpreter, int numberOfPlayers) {
@@ -18,29 +18,39 @@ public class ServerMessageReceiver implements MessageReceiver {
     }
 
     private final Iterable<GameMessage> iterable = new Iterable<GameMessage>() {
-        private Iterator<GameMessage> iterator = new Iterator<GameMessage>() {
+        class MyIterator implements Iterator<GameMessage>{
             int player=0, message=0;
+
+            void reset(){
+                player=0; message=0;
+                if(messages[player][message]==null)
+                    findNext();
+            }
+
+            void findNext() {
+                do {
+                    if (message == messages[0].length - 1) {
+                        player++;
+                        message = 0;
+                    } else {
+                        message++;
+                    }
+                } while (player != messages.length && messages[player][message] == null);
+            }
+
             @Override
             public boolean hasNext() {
-                if(player==messages.length && message==0){
-                    player = 0;
-                    return false;
-                }
-                return true;
+                return player!=messages.length;
             }
 
             @Override
             public GameMessage next() {
                 if(!hasNext()) throw new NoSuchElementException();
+
                 GameMessage ret = messages[player][message];
 
-                if(message==messages[0].length){
-                    player++;
-                    message = 0;
-                } else {
-                    message++;
-                }
-                
+                findNext();
+
                 return ret;
             }
 
@@ -48,11 +58,15 @@ public class ServerMessageReceiver implements MessageReceiver {
             public void remove() {
                 throw new UnsupportedOperationException("Not implemented yet");
             };
-        };
+
+        }
+
+        private MyIterator iterator = new MyIterator();
 
         @NonNull
         @Override
         public Iterator<GameMessage> iterator() {
+            iterator.reset();
             return iterator;
         }
     };
@@ -60,7 +74,7 @@ public class ServerMessageReceiver implements MessageReceiver {
     @Override
     public void storeMessage(GameMessage message) {
         int player = interpreter.getObjectId(message);
-        GameMessage.Type type = message.type;
+        GameMessage.Type type = message.getType();
 
         if(type == GameMessage.Type.MOVE_CLIENT)
             messages[player][0] = message;
