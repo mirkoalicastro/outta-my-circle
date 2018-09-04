@@ -56,9 +56,9 @@ public class EntityFactory{
         c.addComponent(drawable);
 
         c.addComponent(new DynamicCircle(world,
-                Converter.frameToPhysicsRadius(radius),
-                Converter.frameToPhysicsX(x),
-                Converter.frameToPhysicsY(y)));
+                Converter.frameToPhysics(radius),
+                Converter.frameToPhysics(x),
+                Converter.frameToPhysics(y)));
 
         return c;
     }

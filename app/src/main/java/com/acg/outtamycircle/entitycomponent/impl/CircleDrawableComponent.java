@@ -30,7 +30,6 @@ public class CircleDrawableComponent extends DrawableComponent {
 
     public int getRadius(){ return radius; }
 
-    //TODO mi piaceva più il design precedente :S
     @Override
     public void draw() {
         if(strokeWidth > 0 && strokeColor != null)

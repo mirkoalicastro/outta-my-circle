@@ -61,7 +61,7 @@ public class StartScreen extends AndroidSplashScreen {
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }
 
-    //TODO dove deve andare?
+    //TODO sposta in androidgraphics
     private Pixmap[] loadPixmapsFromFolder(Graphics graphics, String path, PixmapFormat pixmapFormat) {
         Pixmap[] ret = null;
         try {

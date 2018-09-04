@@ -26,7 +26,7 @@ public class BoundsTest {
         graphics = g;
 
         BodyDef bdef = new BodyDef();
-        bdef.setPosition(Converter.frameToPhysicsX(x), Converter.frameToPhysicsY(y));
+        bdef.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y));
         //default type is staticBody
         body = world.createBody(bdef);
 

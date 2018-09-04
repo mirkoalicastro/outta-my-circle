@@ -58,8 +58,8 @@ public class ServerScreen extends ClientServerScreen {
 
             DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
 
-            shape.setX((int) Converter.physicsToFrameX(comp.getX()))
-                    .setY((int) Converter.physicsToFrameY(comp.getY()));
+            shape.setX((int) Converter.physicsToFrame(comp.getX()))
+                    .setY((int) Converter.physicsToFrame(comp.getY()));
         }
 
         checkStatus();
@@ -119,8 +119,8 @@ public class ServerScreen extends ClientServerScreen {
         float chY = circle.getY();
 
         DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
-        float arenaX = Converter.frameToPhysicsX(arenaDrawable.getX());
-        float arenaY = Converter.frameToPhysicsY(arenaDrawable.getY());
+        float arenaX = Converter.frameToPhysics(arenaDrawable.getX());
+        float arenaY = Converter.frameToPhysics(arenaDrawable.getY());
 
         float deltaX = (chX - arenaX)*(chX - arenaX);
         float deltaY = (chY - arenaY)*(chY- arenaY);

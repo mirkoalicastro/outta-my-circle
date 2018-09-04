@@ -21,13 +21,8 @@ public class Converter {
                 Math.pow(frameHeight/PHYSIC_HEIGHT, BALANCE));
     }
 
-    public static float physicsToFrameX(float x){ return x*SCALE; }
+    public static float physicsToFrame(float val){ return val*SCALE; }
 
-    public static float physicsToFrameY(float y){ return y*SCALE; }
+    public static float frameToPhysics(float val){ return val/SCALE; }
 
-    public static float frameToPhysicsX(float x){ return x/SCALE; }
-
-    public static float frameToPhysicsY(float y){ return y/SCALE; }
-
-    public static float frameToPhysicsRadius(float r){ return r/SCALE; }
 }
