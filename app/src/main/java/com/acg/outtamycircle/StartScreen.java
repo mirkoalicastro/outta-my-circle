@@ -1,21 +1,16 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
-import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidPixmap;
-import com.badlogic.androidgames.framework.impl.AndroidSplashScreen;
+import com.badlogic.androidgames.framework.impl.AndroidLoadingScreen;
 import com.badlogic.androidgames.framework.impl.CircularTileAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RectangularTileAndroidEffect;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-public class StartScreen extends AndroidSplashScreen {
+public class StartScreen extends AndroidLoadingScreen {
 
     public StartScreen(AndroidGame game) {
         super(game);
