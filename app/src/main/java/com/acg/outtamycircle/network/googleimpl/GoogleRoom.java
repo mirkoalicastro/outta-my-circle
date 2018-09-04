@@ -13,12 +13,15 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
+import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateCallback;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
 
 
 public class GoogleRoom {
@@ -91,8 +94,15 @@ public class GoogleRoom {
                 .setNeutralButton(android.R.string.ok, null).create().show();
     }
 
-    void updateRoom(Room room) {
+    public static volatile String mMyId;
+    public static volatile String mRoomId;
+    public static volatile ArrayList<Participant> mParticipants;
 
+    void updateRoom(Room room) {
+        Log.d("PEPPE","Aggiorno la stanza");
+        mRoomId = room.getRoomId();
+        mParticipants = room.getParticipants();
+        //TODO
     }
 
     void showWaitingRoom(Room room) {
