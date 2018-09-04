@@ -2,12 +2,15 @@ package com.acg.outtamycircle.network;
 
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pools;
+import android.util.Log;
 
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.network.googleimpl.MessageReceiver;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
+import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceivedListener;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
+import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -26,10 +29,17 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     private Pools.Pool<GameMessage> pool;
     private String roomId;
     private List<String> players;
+    private Room room;
 
     //TODO visibility
     byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
+
+    public ServerClientMessageHandler setRoom(Room room) {
+        this.room = room;
+        this.roomId = room.getRoomId(); //TODO
+        return this;
+    }
 
     public ServerClientMessageHandler setRoomId(String roomId){
         this.roomId = roomId;
@@ -47,16 +57,16 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     }
 
     //TODO change
-    ServerClientMessageHandler setReceivers(MessageReceiver first, MessageReceiver second){
+    public ServerClientMessageHandler setReceivers(MessageReceiver first, MessageReceiver second){
         this.first = first;
         this.second = second;
         return this;
     }
 
     @Override
-    public void sendReliable(String player) {
+    public void sendReliable(String playerId) {
 
-        final Task<Integer> sendTask = client.sendReliableMessage(buffer, roomId, player, null);
+        final Task<Integer> sendTask = client.sendReliableMessage(buffer, room.getRoomId(), playerId, null);
         //TODO Check
         sendTask.addOnCompleteListener(new OnCompleteListener<Integer>() {
             @Override
@@ -87,14 +97,14 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     @Override
     public void broadcastReliable(){
         //TODO
-        for(String player : players){
-            sendReliable(player);
+        for(String playerId: room.getParticipantIds()){
+            sendReliable(playerId);
         }
     }
 
     @Override
     public void broadcastUnreliable() {
-        client.sendUnreliableMessageToOthers(buffer,roomId);
+        client.sendUnreliableMessageToOthers(buffer,room.getRoomId());
     }
 
     @Override
@@ -119,6 +129,7 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     public synchronized void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
         byte[] messageData = realTimeMessage.getMessageData();
         int cursor = 0;
+        Log.d("ABCDARIO","HO ricevuto qualcosa zzu");
 
         while( cursor < messageData.length && messageData[cursor]!=ENDING_CHAR) {
             GameMessage gameMessage = pool.acquire();

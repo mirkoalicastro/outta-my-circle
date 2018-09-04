@@ -1,5 +1,6 @@
 package com.acg.outtamycircle;
 
+import android.graphics.Color;
 import android.graphics.Shader;
 import android.util.Log;
 
@@ -20,7 +21,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected GameStatus status;
     protected int frameHeight, frameWeight, arenaRadius; //height, width, radius
 
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,520,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Settings.DKGRAY);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
     protected int[][] spawnPositions;
 
@@ -28,16 +29,21 @@ public abstract class ClientServerScreen extends AndroidScreen {
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
 
-    protected final AndroidJoystick androidJoystick =
-            new AndroidJoystick(androidGame.getGraphics(),
-                    new RadialGradientEffect(200,520,100,
-                            new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
-                            new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    ),200,520,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Settings.DKGRAY
-            );
+    protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100);
 
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
+        androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
+                .setEffect(new RadialGradientEffect(200,580,100,
+                        new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
+                        new float[]{0f,1f}, Shader.TileMode.CLAMP))
+                .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);
+
+        timedCircularButton.setSecondaryColor(Settings.DKRED)
+                .setSecondaryPixmap(Assets.swords_white)
+                .setPixmap(Assets.swords_black)
+                .setColor(Settings.DKGREEN)
+                .setStroke(15, Color.BLACK);
 
         frameHeight = game.getGraphics().getHeight();
         frameWeight = game.getGraphics().getWidth();
@@ -93,6 +99,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
                     Log.d("TCB", "WOW ATTACKK WHOAAAA");
+
                     timedCircularButton.resetTime();
                 }
             }

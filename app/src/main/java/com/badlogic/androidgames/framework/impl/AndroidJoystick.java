@@ -14,16 +14,20 @@ import java.util.List;
 public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     private int xPad, yPad;
     private final List<Input.TouchEvent> buffer = new LinkedList<>();
-    private final int radius;
-    private final Effect effect;
     private int pointer = -1;
     protected Integer secondaryColor;
 
-    public AndroidJoystick(Graphics graphics, Effect effect, int xPad, int yPad, int radius, Integer primaryColor, Integer secondaryColor, Pixmap pixmap, int strokeWidth, Integer strokeColor) {
-        super(graphics, effect, xPad, yPad, radius, primaryColor, pixmap, strokeWidth, strokeColor);
+    public AndroidJoystick(Graphics graphics, int x, int y, int radius) {
+        super(graphics, x, y, radius);
+    }
+
+    public AndroidJoystick setSecondaryColor(Integer secondaryColor) {
         this.secondaryColor = secondaryColor;
-        this.radius = radius;
-        this.effect = effect; //TODO can be null
+        return this;
+    }
+
+    public Integer getSecondaryColor() {
+        return secondaryColor;
     }
 
     @Override
@@ -74,7 +78,8 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
     @Override
     public void draw() {
         super.draw();
-        graphics.drawCircle(x + xPad, y - yPad, radius/2, secondaryColor);
+        if(secondaryColor != null)
+            graphics.drawCircle(x + xPad, y - yPad, radius/2, secondaryColor);
     }
 
 }

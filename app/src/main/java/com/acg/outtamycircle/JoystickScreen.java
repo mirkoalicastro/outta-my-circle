@@ -25,18 +25,23 @@ import java.util.List;
 import java.util.Set;
 
 public class JoystickScreen extends AndroidScreen {
-    private final AndroidJoystick androidJoystick =
-            new AndroidJoystick(androidGame.getGraphics(),
-                    new RadialGradientEffect(200,580,100,
-                            new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
-                            new float[]{0f,1f}, Shader.TileMode.CLAMP
-                    ),200,580,100,Settings.DKGRAY,Settings.WHITE50ALFA,null,15,Color.BLACK
-            );
+    private final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100);
 
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),null,2000,1080,580,100,Settings.DKGREEN,Settings.DKRED,Assets.swords_black,Assets.swords_white,15,Color.BLACK);
+    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
     public JoystickScreen(AndroidGame game) {
         super(game);
+        androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
+                .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
+                        new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
+                        new float[]{0f,1f}, Shader.TileMode.CLAMP))
+                .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);
+
+        timedCircularButton.setSecondaryColor(Settings.DKRED)
+                .setSecondaryPixmap(Assets.swords_white)
+                .setPixmap(Assets.swords_black)
+                .setColor(Settings.DKGREEN)
+                .setStroke(15,Color.BLACK);
     }
 
     @Override
@@ -47,9 +52,7 @@ public class JoystickScreen extends AndroidScreen {
         boolean customizeScreen = false;
         for (Input.TouchEvent event : events) {
             if (timedCircularButton.inBounds(event)) {
-                Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
-                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
                     timedCircularButton.resetTime();
                     customizeScreen = true;
                     break;
@@ -71,18 +74,12 @@ public class JoystickScreen extends AndroidScreen {
         }
     }
 
-  //  int num = 0;
-  //  double sum = 0;
     @Override
     public void present(float deltaTime) {
-  //      long start = Calendar.getInstance().getTimeInMillis();
         Graphics g = androidGame.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         androidJoystick.draw();
         timedCircularButton.draw();
-/*        sum += Calendar.getInstance().getTimeInMillis()-start;
-        num++;
-        Log.d("Media","vale " + (sum/num) + " (" + num + ")");*/
     }
 
     @Override

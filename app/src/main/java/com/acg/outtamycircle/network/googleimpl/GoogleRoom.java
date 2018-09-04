@@ -31,12 +31,18 @@ public class GoogleRoom {
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
     private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler();
+    private final MessageReceiver defaultFirstReceiver = new ClientMessageReceiver(GoogleRoom.MAX_PLAYERS);
+    private final MessageReceiver defaultSecondReceiver = new ClientMessageReceiver(GoogleRoom.MAX_PLAYERS);
 
     private volatile Room room;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
     private RoomConfig config;
 
     private static String TAG = "GoogleS";
+
+    public ServerClientMessageHandler getServerClientMessageHandler() {
+        return serverClientMessageHandler;
+    }
 
     public static void createInstance(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
         instance = new GoogleRoom(googleAndroidGame, myGoogleSignIn);
@@ -46,6 +52,8 @@ public class GoogleRoom {
         room = null;
         config = null;
         realTimeMultiplayerClient = null;
+        serverClientMessageHandler.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
+        serverClientMessageHandler.setClient(null);
     }
 
     public static GoogleRoom getInstance() {
@@ -114,6 +122,7 @@ public class GoogleRoom {
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
         reset();
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
+        serverClientMessageHandler.setClient(realTimeMultiplayerClient);
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 
         config = RoomConfig.builder(myRoomUpdatedCallback)

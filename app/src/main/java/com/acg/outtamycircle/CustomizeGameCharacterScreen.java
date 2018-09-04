@@ -8,6 +8,7 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.badlogic.androidgames.framework.Button;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
+import com.badlogic.androidgames.framework.impl.AndroidButton;
 import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
@@ -18,11 +19,11 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private int currentIdAttack = 0;
     private final Graphics g = androidGame.getGraphics();
 
-    private final Button leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),null,490-74,200,74,80,null,Assets.leftArrow,0,null);
-    private final Button leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),null,490-74,400,74,80,null,Assets.leftArrow,0,null);
-    private final Button rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),null,790,200,74,80,null,Assets.rightArrow,0,null);
-    private final Button rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),null,790,400,74,80,null,Assets.rightArrow,0,null);
-    private final Button quickGame = new AndroidCircularButton(androidGame.getGraphics(),null,150,150,50,Color.RED,null,0,null);
+    private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
+    private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
+    private final AndroidButton rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
+    private final AndroidButton rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
+    private final AndroidButton quickGame = new AndroidCircularButton(androidGame.getGraphics(),150,150,50);
 
     private boolean dontUpdate;
 
@@ -30,7 +31,11 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     public CustomizeGameCharacterScreen(AndroidGame androidGame) {
         super(androidGame);
-        myGoogleSignIn.createClient(androidGame);
+        leftSkin.setPixmap(Assets.leftArrow);
+        rightSkin.setPixmap(Assets.rightArrow);
+        leftAttack.setPixmap(Assets.leftArrow);
+        rightAttack.setPixmap(Assets.rightArrow);
+        quickGame.setColor(Color.RED);
         myGoogleSignIn.signIn();
     }
 
@@ -74,7 +79,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     public void present(float deltaTime) {
         if(dontUpdate)
             return;
-        Log.d("BEBE", myGoogleSignIn.getPlayerId() == null ? "null" : myGoogleSignIn.getPlayerId());
         dontUpdate = true;
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
         quickGame.draw();

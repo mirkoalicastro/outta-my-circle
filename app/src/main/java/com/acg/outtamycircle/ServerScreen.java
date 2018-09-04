@@ -50,8 +50,8 @@ public class ServerScreen extends ClientServerScreen {
 
         comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
 
-        //TODO deltaTime?
-        world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
+        //TODO deltaTime!
+        world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         for(int i=0; i<status.characters.length; i++) {
             comp = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);

@@ -8,6 +8,18 @@ public abstract class AndroidSplashScreen extends AndroidLoadingScreen {
     private final Queue<Integer> animations;
     private final GradualProgress thread;
 
+    @Override
+    public final void present(float deltaTime) {
+
+    }
+
+    @Override
+    public final void update(float deltaTime) {
+        doJob();
+    }
+
+    public abstract void doJob();
+
     public AndroidSplashScreen(AndroidGame game) {
         super(game);
         progressValue = 0;

@@ -43,10 +43,7 @@ public class MyGoogleSignIn {
 
     private MyGoogleSignIn(Activity activity) {
         this.activity = activity;
-    }
-
-    public void createClient(Activity activity) {
-        client = GoogleSignIn.getClient(activity, OPTIONS);
+        this.client = GoogleSignIn.getClient(activity, OPTIONS);
     }
 
     public boolean isSignedIn() {
