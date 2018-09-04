@@ -5,6 +5,7 @@ import android.support.v4.util.Pools;
 import android.util.Log;
 
 import com.acg.outtamycircle.GameStatus;
+import com.acg.outtamycircle.network.googleimpl.GoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.MessageReceiver;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.games.multiplayer.Participant;
@@ -12,6 +13,7 @@ import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceiv
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -63,21 +65,41 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
         return this;
     }
 
+    final String TAG = "PEPPE";
+
+    private final RealTimeMultiplayerClient.ReliableMessageSentCallback mywtf = new RealTimeMultiplayerClient.ReliableMessageSentCallback() {
+        @Override
+        public void onRealTimeMessageSent(int statusCode, int tokenId, String recipientParticipantId) {
+            Log.d(TAG, "RealTime message sent");
+            Log.d(TAG, "  statusCode: " + statusCode);
+            Log.d(TAG, "  tokenId: " + tokenId);
+            Log.d(TAG, "  recipientParticipantId: " + recipientParticipantId);
+        }
+    };
+
     @Override
     public void sendReliable(String playerId) {
-
-        final Task<Integer> sendTask = client.sendReliableMessage(buffer, room.getRoomId(), playerId, null);
+        Log.d(TAG, "Room id " + GoogleRoom.getInstance().getRoom().getRoomId() + " -- " + room.getRoomId());
+        final Task<Integer> sendTask = GoogleRoom.getInstance().getRealTimeMultiplayerClient()
+                .sendReliableMessage(buffer, GoogleRoom.getInstance().getRoom().getRoomId(), playerId, mywtf);
         //TODO Check
+        sendTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Impossibile inviare il messaggio " + e);
+            }
+        });
         sendTask.addOnCompleteListener(new OnCompleteListener<Integer>() {
             @Override
             public void onComplete(@NonNull Task<Integer> task) {
+                Log.d(TAG,"Completato");
                 synchronized(task){
                     task.notify();
                 }
             }
         });
 
-        synchronized (sendTask){
+/*        synchronized (sendTask){
             while(!sendTask.isComplete()){
                 try {
                     sendTask.wait();
@@ -85,7 +107,7 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
 
     }
 

@@ -34,7 +34,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     public ClientServerScreen(AndroidGame game, long[] ids) {
         super(game);
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
-                .setEffect(new RadialGradientEffect(200,580,100,
+                .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
                         new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
                         new float[]{0f,1f}, Shader.TileMode.CLAMP))
                 .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);

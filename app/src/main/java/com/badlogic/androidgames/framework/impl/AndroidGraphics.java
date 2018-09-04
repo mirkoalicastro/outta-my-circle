@@ -2,6 +2,7 @@ package com.badlogic.androidgames.framework.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -33,6 +34,23 @@ public class AndroidGraphics implements Graphics {
         this.frameBuffer = frameBuffer;
         canvas = new Canvas(frameBuffer);
         paint.setAntiAlias(false);
+    }
+
+    @Override
+    public Pixmap[] newPixmapsFromFolder(String path, PixmapFormat format) {
+        Pixmap[] ret = null;
+        try {
+            String[] files = assets.list(path);
+            if(files.length == 0)
+                return null;
+            Arrays.sort(files);
+            ret = new Pixmap[files.length];
+            for(int i=0; i<files.length; i++)
+                ret[i] = newPixmap(path + "/" + files[i], format);
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't load bitmap from path '"+ path + "'");
+        }
+        return ret;
     }
 
     @Override

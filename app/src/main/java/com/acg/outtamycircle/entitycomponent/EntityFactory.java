@@ -7,6 +7,7 @@ import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.Settings;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.physicsutilities.Converter;
+import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.CircleDrawableComponent;
@@ -32,15 +33,15 @@ public class EntityFactory{
     public static Arena createArena(int radius, int x, int y){
         Arena arena = new Arena();
 
-       List<AndroidEffect> arenaEffects = new LinkedList<>();
-        arenaEffects.add(new RadialGradientEffect(x,y,radius,
-                new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
-                new float[]{0f,1f}, Shader.TileMode.CLAMP
-        ));
-        arenaEffects.add((AndroidEffect)Assets.arenaTile);
-
         CircleDrawableComponent circleDrawableComponent = new CircleDrawableComponent(graphics);
-        circleDrawableComponent.setRadius(radius).setX(x).setY(y).setEffect(new ComposerAndroidEffect(arenaEffects));
+        circleDrawableComponent.setRadius(radius).setX(x).setY(y)
+                .setEffect(new ComposerAndroidEffect(
+                        new RadialGradientEffect(x,y,radius,
+                                new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
+                                new float[]{0f,1f}, Shader.TileMode.CLAMP
+                        ),
+                        (AndroidEffect)Assets.arenaTile)
+                );
 
         arena.addComponent(circleDrawableComponent);
 

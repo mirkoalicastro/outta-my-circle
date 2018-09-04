@@ -5,6 +5,8 @@ public interface Graphics {
         ARGB8888, ARGB4444, RGB565
     }
 
+    Pixmap[] newPixmapsFromFolder(String path, PixmapFormat format);
+
     Pixmap newPixmap(String fileName, PixmapFormat format);
 
     void clear(int color);

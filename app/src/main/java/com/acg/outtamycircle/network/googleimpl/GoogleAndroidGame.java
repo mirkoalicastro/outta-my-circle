@@ -26,7 +26,7 @@ public abstract class GoogleAndroidGame extends AndroidGame {
         }
     }
 
-    public static final String TAG = "ABCDARIO";
+    public static final String TAG = "PEPPE";
 
     private ClientServerScreen getClientServerScreen(GoogleRoom googleRoom) {
         Log.d(TAG, "inizio");
@@ -46,7 +46,7 @@ public abstract class GoogleAndroidGame extends AndroidGame {
         interpreter.makeHostOrClientMessage(gameMessage,bestTime);
         client.putInBuffer(gameMessage);
         Log.d(TAG,"colpa del broadcast?");
-        client.broadcastUnreliable();
+        client.broadcastReliable();
 
         Log.d(TAG, "sono "+ playerId + " e ho calcolato in " + bestTime);
 
@@ -54,7 +54,6 @@ public abstract class GoogleAndroidGame extends AndroidGame {
         int sizeParticipants = googleRoom.getRoom().getParticipants().size();
         String sender = null;
         while(count < sizeParticipants) {
-            Log.d(TAG,"sto ancora qui");
             for(GameMessage tmp: client.getMessages()) {
                 int tmpTime = interpreter.getTimeMillis(tmp);
                 if(tmpTime < bestTime || (tmpTime == bestTime && playerId.compareTo((sender=tmp.getSender())) > 0)) {

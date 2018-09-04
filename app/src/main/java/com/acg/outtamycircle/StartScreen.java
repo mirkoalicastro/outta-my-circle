@@ -47,8 +47,8 @@ public class StartScreen extends AndroidSplashScreen {
         Assets.arena = graphics.newPixmap("arenatile.png", PixmapFormat.ARGB8888);
         Assets.arenaTile = new CircularTileAndroidEffect((AndroidPixmap)Assets.arena);
         Assets.logo = graphics.newPixmap("logo.png", PixmapFormat.ARGB8888);
-        Assets.skins = loadPixmapsFromFolder(graphics,"skins",PixmapFormat.ARGB8888);
-        Assets.attacks = loadPixmapsFromFolder(graphics,"attacks",PixmapFormat.ARGB8888);
+        Assets.skins = graphics.newPixmapsFromFolder("skins",PixmapFormat.ARGB8888);
+        Assets.attacks = graphics.newPixmapsFromFolder("attacks",PixmapFormat.ARGB8888);
         setProgress(50);
         Assets.rightArrow = graphics.newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
         Assets.leftArrow = graphics.newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
@@ -59,23 +59,6 @@ public class StartScreen extends AndroidSplashScreen {
         // Settings.load(game.getFileIO());
         setProgress(100);
         androidGame.setScreen(new MainMenuScreen(androidGame));
-    }
-
-    //TODO sposta in androidgraphics
-    private Pixmap[] loadPixmapsFromFolder(Graphics graphics, String path, PixmapFormat pixmapFormat) {
-        Pixmap[] ret = null;
-        try {
-            String[] files = androidGame.getAssets().list(path);
-            if(files.length == 0)
-                return null;
-            Arrays.sort(files);
-            ret = new Pixmap[files.length];
-            for(int i=0; i<files.length; i++)
-                ret[i] = graphics.newPixmap(path + "/" + files[i], pixmapFormat);
-        } catch (IOException e) {
-            throw new RuntimeException("Error opening assets");
-        }
-        return ret;
     }
 
     @Override

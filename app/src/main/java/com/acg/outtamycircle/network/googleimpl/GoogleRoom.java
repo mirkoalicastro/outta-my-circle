@@ -115,7 +115,7 @@ public class GoogleRoom {
 
     public void quickGame(int min_players, int max_players) {
         if(!myGoogleSignIn.isSignedIn())
-            throw new IllegalStateException("first login bitch");
+            throw new IllegalStateException("first login bitch"); //TODO non eccezione
         if(min_players < MIN_PLAYERS)
             throw new IllegalArgumentException("Min players must be at least " + MIN_PLAYERS);
         if(max_players > MAX_PLAYERS)
@@ -134,6 +134,7 @@ public class GoogleRoom {
     }
 
     public RealTimeMultiplayerClient getRealTimeMultiplayerClient() {
+        realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
         return realTimeMultiplayerClient;
     }
 
