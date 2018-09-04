@@ -44,11 +44,14 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.logo = graphics.newPixmap("logo.png", PixmapFormat.ARGB8888);
         Assets.skins = graphics.newPixmapsFromFolder("skins",PixmapFormat.ARGB8888);
         Assets.attacks = graphics.newPixmapsFromFolder("attacks",PixmapFormat.ARGB8888);
+        Assets.start = graphics.newPixmap("start.png", PixmapFormat.ARGB8888);
+        Assets.back = graphics.newPixmap("back.png", PixmapFormat.ARGB8888);
+        Assets.quickGame = graphics.newPixmap("quickgame.png", PixmapFormat.ARGB8888);
         setProgress(50);
         Assets.rightArrow = graphics.newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
         Assets.leftArrow = graphics.newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
-        Assets.swords_black = graphics.newPixmap("swords_black.png", PixmapFormat.ARGB8888);
-        Assets.swords_white = graphics.newPixmap("swords_white.png", PixmapFormat.ARGB8888);
+        Assets.swordsBlack = graphics.newPixmap("swords_black.png", PixmapFormat.ARGB8888);
+        Assets.swordsWhite = graphics.newPixmap("swords_white.png", PixmapFormat.ARGB8888);
         setProgress(70);
         Assets.click = androidGame.getAudio().newSound("urto1.wav");
         // Settings.load(game.getFileIO());

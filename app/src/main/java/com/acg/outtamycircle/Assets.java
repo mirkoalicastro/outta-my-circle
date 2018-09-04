@@ -11,6 +11,9 @@ import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 public class Assets {
     public static Pixmap[] skins;
     public static Pixmap[] attacks;
+    public static Pixmap back;
+    public static Pixmap start;
+    public static Pixmap quickGame;
     public static Pixmap joystick;
     public static Pixmap logo;
     public static Pixmap background;
@@ -18,8 +21,8 @@ public class Assets {
     public static Pixmap loading;
     public static Pixmap rightArrow;
     public static Pixmap leftArrow;
-    public static Pixmap swords_white;
-    public static Pixmap swords_black;
+    public static Pixmap swordsWhite;
+    public static Pixmap swordsBlack;
     public static Effect backgroundTile;
     public static Effect arenaTile;
     public static Sound click;

@@ -40,8 +40,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);
 
         timedCircularButton.setSecondaryColor(Settings.DKRED)
-                .setSecondaryPixmap(Assets.swords_white)
-                .setPixmap(Assets.swords_black)
+                .setSecondaryPixmap(Assets.swordsWhite)
+                .setPixmap(Assets.swordsBlack)
                 .setColor(Settings.DKGREEN)
                 .setStroke(15, Color.BLACK);
 
