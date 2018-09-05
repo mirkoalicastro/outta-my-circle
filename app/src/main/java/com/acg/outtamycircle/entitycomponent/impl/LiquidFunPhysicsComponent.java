@@ -13,7 +13,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
 
     private float width, height;
 
-    public void move(float x, float y){
+    public void applyForce(float x, float y){
         x *= 30; y *= 30;
 
         //Simulazione attrito con l'arena

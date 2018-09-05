@@ -2,6 +2,7 @@ package com.acg.outtamycircle.contactphase;
 
 import android.util.SparseArray;
 
+import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.Powerup;
 import com.badlogic.androidgames.framework.Audio;
@@ -30,11 +31,12 @@ public class ContactHandler extends ContactListener{
         //se generalizzo myHashCode a Class<?> non devo fare il cast esplicito
     }
 
-    public void init(Audio audio){
-        this.audio = audio;
+    public void init(){
         map = new SparseArray<>();
 
         CharactersContact cc = new CharactersContact();
+        cc.setSound(Assets.gameCharacterCollision);
+
         CharacterPowerupContact cp = new CharacterPowerupContact();
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);

@@ -3,6 +3,7 @@ package com.acg.outtamycircle;
 import android.graphics.Color;
 import android.graphics.Shader;
 
+import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
@@ -58,7 +59,7 @@ public class ServerScreen extends ClientServerScreen {
         initArenaSetting();
         status.setArena(createArena());
 
-        //world.setContactListener(new ContactHandler());
+        world.setContactListener(new ContactHandler());
 
         //TODO comunica posizioni etc.
     }
@@ -68,22 +69,14 @@ public class ServerScreen extends ClientServerScreen {
         super.update(deltaTime);
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
-
-        comp.move((float)androidJoystick.getNormX(), (float)androidJoystick.getNormY());
+        comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
         //TODO deltaTime!
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
-        for(int i=0; i<status.characters.length; i++) {
-            comp = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
+        updateDrawablesPosition();
 
-            DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
-
-            shape.setX((int) Converter.physicsToFrame(comp.getX()))
-                    .setY((int) Converter.physicsToFrame(comp.getY()));
-        }
-
-        //checkStatus();
+        checkStatus();
 
         //TODO invia posizione
     }
@@ -186,5 +179,18 @@ public class ServerScreen extends ClientServerScreen {
         arena.addComponent(drawableComponentFactory.getComponent());
 
         return arena;
+    }
+
+    private void updateDrawablesPosition(){
+        LiquidFunPhysicsComponent component;
+        for(int i=0; i<status.characters.length; i++) {
+
+            component = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
+
+            DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
+
+            shape.setX((int) Converter.physicsToFrame(component.getX()))
+                    .setY((int) Converter.physicsToFrame(component.getY()));
+        }
     }
 }
