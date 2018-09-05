@@ -10,6 +10,6 @@ public class CharactersContact extends ContactType{
 
     @Override
     public void handle(){
-        sound.play(Settings.audioVolume);
+        sound.play(100);
     }
 }
