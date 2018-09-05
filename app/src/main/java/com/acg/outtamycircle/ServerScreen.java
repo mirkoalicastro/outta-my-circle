@@ -216,6 +216,9 @@ public class ServerScreen extends ClientServerScreen {
             component = (DrawableComponent) ch.getComponent(Component.Type.Drawable);
             diam = component.getHeight();
             component.setHeight(diam - 1);
+            if(diam <= 0) {
+                //TODO e mo?
+            }
         }
         status.dying.resetIterator();
     }
