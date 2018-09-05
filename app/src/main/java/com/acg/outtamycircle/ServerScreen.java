@@ -11,7 +11,6 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
-import com.acg.outtamycircle.entitycomponent.impl.Powerup;
 import com.acg.outtamycircle.utilities.Converter;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
@@ -21,12 +20,16 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.World;
 
+import java.util.Iterator;
+
 public class ServerScreen extends ClientServerScreen {
     private final World world;
 
     private static final float TIME_STEP = 1 / 60f;   //60 fps
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
+
+    private long previousTime = System.currentTimeMillis();
 
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
     private final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
@@ -55,6 +58,7 @@ public class ServerScreen extends ClientServerScreen {
         };
 
         status.setCharacters(characters);
+        status.setPlayerOne(characters[0]);
 
         initArenaSetting();
         status.setArena(createArena());
@@ -71,14 +75,14 @@ public class ServerScreen extends ClientServerScreen {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
+        LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         updateDrawablesPosition();
-
-        checkStatus();
+        updateCharactersStatus();
+        updateDyingRadius();
 
         //TODO invia posizione
     }
@@ -116,10 +120,17 @@ public class ServerScreen extends ClientServerScreen {
         return points;
     }
 
-    private void checkStatus(){
-        for(int i=0 ; i<spawnPositions.length ; i++)
-            if(isOut(status.characters[i]));
-                //status.alives[i] = false;
+    private void updateCharactersStatus(){
+        Iterator<GameCharacter> iterator = status.living.iterator();
+        while(iterator.hasNext()) {
+            GameCharacter character = iterator.next();
+            if (isOut(character)) {
+                status.dying.add(character);
+                iterator.remove();
+                //TODO elimina il body
+            }
+        }
+        status.living.resetIterator();
     }
 
     private boolean isOut(GameCharacter ch){
@@ -186,14 +197,26 @@ public class ServerScreen extends ClientServerScreen {
 
     private void updateDrawablesPosition(){
         LiquidFunPhysicsComponent component;
-        for(int i=0; i<status.characters.length; i++) {
+        DrawableComponent shape;
 
-            component = (LiquidFunPhysicsComponent)status.characters[i].getComponent(Component.Type.Physics);
+        for(GameCharacter ch : status.living) {
+            component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
 
-            DrawableComponent shape = (DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable);
-
+            shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
             shape.setX((int) Converter.physicsToFrame(component.getX()))
                     .setY((int) Converter.physicsToFrame(component.getY()));
         }
+        status.living.resetIterator();
+    }
+
+    private void updateDyingRadius(){
+        int diam;
+        DrawableComponent component = null;
+        for(GameCharacter ch : status.dying) {
+            component = (DrawableComponent) ch.getComponent(Component.Type.Drawable);
+            diam = component.getHeight();
+            component.setHeight(diam - 1);
+        }
+        status.dying.resetIterator();
     }
 }

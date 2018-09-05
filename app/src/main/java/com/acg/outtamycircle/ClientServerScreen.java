@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
+import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
@@ -105,11 +106,13 @@ public abstract class ClientServerScreen extends AndroidScreen {
         }
     }
 
-    //TODO così il personaggio sparisce improvvisamente, inoltre continua ad esserci il corpo fisico
     private void drawCharacters(){
-        for(int i=0 ; i<status.characters.length ; i++)
-            if(status.alives[i])
-                ((DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable)).draw();
+        for(GameCharacter ch : status.living)
+            ((DrawableComponent)ch.getComponent(Component.Type.Drawable)).draw();
+        for(GameCharacter ch : status.dying)
+            ((DrawableComponent)ch.getComponent(Component.Type.Drawable)).draw();
+        status.living.resetIterator();
+        status.dying.resetIterator();
     }
 
     private void drawArena(){
