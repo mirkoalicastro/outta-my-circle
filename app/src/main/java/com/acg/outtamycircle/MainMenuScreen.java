@@ -18,6 +18,8 @@ public class MainMenuScreen extends AndroidScreen {
 
     public MainMenuScreen(AndroidGame game) {
         super(game);
+        for(int i=0;i<100;i++)
+            Assets.gameCharacterCollision.play(80);
         Settings.loadSettings(androidGame);
         startButton.setPixmap(Assets.start);
         if(Settings.soundEnabled)
@@ -36,8 +38,7 @@ public class MainMenuScreen extends AndroidScreen {
                     if(Settings.soundEnabled) {
                         soundButton.setPixmap(Assets.nosound);
                     } else {
-                        if(Settings.soundEnabled)
-                            Assets.click.play(Settings.volume);
+                        Assets.click.play(Settings.volume);
                         soundButton.setPixmap(Assets.sound);
                     }
                     Settings.setSoundEnabled(androidGame, !Settings.soundEnabled);

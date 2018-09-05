@@ -78,7 +78,6 @@ public class DrawableComponentFactory{
         return this;
     }
 
-
     public DrawableComponent getComponent(){
         DrawableComponent component = null;
 
@@ -88,8 +87,9 @@ public class DrawableComponentFactory{
                 break;
         }
 
-        component.setStroke(strokeWidth, strokeColor).setColor(color).setEffect(effect)
-                .setPixmap(pixmap).setWidth(width).setHeight(height).setX(x).setY(y).setOwner(owner);
+        component.setStroke(strokeWidth, strokeColor).setColor(color)
+                .setEffect(effect).setPixmap(pixmap).setWidth(width)
+                .setHeight(height).setX(x).setY(y).setOwner(owner);
 
         return component;
     }

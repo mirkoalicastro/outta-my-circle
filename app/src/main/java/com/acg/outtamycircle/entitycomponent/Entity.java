@@ -11,7 +11,6 @@ public class Entity {
     }
 
     public void addComponent(Component c) {
-        c.setOwner(this);
         components.put(c.type(), c);
     }
     public Component getComponent(Component.Type type) {
