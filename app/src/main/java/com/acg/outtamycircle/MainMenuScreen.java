@@ -1,7 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
@@ -18,8 +16,6 @@ public class MainMenuScreen extends AndroidScreen {
 
     public MainMenuScreen(AndroidGame game) {
         super(game);
-        for(int i=0;i<100;i++)
-            Assets.gameCharacterCollision.play(80);
         Settings.loadSettings(androidGame);
         startButton.setPixmap(Assets.start);
         if(Settings.soundEnabled)
@@ -30,10 +26,10 @@ public class MainMenuScreen extends AndroidScreen {
 
     @Override
     public void update(float deltaTime) {
+        boolean goCustomizeScreen = false;
         for(TouchEvent event: androidGame.getInput().getTouchEvents()) {
             if(event.type == TouchEvent.TOUCH_UP) {
                 if(soundButton.inBounds(event)) {
-                    Log.d("JUAN","prem");
                     unchanged = false;
                     if(Settings.soundEnabled) {
                         soundButton.setPixmap(Assets.nosound);
@@ -46,10 +42,12 @@ public class MainMenuScreen extends AndroidScreen {
                 if(startButton.inBounds(event)) {
                     if(Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
-                    androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+                    goCustomizeScreen = true;
                 }
             }
         }
+        if(goCustomizeScreen)
+            androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
     }
 
     @Override

@@ -59,6 +59,8 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.powerupCollision = androidGame.getAudio().newSound("powerupcollision.wav");
         Assets.newPowerup = androidGame.getAudio().newSound("powerupcollision.wav");
         Assets.gameCharacterCollision = androidGame.getAudio().newSound("gamecharcollision.wav");
+        Assets.attackEnabled = androidGame.getAudio().newSound("attackenabled.wav");
+        Assets.attackDisabled = androidGame.getAudio().newSound("attackdisabled.wav");
         setProgress(100);
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }

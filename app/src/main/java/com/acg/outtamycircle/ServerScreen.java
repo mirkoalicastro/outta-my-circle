@@ -74,7 +74,6 @@ public class ServerScreen extends ClientServerScreen {
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.characters[0].getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
-        //TODO deltaTime!
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         updateDrawablesPosition();

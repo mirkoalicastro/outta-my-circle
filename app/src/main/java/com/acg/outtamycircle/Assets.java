@@ -31,4 +31,6 @@ public class Assets {
     public static Sound gameCharacterCollision;
     public static Sound newPowerup;
     public static Sound powerupCollision;
+    public static Sound attackEnabled;
+    public static Sound attackDisabled;
 }

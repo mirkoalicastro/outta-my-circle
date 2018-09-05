@@ -93,13 +93,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
         events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
-            if (timedCircularButton.inBounds(event)) {
+            if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
-                    Log.d("TCB", "WOW ATTACKK WHOAAAA");
-
+                    if(Settings.soundEnabled)
+                        Assets.attackEnabled.play(Settings.volume);
                     timedCircularButton.resetTime();
-                }
+                } else if(Settings.soundEnabled)
+                    Assets.attackDisabled.play(Settings.volume);
             }
         }
     }
