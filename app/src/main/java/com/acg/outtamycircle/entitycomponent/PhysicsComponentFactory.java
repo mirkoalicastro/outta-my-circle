@@ -15,7 +15,7 @@ public class PhysicsComponentFactory {
     private final FixtureDef fixDef = new FixtureDef();
 
     private Shape shape;
-    private float radius = -1;
+    private float radius, width, height;
 
     private boolean sleepingAllowed = true;
     private boolean awake = false;
@@ -57,8 +57,21 @@ public class PhysicsComponentFactory {
         return this;
     }
 
+    public PhysicsComponentFactory setWidth(float width){
+        this.width = width;
+        return this;
+    }
+
+
+    public PhysicsComponentFactory setHeight(float height){
+        this.height = height;
+        return this;
+    }
+
     public PhysicsComponentFactory setRadius(float radius){
         this.radius = radius;
+        width = radius*2;
+        height = radius*2;
         return this;
     }
 
@@ -79,6 +92,8 @@ public class PhysicsComponentFactory {
 
     public PhysicsComponent getComponent(){
         LiquidFunPhysicsComponent component = new LiquidFunPhysicsComponent();
+
+        component.setWidth(width).setHeight(height);
 
         Body body = world.createBody(bodyDef);
         body.setSleepingAllowed(sleepingAllowed);

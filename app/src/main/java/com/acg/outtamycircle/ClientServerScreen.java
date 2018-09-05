@@ -52,11 +52,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         setup();
         status = new GameStatus();
 
-        EntityFactory.setGraphics(game.getGraphics());
+        /*EntityFactory.setGraphics(game.getGraphics());
 
-        status.setArena(EntityFactory.createArena(arenaRadius, frameWeight/2, frameHeight /2));
-
-        spawnPositions = getSpawnPositions(arenaRadius-40, frameWeight/2, frameHeight /2, 4);
+        status.setArena(EntityFactory.createArena(arenaRadius, frameWeight/2, frameHeight /2));*/
     }
 
     @Override
@@ -65,9 +63,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         Graphics g = game.getGraphics(); //se lo sfondo è un gameobject si può separare graphics da screen
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
 
-        DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
-        arenaDrawable.draw();
-
+        drawArena();
         drawCharacters();
 
         //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.getComponent(Component.Type.Drawable);
@@ -116,28 +112,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 ((DrawableComponent)status.characters[i].getComponent(Component.Type.Drawable)).draw();
     }
 
-    /**
-     * Calcolo delle posizioni di spawn dei giocatori
-     *
-     * @param arenaRadius raggio
-     * @param frameWeight fattore di shift sull'asse x
-     * @param h fattore di shift sull'asse y
-     * @param n numero di giocatori
-     * @return
-     */
-    private int[][] getSpawnPositions(int arenaRadius, int frameWeight, int h, int n){
-        int[][] spwns = new int[n][2];
-        double x, y;
-        double p = (Math.PI*2)/n;
-        double theta = Math.PI/2;
-        Log.d("TAG","frameWeight:" + frameWeight + " H: " + h);
-        for(int i=0 ; i<n ; i++){
-            x = Math.cos(theta)*arenaRadius;
-            y = Math.sin(theta)*arenaRadius;
-            spwns[i][0] = (int)x + frameWeight;
-            spwns[i][1] = (int)y + h;
-            theta += p;
-        }
-        return spwns;
+    private void drawArena(){
+        DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
+        arenaDrawable.draw();
     }
 }

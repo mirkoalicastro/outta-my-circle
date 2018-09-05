@@ -23,8 +23,9 @@ public class ContactHandler extends ContactListener{
                 fb = contact.getFixtureB();
         Body ba = fa.getBody(), bb = fb.getBody();
 
-        map.get(ContactType.myHashCode(ba.getUserData(), bb.getUserData())).handle();
-        //se, caso strano, capita una collisione tra due powerup, cosa torna map?
+        ContactType contactType = map.get(ContactType.myHashCode(ba.getUserData(), bb.getUserData()));
+
+        if(contactType != null) contactType.handle();
 
         //se generalizzo myHashCode a Class<?> non devo fare il cast esplicito
     }
