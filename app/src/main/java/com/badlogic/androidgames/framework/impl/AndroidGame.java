@@ -6,9 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.acg.outtamycircle.Assets;
+import com.acg.outtamycircle.R;
 import com.badlogic.androidgames.framework.Audio;
 import com.badlogic.androidgames.framework.FileIO;
 import com.badlogic.androidgames.framework.Game;
@@ -33,6 +36,9 @@ public abstract class AndroidGame extends Activity implements Game {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        int frameBufferWidth = 1280;
+        int frameBufferHeight = 720;
+
         System.loadLibrary("liquidfun");
         System.loadLibrary("liquidfun_jni");
 
@@ -40,10 +46,7 @@ public abstract class AndroidGame extends Activity implements Game {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-        int frameBufferWidth = isLandscape ? 1280 : 720;
-        int frameBufferHeight = isLandscape ? 720 : 1280;
-        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.ARGB_8888); //was RGB_565
+        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.RGB_565);
         Point dim = new Point();
         getWindowManager().getDefaultDisplay().getSize(dim);
         float scaleX = (float)frameBufferWidth / dim.x;
@@ -70,7 +73,6 @@ public abstract class AndroidGame extends Activity implements Game {
         super.onPause();
         renderView.pause();
         screen.pause();
-
         if (isFinishing())
             screen.dispose();
     }
@@ -109,8 +111,14 @@ public abstract class AndroidGame extends Activity implements Game {
         this.screen = screen;
     }
 
+    @Override
     public Screen getCurrentScreen() {
         return screen;
+    }
+
+    @Override
+    public void onBackPressed() {
+        screen.back();
     }
 
     public abstract Screen getStartScreen();

@@ -17,4 +17,5 @@ public abstract class Screen {
 
     public abstract void dispose();
 
+    public abstract void back();
 }

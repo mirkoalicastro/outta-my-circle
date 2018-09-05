@@ -78,4 +78,9 @@ public class MainMenuScreen extends AndroidScreen {
     public void dispose() {
 
     }
+
+    @Override
+    public void back() {
+        androidGame.finish();
+    }
 }

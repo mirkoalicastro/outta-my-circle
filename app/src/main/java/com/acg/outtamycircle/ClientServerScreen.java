@@ -3,6 +3,7 @@ package com.acg.outtamycircle;
 import android.graphics.Color;
 import android.graphics.Shader;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -118,5 +119,10 @@ public abstract class ClientServerScreen extends AndroidScreen {
     private void drawArena(){
         DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
         arenaDrawable.draw();
+    }
+
+    @Override
+    public void back() {
+        Toast.makeText(androidGame,"E mo che si fa?",Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,6 @@
 package com.acg.outtamycircle;
 
+import android.app.Activity;
 import android.graphics.Color;
 
 import com.badlogic.androidgames.framework.Graphics;
@@ -32,7 +33,7 @@ public class StartScreen extends AndroidLoadingScreen {
 
     @Override
     public void doJob() {
-        final Graphics graphics = androidGame.getGraphics();
+        Graphics graphics = androidGame.getGraphics();
         Assets.background = graphics.newPixmap("bgtile.png", PixmapFormat.ARGB8888);
         Assets.backgroundTile = new RectangularTileAndroidEffect((AndroidPixmap)Assets.background);
         Assets.loading = graphics.newPixmap("loading.png", PixmapFormat.ARGB8888);
@@ -73,6 +74,11 @@ public class StartScreen extends AndroidLoadingScreen {
     @Override
     public void resume() {
 
+    }
+
+    @Override
+    public void back() {
+        androidGame.finish();
     }
 
 }

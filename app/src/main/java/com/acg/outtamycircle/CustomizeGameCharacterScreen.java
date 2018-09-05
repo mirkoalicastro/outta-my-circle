@@ -134,18 +134,23 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     @Override
     public void pause() {
-        Log.d("GoogleS", "pause");
-        fakeButton.enable(false);
+
     }
 
     @Override
     public void resume() {
-        Log.d("GoogleS", "resume");
-        fakeButton.enable(true);
+
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public void back() {
+        if(Settings.soundEnabled)
+            Assets.click.play(Settings.volume);
+        androidGame.setScreen(new MainMenuScreen(androidGame));
     }
 }
