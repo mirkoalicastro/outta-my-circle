@@ -34,23 +34,18 @@ public class MyList<T> implements Iterable<T>{
         resetIterator();
     }
 
-    public void remove(T el){
+    public boolean remove(T el){
         Node<T> prev = null;
-        for(T key : this) {
-            if(key.equals(el)) {
-                if (prev == null)
-                    head = head.next;
-                else
-                    prev.next = prev.next.next;
+        resetIterator();
+        while(iterator.hasNext()) {
+            T curr = iterator.next();
+            if(curr.equals(el)) {
+                iterator.remove();
                 resetIterator();
-                return;
+                return true;
             }
-            if(prev == null)
-                prev = head;
-            else
-                prev = prev.next;
         }
-        throw new NoSuchElementException("Cannot find the element to remove");
+        return false;
     }
 
     private class MyIterator implements Iterator<T> {
