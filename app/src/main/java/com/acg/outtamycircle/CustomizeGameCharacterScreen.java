@@ -56,29 +56,35 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 rom = true;
             } else if(backButton.inBounds(event)) {
                 goBack = true;
+                Assets.click.play(100);
                 break;
             } else if(quickGameButton.inBounds(event)) {
                 goForward = true;
+                Assets.click.play(100);
                 break;
             } else if(rightSkin.inBounds(event)) {
                 if(currentIdSkin < Assets.skins.length-1) {
                     currentIdSkin++;
                     unchanged = false;
+                    Assets.click.play(100);
                 }
             } else if(leftSkin.inBounds(event)) {
                 if(currentIdSkin > 0) {
                     currentIdSkin--;
                     unchanged = false;
+                    Assets.click.play(100);
                 }
             } else if (rightAttack.inBounds(event)) {
                 if(currentIdAttack < Assets.attacks.length-1) {
                     currentIdAttack++;
                     unchanged = false;
+                    Assets.click.play(100);
                 }
             } else if(leftAttack.inBounds(event)) {
                 if(currentIdAttack > 0) {
                     currentIdAttack--;
                     unchanged = false;
+                    Assets.click.play(100);
                 }
             }
         }

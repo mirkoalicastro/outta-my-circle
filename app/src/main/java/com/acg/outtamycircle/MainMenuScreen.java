@@ -42,9 +42,10 @@ public class MainMenuScreen extends AndroidScreen {
                     }
                     Settings.setSoundEnabled(androidGame, !Settings.soundEnabled);
                 }
-                if(startButton.inBounds(event))
+                if(startButton.inBounds(event)) {
                     Assets.click.play(100);
                     androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+                }
             }
         }
     }
