@@ -1,4 +1,4 @@
-package com.acg.outtamycircle.physicsutilities;
+package com.acg.outtamycircle.utilities;
 
 //TODO valutare posizione nei package
 

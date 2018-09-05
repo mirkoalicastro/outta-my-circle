@@ -1,16 +1,23 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.graphics.Shader;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.EntityFactory;
-import com.acg.outtamycircle.entitycomponent.impl.CircleDrawableComponent;
-import com.acg.outtamycircle.entitycomponent.impl.DynamicCircle;
+import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
+import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
+import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
-import com.acg.outtamycircle.physicsutilities.Converter;
+import com.acg.outtamycircle.entitycomponent.impl.Powerup;
+import com.acg.outtamycircle.utilities.Converter;
+import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
+import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
+import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
+import com.google.fpl.liquidfun.BodyType;
+import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.World;
 
 public class ServerScreen extends ClientServerScreen {
@@ -20,24 +27,38 @@ public class ServerScreen extends ClientServerScreen {
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
 
+    private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
+    private final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
+
     private int[][] spawnPositions;
 
     public ServerScreen(AndroidGame game, long []ids) {
         super(game, ids);
 
         world = new World(0, 0);
-        EntityFactory.setWorld(world);
 
         /*Inizializzazione Giocatori*/
         spawnPositions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, 4);
 
+
+        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWeight/2, frameHeight/2);
+        status.setPowerup(pu);*/
+
+        initCharacterSettings(40);
+
         GameCharacter[] characters = {
-                EntityFactory.createServerDefaultCharacter(40, spawnPositions[0][0], spawnPositions[0][1], Color.GREEN),
-                EntityFactory.createServerDefaultCharacter(40, spawnPositions[1][0], spawnPositions[1][1], Color.WHITE),
-                EntityFactory.createServerDefaultCharacter(40, spawnPositions[2][0], spawnPositions[2][1], Color.YELLOW),
-                EntityFactory.createServerDefaultCharacter(40, spawnPositions[3][0], spawnPositions[3][1], Color.RED),
+                createCharacter(spawnPositions[0][0], spawnPositions[0][1], Color.GREEN),
+                createCharacter(spawnPositions[1][0], spawnPositions[1][1], Color.WHITE),
+                createCharacter(spawnPositions[2][0], spawnPositions[2][1], Color.YELLOW),
+                createCharacter(spawnPositions[3][0], spawnPositions[3][1], Color.RED),
         };
+
         status.setCharacters(characters);
+
+        initArenaSetting();
+        status.setArena(createArena());
+
+        //world.setContactListener(new ContactHandler());
 
         //TODO comunica posizioni etc.
     }
@@ -62,7 +83,7 @@ public class ServerScreen extends ClientServerScreen {
                     .setY((int) Converter.physicsToFrame(comp.getY()));
         }
 
-        checkStatus();
+        //checkStatus();
 
         //TODO invia posizione
     }
@@ -70,13 +91,6 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void setup(){
         Converter.setScale(frameWeight, frameHeight);
-    }
-
-    /*TODO Non serve*/
-    @Override
-    public void present(float deltaTime){
-        super.present(deltaTime);
-        //world.setContactListener(new ContactHandler());
     }
 
     /**
@@ -109,12 +123,12 @@ public class ServerScreen extends ClientServerScreen {
 
     private void checkStatus(){
         for(int i=0 ; i<spawnPositions.length ; i++)
-            if(isOut(status.characters[i]))
-                status.alives[i] = false;
+            if(isOut(status.characters[i]));
+                //status.alives[i] = false;
     }
 
-    private boolean isOut(GameCharacter ch1){
-        DynamicCircle circle = (DynamicCircle)ch1.getComponent(Component.Type.Physics);
+    private boolean isOut(GameCharacter ch){
+        LiquidFunPhysicsComponent circle = (LiquidFunPhysicsComponent) ch.getComponent(Component.Type.Physics);
         float chX = circle.getX();
         float chY = circle.getY();
 
@@ -123,9 +137,54 @@ public class ServerScreen extends ClientServerScreen {
         float arenaY = Converter.frameToPhysics(arenaDrawable.getY());
 
         float deltaX = (chX - arenaX)*(chX - arenaX);
-        float deltaY = (chY - arenaY)*(chY- arenaY);
+        float deltaY = (chY - arenaY)*(chY - arenaY);
 
         float delta = (float)Math.sqrt(deltaX + deltaY);
-        return delta > arenaRadius + circle.radius;
+
+        return delta > Converter.frameToPhysics(arenaRadius) + circle.getWidth()/4;
+    }
+
+    private void initCharacterSettings(float r){
+        drawableComponentFactory.setGraphics(game.getGraphics())
+                .setStroke(6,Color.BLACK)
+                .setHeight((int)(r*2)).setWidth((int)(r*2))
+                .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
+
+        physicsComponentFactory.setWorld(world).setDensity(1f).setFriction(1f).setRestitution(1f)
+                .setType(BodyType.dynamicBody).setShape(new CircleShape())
+                .setRadius(Converter.frameToPhysics(r)).setAwake(true)
+                .setBullet(true).setSleepingAllowed(true);
+    }
+
+    private GameCharacter createCharacter(int x, int y, int color){
+        drawableComponentFactory.setColor(color).setX(x).setY(y);
+        physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y));
+
+        GameCharacter gc = new GameCharacter();
+        gc.addComponent(physicsComponentFactory.getComponent());
+        gc.addComponent(drawableComponentFactory.getComponent());
+
+        return gc;
+    }
+
+    private void initArenaSetting(){
+        int x = frameWeight/2, y = frameHeight/2;
+
+        drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
+                .setX(x).setY(y)
+                .setEffect(new ComposerAndroidEffect(
+                        new RadialGradientEffect(x,y,arenaRadius,
+                                new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
+                                new float[]{0f,1f}, Shader.TileMode.CLAMP
+                        ),
+                        (AndroidEffect)Assets.arenaTile)
+                );
+    }
+
+    private Arena createArena(){
+        Arena arena = new Arena();
+        arena.addComponent(drawableComponentFactory.getComponent());
+
+        return arena;
     }
 }
