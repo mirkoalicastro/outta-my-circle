@@ -27,6 +27,7 @@ public class MyRoomUpdateCallback extends RoomUpdateCallback {
             return;
         }
         googleRoom.showWaitingRoom(room);
+        googleRoom.updateRoom(room);
     }
 
     // Called when room is fully connected.
@@ -50,6 +51,7 @@ public class MyRoomUpdateCallback extends RoomUpdateCallback {
             return;
         }
         googleRoom.showWaitingRoom(room);
+        googleRoom.updateRoom(room);
     }
 
     // Called when we've successfully left the room (this happens a result of voluntarily leaving

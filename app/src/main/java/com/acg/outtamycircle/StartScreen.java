@@ -48,13 +48,17 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.back = graphics.newPixmap("back.png", PixmapFormat.ARGB8888);
         Assets.quickGame = graphics.newPixmap("quickgame.png", PixmapFormat.ARGB8888);
         setProgress(50);
+        Assets.sound = graphics.newPixmap("sound.png", PixmapFormat.ARGB8888);
+        Assets.nosound = graphics.newPixmap("nosound.png", PixmapFormat.ARGB8888);
         Assets.rightArrow = graphics.newPixmap("r_arrow.png", PixmapFormat.ARGB8888);
         Assets.leftArrow = graphics.newPixmap("l_arrow.png", PixmapFormat.ARGB8888);
         Assets.swordsBlack = graphics.newPixmap("swords_black.png", PixmapFormat.ARGB8888);
         Assets.swordsWhite = graphics.newPixmap("swords_white.png", PixmapFormat.ARGB8888);
         setProgress(70);
-        Assets.click = androidGame.getAudio().newSound("urto1.wav");
-        // Settings.load(game.getFileIO());
+        Assets.click = androidGame.getAudio().newSound("click.wav");
+        Assets.powerupCollision = androidGame.getAudio().newSound("powerupcollision.wav");
+        Assets.newPowerup = androidGame.getAudio().newSound("powerupcollision.wav");
+        Assets.gameCharacterCollision = androidGame.getAudio().newSound("gamecharcollision.wav");
         setProgress(100);
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }

@@ -68,7 +68,7 @@ public class GameMessage {
         POWERUP_ASSIGN((byte)0), //TODO
         ATTACK((byte)3),
         END((byte)3),
-        HOST_OR_CLIENT((byte)0); //TODO length
+        HOST_OR_CLIENT((byte)5); //TODO length
 
         final byte length;
 

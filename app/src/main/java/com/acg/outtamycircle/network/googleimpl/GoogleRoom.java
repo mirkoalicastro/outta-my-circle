@@ -23,8 +23,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
-
 public class GoogleRoom {
+
+    public static volatile String mMyId;
+    public static volatile String mRoomId;
+    public static volatile ArrayList<Participant> mParticipants;
+
+
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
     private static GoogleRoom instance;
@@ -94,14 +99,12 @@ public class GoogleRoom {
                 .setNeutralButton(android.R.string.ok, null).create().show();
     }
 
-    public static volatile String mMyId;
-    public static volatile String mRoomId;
-    public static volatile ArrayList<Participant> mParticipants;
 
     void updateRoom(Room room) {
         Log.d("PEPPE","Aggiorno la stanza");
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
+        mMyId = room.getParticipantId(MyGoogleSignIn.getInstance().getPlayerId());
         //TODO
     }
 
@@ -135,6 +138,8 @@ public class GoogleRoom {
         serverClientMessageHandler.setClient(realTimeMultiplayerClient);
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 
+
+
         config = RoomConfig.builder(myRoomUpdatedCallback)
                 .setOnMessageReceivedListener(serverClientMessageHandler)
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
@@ -144,7 +149,6 @@ public class GoogleRoom {
     }
 
     public RealTimeMultiplayerClient getRealTimeMultiplayerClient() {
-        realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
         return realTimeMultiplayerClient;
     }
 

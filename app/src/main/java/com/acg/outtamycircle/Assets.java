@@ -12,6 +12,8 @@ public class Assets {
     public static Pixmap[] skins;
     public static Pixmap[] attacks;
     public static Pixmap back;
+    public static Pixmap sound;
+    public static Pixmap nosound;
     public static Pixmap start;
     public static Pixmap quickGame;
     public static Pixmap joystick;
@@ -26,4 +28,7 @@ public class Assets {
     public static Effect backgroundTile;
     public static Effect arenaTile;
     public static Sound click;
+    public static Sound gameCharacterCollision;
+    public static Sound newPowerup;
+    public static Sound powerupCollision;
 }
