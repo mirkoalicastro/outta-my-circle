@@ -19,16 +19,6 @@ public class MainMenuScreen extends AndroidScreen {
     public MainMenuScreen(AndroidGame game) {
         super(game);
         Settings.loadSettings(androidGame);
-        for(int i=0; i<1; i++) {
-            Assets.click.play(100);
-            Log.d("SOUND", "1 OK ");
-            Assets.powerupCollision.play(100);
-            Log.d("SOUND", "2 OK ");
-            Assets.newPowerup.play(100);
-            Log.d("SOUND", "3 OK ");
-            Assets.gameCharacterCollision.play(100);
-            Log.d("SOUND", "4 OK ");
-        }
         startButton.setPixmap(Assets.start);
         if(Settings.soundEnabled)
             soundButton.setPixmap(Assets.sound);
@@ -44,16 +34,17 @@ public class MainMenuScreen extends AndroidScreen {
                     Log.d("JUAN","prem");
                     unchanged = false;
                     if(Settings.soundEnabled) {
-                        Assets.click.play(100);
                         soundButton.setPixmap(Assets.nosound);
                     } else {
-                        Assets.click.play(100);
+                        if(Settings.soundEnabled)
+                            Assets.click.play(Settings.volume);
                         soundButton.setPixmap(Assets.sound);
                     }
                     Settings.setSoundEnabled(androidGame, !Settings.soundEnabled);
                 }
                 if(startButton.inBounds(event)) {
-                    Assets.click.play(100);
+                    if(Settings.soundEnabled)
+                        Assets.click.play(Settings.volume);
                     androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
                 }
             }

@@ -10,6 +10,7 @@ public class CharactersContact extends ContactType{
     @Override
     public void handle(){
         Log.d("PROVAAAA","handle");
-        Assets.gameCharacterCollision.play(100);
+        if(Settings.soundEnabled)
+            Assets.gameCharacterCollision.play(Settings.volume);
     }
 }
