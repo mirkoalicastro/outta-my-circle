@@ -1,9 +1,6 @@
 package com.acg.outtamycircle.entitycomponent.impl;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
-import com.acg.outtamycircle.physicsutilities.Converter;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Vec2;
 
@@ -15,7 +12,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
     private final Vec2 v = new Vec2();
 
     public void move(float x, float y){
-        x *= 15; y *= 15;
+        x *= 30; y *= 30;
 
         //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();
@@ -32,5 +29,10 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
 
     public float getY(){
         return body.getPositionY();
+    }
+
+    public LiquidFunPhysicsComponent setBody(Body body){
+        this.body = body;
+        return this;
     }
 }

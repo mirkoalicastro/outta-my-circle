@@ -3,10 +3,8 @@ package com.acg.outtamycircle.contactphase;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
-import com.acg.outtamycircle.entitycomponent.impl.GameObject;
-import com.acg.outtamycircle.entitycomponent.impl.PowerUp;
+import com.acg.outtamycircle.entitycomponent.impl.Powerup;
 import com.badlogic.androidgames.framework.Audio;
-import com.badlogic.androidgames.framework.Sound;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
@@ -25,11 +23,7 @@ public class ContactHandler extends ContactListener{
                 fb = contact.getFixtureB();
         Body ba = fa.getBody(), bb = fb.getBody();
 
-
-        GameObject a = (GameObject)ba.getUserData();
-        GameObject b = (GameObject)bb.getUserData();
-
-        map.get(ContactType.myHashCode(a.getClass(), b.getClass())).handle();
+        map.get(ContactType.myHashCode(ba.getUserData(), bb.getUserData())).handle();
         //se, caso strano, capita una collisione tra due powerup, cosa torna map?
 
         //se generalizzo myHashCode a Class<?> non devo fare il cast esplicito
@@ -43,6 +37,6 @@ public class ContactHandler extends ContactListener{
         CharacterPowerupContact cp = new CharacterPowerupContact();
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
-        map.put(ContactType.myHashCode(GameCharacter.class,PowerUp.class), cp);
+        map.put(ContactType.myHashCode(GameCharacter.class,Powerup.class), cp);
     }
 }
