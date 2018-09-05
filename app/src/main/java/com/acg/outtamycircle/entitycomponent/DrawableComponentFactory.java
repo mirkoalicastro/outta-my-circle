@@ -15,6 +15,7 @@ public class DrawableComponentFactory{
     private Effect effect;
     private int strokeWidth;
     private Integer strokeColor;
+    private Entity owner;
 
     private DrawableShape shape = DrawableShape.RECTANGLE;
     public enum DrawableShape{CIRCLE, RECTANGLE}
@@ -72,6 +73,11 @@ public class DrawableComponentFactory{
         return this;
     }
 
+    public DrawableComponentFactory setOwner(Entity owner) {
+        this.owner = owner;
+        return this;
+    }
+
 
     public DrawableComponent getComponent(){
         DrawableComponent component = null;
@@ -82,8 +88,10 @@ public class DrawableComponentFactory{
                 break;
         }
 
-        return component.setStroke(strokeWidth, strokeColor).setColor(color).setEffect(effect)
-                .setPixmap(pixmap).setWidth(width).setHeight(height).setX(x).setY(y);
+        component.setStroke(strokeWidth, strokeColor).setColor(color).setEffect(effect)
+                .setPixmap(pixmap).setWidth(width).setHeight(height).setX(x).setY(y).setOwner(owner);
+
+        return component;
     }
 
     private class CircleDrawableComponent extends DrawableComponent{

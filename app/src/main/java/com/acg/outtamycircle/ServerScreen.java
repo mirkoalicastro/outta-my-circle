@@ -59,7 +59,10 @@ public class ServerScreen extends ClientServerScreen {
         initArenaSetting();
         status.setArena(createArena());
 
-        world.setContactListener(new ContactHandler());
+        ContactHandler contactHandler = new ContactHandler();
+        contactHandler.init();
+
+        world.setContactListener(contactHandler);
 
         //TODO comunica posizioni etc.
     }
@@ -150,10 +153,11 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private GameCharacter createCharacter(int x, int y, int color){
-        drawableComponentFactory.setColor(color).setX(x).setY(y);
-        physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y));
-
         GameCharacter gc = new GameCharacter();
+
+        drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
+        physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y)).setOwner(gc);
+
         gc.addComponent(physicsComponentFactory.getComponent());
         gc.addComponent(drawableComponentFactory.getComponent());
 

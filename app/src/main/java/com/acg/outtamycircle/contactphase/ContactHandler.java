@@ -1,5 +1,6 @@
 package com.acg.outtamycircle.contactphase;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.Assets;
@@ -20,22 +21,26 @@ public class ContactHandler extends ContactListener{
 
     @Override
     public void beginContact(Contact contact){
+        Log.d("PROVAAAA", "beginccontatct");
         Fixture fa = contact.getFixtureA(),
                 fb = contact.getFixtureB();
         Body ba = fa.getBody(), bb = fb.getBody();
 
-        ContactType contactType = map.get(ContactType.myHashCode(ba.getUserData(), bb.getUserData()));
+        ContactType contactType = map.get(ContactType.myHashCode(ba.getUserData().getClass(), bb.getUserData().getClass()));
 
-        if(contactType != null) contactType.handle();
+        if(contactType != null) {
+            Log.d("PROVAAAA","inizio handle con " + ba.getUserData().getClass().getName() + " e " + bb.getUserData().getClass().getName());
+            contactType.handle();
+        }
 
         //se generalizzo myHashCode a Class<?> non devo fare il cast esplicito
     }
 
     public void init(){
+        Log.d("PROVAAAA","inittttttt");
         map = new SparseArray<>();
 
         CharactersContact cc = new CharactersContact();
-        cc.setSound(Assets.gameCharacterCollision);
 
         CharacterPowerupContact cp = new CharacterPowerupContact();
 

@@ -10,6 +10,7 @@ import com.google.fpl.liquidfun.World;
 
 public class PhysicsComponentFactory {
     private World world;
+    private Entity owner;
 
     private final BodyDef bodyDef = new BodyDef();
     private final FixtureDef fixDef = new FixtureDef();
@@ -90,10 +91,14 @@ public class PhysicsComponentFactory {
         return this;
     }
 
+    public PhysicsComponentFactory setOwner(Entity owner) {
+        this.owner = owner;
+        return this;
+    }
+
     public PhysicsComponent getComponent(){
         LiquidFunPhysicsComponent component = new LiquidFunPhysicsComponent();
-
-        component.setWidth(width).setHeight(height);
+        component.setWidth(width).setHeight(height).setOwner(owner);
 
         Body body = world.createBody(bodyDef);
         body.setSleepingAllowed(sleepingAllowed);

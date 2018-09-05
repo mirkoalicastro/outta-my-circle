@@ -5,7 +5,8 @@ public abstract class Component {
     protected Entity owner;
     public abstract Type type();
 
-    public void setOwner(Entity owner) {
+    public Component setOwner(Entity owner) {
         this.owner = owner;
+        return this;
     }
 }

@@ -1,15 +1,15 @@
 package com.acg.outtamycircle.contactphase;
 
+import android.util.Log;
+
+import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.Settings;
 import com.badlogic.androidgames.framework.Sound;
 
 public class CharactersContact extends ContactType{
-    private Sound sound;
-
-    public void setSound(Sound sound){ this.sound = sound; }
-
     @Override
     public void handle(){
-        sound.play(100);
+        Log.d("PROVAAAA","handle");
+        Assets.gameCharacterCollision.play(100);
     }
 }

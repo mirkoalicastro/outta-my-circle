@@ -19,6 +19,16 @@ public class MainMenuScreen extends AndroidScreen {
     public MainMenuScreen(AndroidGame game) {
         super(game);
         Settings.loadSettings(androidGame);
+        for(int i=0; i<1; i++) {
+            Assets.click.play(100);
+            Log.d("SOUND", "1 OK ");
+            Assets.powerupCollision.play(100);
+            Log.d("SOUND", "2 OK ");
+            Assets.newPowerup.play(100);
+            Log.d("SOUND", "3 OK ");
+            Assets.gameCharacterCollision.play(100);
+            Log.d("SOUND", "4 OK ");
+        }
         startButton.setPixmap(Assets.start);
         if(Settings.soundEnabled)
             soundButton.setPixmap(Assets.sound);

@@ -1,9 +1,14 @@
 package com.acg.outtamycircle.contactphase;
 
+import android.util.Log;
+
+import java.util.Objects;
+
 abstract class ContactType{
 
     public static int myHashCode(Object a, Object b){
-        return a.getClass().hashCode() ^ b.getClass().hashCode();
+        Log.d("PROVAAAA", (a == null ? "null" : "") + "," + (b == null ? "null2" : "") + "<-");
+        return a.hashCode() ^ b.hashCode();
     }
 
     public abstract void handle();
