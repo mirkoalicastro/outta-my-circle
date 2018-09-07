@@ -32,7 +32,8 @@ public class MyGoogleRoom {
 
     private String mMyId;
     private String mRoomId;
-    private ArrayList<Participant> mParticipants;
+    private short currentIdSkin;
+    private byte currentIdAttack;
 
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
@@ -49,14 +50,36 @@ public class MyGoogleRoom {
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
     private RoomConfig config;
 
+    private String serverId;
+
+    public boolean isServer() {
+        return getPlayerId().equals(serverId);
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+
+    public String getServerId() {
+        return serverId;
+    }
+
     private static String TAG = "GoogleS";
 
     public String getPlayerId() {
         return mMyId;
     }
 
+    public short getCurrentIdSkin() {
+        return currentIdSkin;
+    }
+
+    public byte getCurrentIdAttack() {
+        return currentIdAttack;
+    }
+
     void leave() {
-        if (realTimeMultiplayerClient != null) {
+        if(mRoomId != null && realTimeMultiplayerClient != null) {
             realTimeMultiplayerClient.leave(config, mRoomId)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -76,7 +99,6 @@ public class MyGoogleRoom {
         config = null;
         realTimeMultiplayerClient = null;
         mRoomId = null;
-        mParticipants = null;
         mMyId = null;
         serverClientMessageHandler.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
     }
@@ -116,7 +138,6 @@ public class MyGoogleRoom {
         setRoom(room);
         Log.d("JUAN", Strings.nullToEmpty(mRoomId) + " -> " + room.getRoomId());
         mRoomId = room.getRoomId();
-        mParticipants = room.getParticipants();
         mMyId = room.getParticipantId(myGoogleSignIn.getPlayerId());
         //TODO
     }
@@ -139,7 +160,7 @@ public class MyGoogleRoom {
                 });
     }
 
-    public void quickGame(int min_players, int max_players) {
+    public void quickGame(int min_players, int max_players, short currentIdSkin, byte currentIdAttack) {
         if(!myGoogleSignIn.isSignedIn())
             throw new IllegalStateException("first login bitch"); //TODO non eccezione
         if(min_players < MIN_PLAYERS)
@@ -147,6 +168,8 @@ public class MyGoogleRoom {
         if(max_players > MAX_PLAYERS)
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
         reset();
+        this.currentIdSkin = currentIdSkin;
+        this.currentIdAttack = currentIdAttack;
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 

@@ -15,8 +15,8 @@ import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
 public class CustomizeGameCharacterScreen extends AndroidScreen {
-    private int currentIdSkin = 0;
-    private int currentIdAttack = 0;
+    private short currentIdSkin = 0;
+    private byte currentIdAttack = 0;
 
     private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
     private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
@@ -28,7 +28,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
 
     private boolean unchanged;
-
 
     public CustomizeGameCharacterScreen(GoogleAndroidGame googleAndroidGame) {
         super(googleAndroidGame);
@@ -101,12 +100,11 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         }
         if(goForward) {
-            androidGame.setScreen(new ServerScreen(androidGame, new long[]{0, 1, 2, 3})); //TODO generalizzare
+//            androidGame.setScreen(new ServerScreen(androidGame, new long[]{0, 1, 2, 3})); //TODO generalizzare
         }
         if(rom) {
             fakeButton.enable(false);
-            Log.d("GoogleS", "click____");
-            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2);
+            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,currentIdSkin,currentIdAttack);
             return;
         }
     }

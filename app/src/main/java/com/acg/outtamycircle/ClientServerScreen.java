@@ -67,7 +67,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         drawArena();
         drawCharacters();
 
-        //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.getComponent(Component.Type.Drawable);
+        //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.makeComponent(Component.Type.Drawable);
         //powerupDrawable.draw();
 
         androidJoystick.draw();

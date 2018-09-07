@@ -96,7 +96,7 @@ public class PhysicsComponentFactory {
         return this;
     }
 
-    public PhysicsComponent getComponent(){
+    public PhysicsComponent makeComponent(){
         LiquidFunPhysicsComponent component = new LiquidFunPhysicsComponent();
         component.setWidth(width).setHeight(height).setOwner(owner);
 

@@ -78,7 +78,7 @@ public class DrawableComponentFactory{
         return this;
     }
 
-    public DrawableComponent getComponent(){
+    public DrawableComponent makeComponent(){
         DrawableComponent component = null;
 
         switch(shape){

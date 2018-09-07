@@ -168,8 +168,8 @@ public class ServerScreen extends ClientServerScreen {
         drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
         physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y)).setOwner(gc);
 
-        gc.addComponent(physicsComponentFactory.getComponent());
-        gc.addComponent(drawableComponentFactory.getComponent());
+        gc.addComponent(physicsComponentFactory.makeComponent());
+        gc.addComponent(drawableComponentFactory.makeComponent());
 
         return gc;
     }
@@ -190,7 +190,7 @@ public class ServerScreen extends ClientServerScreen {
 
     private Arena createArena(){
         Arena arena = new Arena();
-        arena.addComponent(drawableComponentFactory.getComponent());
+        arena.addComponent(drawableComponentFactory.makeComponent());
 
         return arena;
     }
