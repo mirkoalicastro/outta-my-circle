@@ -5,6 +5,8 @@ import com.acg.outtamycircle.network.GameMessage;
  * Handles the storage of messages and the iteration through them.
  */
 public interface MessageReceiver {
+
+    int size();
     /**
      * Stores a messages.
      * @param message

@@ -9,7 +9,7 @@ import com.badlogic.androidgames.framework.Pixmap;
 public abstract class AndroidButton implements Button {
     protected int x, y, width, height;
     protected final Graphics graphics;
-    private boolean enabled;
+    private boolean enabled = true;
     protected Integer color;
     protected Pixmap pixmap;
     protected int strokeWidth;

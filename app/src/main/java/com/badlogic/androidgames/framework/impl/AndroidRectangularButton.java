@@ -1,9 +1,7 @@
 package com.badlogic.androidgames.framework.impl;
 
-import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidRectangularButton extends AndroidButton {
 

@@ -1,5 +1,6 @@
 package com.acg.outtamycircle;
 
+import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
@@ -47,7 +48,7 @@ public class MainMenuScreen extends AndroidScreen {
             }
         }
         if(goCustomizeScreen)
-            androidGame.setScreen(new CustomizeGameCharacterScreen(androidGame));
+            androidGame.setScreen(new CustomizeGameCharacterScreen((GoogleAndroidGame)androidGame));
     }
 
     @Override

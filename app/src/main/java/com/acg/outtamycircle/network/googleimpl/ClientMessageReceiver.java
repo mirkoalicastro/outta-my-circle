@@ -9,6 +9,11 @@ public class ClientMessageReceiver implements MessageReceiver {
     private List<GameMessage> messages;
     private static final int DEFAULT_CAPACITY = 40; //TODO
 
+    @Override
+    public int size(){
+        return messages.size();
+    }
+
     public ClientMessageReceiver(int capacity){
         this.messages = new ArrayList<>(capacity);
     }

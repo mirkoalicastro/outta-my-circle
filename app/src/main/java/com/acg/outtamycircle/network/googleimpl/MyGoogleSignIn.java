@@ -25,23 +25,12 @@ public class MyGoogleSignIn {
     private GoogleSignInClient client;
     private final Activity activity;
     private String playerId;
-    private static MyGoogleSignIn instance;
 
     public String getPlayerId() {
         return playerId;
     }
 
-    public static void createInstance(Activity activity) {
-        instance = new MyGoogleSignIn(activity);
-    }
-
-    public static MyGoogleSignIn getInstance() {
-        if(instance == null)
-            throw new IllegalStateException("first create");
-        return instance;
-    }
-
-    private MyGoogleSignIn(Activity activity) {
+    public MyGoogleSignIn(Activity activity) {
         this.activity = activity;
         this.client = GoogleSignIn.getClient(activity, OPTIONS);
     }

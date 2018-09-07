@@ -124,5 +124,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
     @Override
     public void back() {
         Toast.makeText(androidGame,"E mo che si fa?",Toast.LENGTH_SHORT).show();
+        androidGame.setScreen(new MainMenuScreen(androidGame));
     }
 }

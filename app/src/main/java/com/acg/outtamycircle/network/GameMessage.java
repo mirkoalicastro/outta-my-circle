@@ -194,8 +194,8 @@ public class GameMessage {
 
         interpreter.makeMoveClientMessage(m1, (short)1, 3.1f, 2.8f);
         interpreter.makeAttackMessage(m2, (short) 3);
-
-        ServerClientMessageHandler handler = new ServerClientMessageHandler(){
+        //TODO non funziona
+        ServerClientMessageHandler handler = new ServerClientMessageHandler(null){
             @Override
             public void onRealTimeMessageReceived(RealTimeMessage message){
                 byte[] messageData = buffer;

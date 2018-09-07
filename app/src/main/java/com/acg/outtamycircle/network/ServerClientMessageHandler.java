@@ -4,13 +4,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.Pools;
 import android.util.Log;
 
-import com.acg.outtamycircle.GameStatus;
-import com.acg.outtamycircle.network.googleimpl.GoogleRoom;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.MessageReceiver;
-import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.games.multiplayer.Participant;
-import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceivedListener;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -18,51 +15,32 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 public class ServerClientMessageHandler implements NetworkMessageHandler {
     private static final int MAX_BUFFER_SIZE = 400; //TODO
     private static final byte ENDING_CHAR = 127;
     private static final int DEFAULT_CAPACITY = 30;
 
-    private RealTimeMultiplayerClient client;
     private MessageReceiver first, second;
     private Pools.Pool<GameMessage> pool;
-    private String roomId;
-    private List<String> players;
-    private Room room;
 
     //TODO visibility
     byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
 
-    public ServerClientMessageHandler setRoom(Room room) {
-        this.room = room;
-        this.roomId = room.getRoomId(); //TODO
-        return this;
-    }
+    private final MyGoogleRoom myGoogleRoom;
 
-    public ServerClientMessageHandler setRoomId(String roomId){
-        this.roomId = roomId;
-        return this;
-    }
-
-    public ServerClientMessageHandler setClient(RealTimeMultiplayerClient client){
-        this.client = client;
-        return this;
-    }
-
-    public ServerClientMessageHandler setPlayerList(List<String> players){
-        this.players = players;
-        return this;
+    public ServerClientMessageHandler(MyGoogleRoom myGoogleRoom) {
+        this.myGoogleRoom = myGoogleRoom;
+        pool = new Pools.SimplePool<>(DEFAULT_CAPACITY);
+        for(int i=0;i<DEFAULT_CAPACITY; i++)
+            pool.release(new GameMessage());
     }
 
     //TODO change
-    public ServerClientMessageHandler setReceivers(MessageReceiver first, MessageReceiver second){
+    public ServerClientMessageHandler setReceivers(MessageReceiver first, MessageReceiver second) {
         this.first = first;
         this.second = second;
         return this;
@@ -82,65 +60,41 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
 
     @Override
     public void sendReliable(final String playerId) {
-        Log.d("PEPPE", Arrays.toString(buffer));
-        new Thread(new Runnable() {
+        final Task<Integer> sendTask = myGoogleRoom.getRealTimeMultiplayerClient()
+                .sendReliableMessage(buffer, myGoogleRoom.getRoom().getRoomId(), playerId, mywtf);
+        //TODO Check
+        sendTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void run() {
-                Log.d("PEPPE","room id " + GoogleRoom.mRoomId);
-                final Task<Integer> sendTask = GoogleRoom.getInstance().getRealTimeMultiplayerClient()
-                        .sendReliableMessage(buffer, GoogleRoom.mRoomId, playerId, mywtf);
-                //TODO Check
-                sendTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Impossibile inviare il messaggio " + e);
-                    }
-                });
-                sendTask.addOnCompleteListener(new OnCompleteListener<Integer>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Integer> task) {
-                        Log.d(TAG, "Completato");
-                        synchronized (sendTask) {
-                            sendTask.notify();
-                        }
-                    }
-                });
-                sendTask.addOnCanceledListener(new OnCanceledListener() {
-                       @Override
-                       public void onCanceled() {
-                           Log.d("JUAN", "Canceled");
-                       }
-                });
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Impossibile inviare il messaggio " + e);
             }
-        }).start();
-
-
-/*        synchronized (sendTask){
-            while(!sendTask.isComplete()){
-                try {
-                    sendTask.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        });
+        sendTask.addOnCompleteListener(new OnCompleteListener<Integer>() {
+            @Override
+            public void onComplete(@NonNull Task<Integer> task) {
+                Log.d(TAG, "Completato!!!!!");
             }
-        }*/
-
+        });
+        sendTask.addOnCanceledListener(new OnCanceledListener() {
+               @Override
+               public void onCanceled() {
+                   Log.d(TAG, "Canceled");
+               }
+        });
     }
+
 
     @Override
     public void sendUnreliable(String player) {
-        client.sendUnreliableMessage(buffer, roomId, player);
+        myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessage(buffer, myGoogleRoom.getRoom().getRoomId(), player);
     }
 
     @Override
     public void broadcastReliable(){
         //TODO
-        Log.d("PEPPE","sono " + GoogleRoom.mMyId);
-        for(Participant player: GoogleRoom.mParticipants) {
+        for(Participant player: myGoogleRoom.getRoom().getParticipants()) {
             String playerId = player.getParticipantId();
-            Log.d("PEPPE", "manderei a " + playerId);
-            if(!playerId.equals(GoogleRoom.mMyId)) {
-                Log.d("PEPPE", "mando a " + playerId);
+            if(!playerId.equals(myGoogleRoom.getPlayerId())) {
                 sendReliable(playerId);
             }
         }
@@ -148,16 +102,16 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
 
     @Override
     public void broadcastUnreliable() {
-        final Task<Void> task = client.sendUnreliableMessageToOthers(buffer,GoogleRoom.mRoomId);
+        final Task<Void> task = myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessageToOthers(buffer, myGoogleRoom.getRoom().getRoomId());
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("JUAN","failure " + e);
+                Log.d(TAG,"failure " + e);
             }
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Log.d("JUAN", "complete and success? " + task.isSuccessful());
+                Log.d(TAG, "complete and success? E' succies che magg appiciat! A casa se distrutta e nu bell mensil che tenevo stipat nu teng chiu" + task.isSuccessful());
             }
         });
     }
@@ -184,7 +138,6 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
     public synchronized void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
         byte[] messageData = realTimeMessage.getMessageData();
         int cursor = 0;
-        Log.d("ABCDARIO","HO ricevuto qualcosa zzu");
 
         while( cursor < messageData.length && messageData[cursor]!=ENDING_CHAR) {
             GameMessage gameMessage = pool.acquire();

@@ -1,7 +1,6 @@
 package com.acg.outtamycircle.network.googleimpl;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.games.multiplayer.realtime.Room;
@@ -11,9 +10,9 @@ import java.util.List;
 
 public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
     private static final String TAG = "GoogleS";
-    private final GoogleRoom googleRoom;
-    public MyRoomStatusUpdateCallback(GoogleRoom googleRoom) {
-        this.googleRoom = googleRoom;
+    private final MyGoogleRoom myGoogleRoom;
+    public MyRoomStatusUpdateCallback(MyGoogleRoom myGoogleRoom) {
+        this.myGoogleRoom = myGoogleRoom;
     }
 
     // Called when we are connected to the room. We're not ready to play yet! (maybe not everybody
@@ -21,16 +20,13 @@ public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
     @Override
     public void onConnectedToRoom(Room room) {
         Log.d(TAG, "onConnectedToRoom.");
-        googleRoom.setRoom(room);
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     // Called when we get disconnected from the room. We return to the main screen.
     @Override
     public void onDisconnectedFromRoom(Room room) {
-        googleRoom.updateRoom(room);
-        googleRoom.setRoom(null);
-        googleRoom.showGameError();
+        myGoogleRoom.leave();
     }
 
 
@@ -40,12 +36,12 @@ public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
     // etc.
     @Override
     public void onPeerDeclined(Room room, @NonNull List<String> arg1) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onPeerInvitedToRoom(Room room, @NonNull List<String> arg1) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
@@ -58,32 +54,32 @@ public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
 
     @Override
     public void onPeerJoined(Room room, @NonNull List<String> arg1) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onPeerLeft(Room room, @NonNull List<String> peersWhoLeft) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onRoomAutoMatching(Room room) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onRoomConnecting(Room room) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onPeersConnected(Room room, @NonNull List<String> peers) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 
     @Override
     public void onPeersDisconnected(Room room, @NonNull List<String> peers) {
-        googleRoom.updateRoom(room);
+        myGoogleRoom.updateRoom(room);
     }
 }
 

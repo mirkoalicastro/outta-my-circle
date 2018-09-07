@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 public class ServerMessageReceiver implements MessageReceiver {
     private final GameMessage[][] messages;
     private GameMessageInterpreter interpreter;
+    private int count = 0;
 
     public ServerMessageReceiver(GameMessageInterpreter interpreter, int numberOfPlayers) {
         this.interpreter = interpreter;
@@ -72,16 +73,26 @@ public class ServerMessageReceiver implements MessageReceiver {
     };
 
     @Override
+    public int size() {
+        return count;
+    }
+
+    @Override
     public void storeMessage(GameMessage message) {
+        int j;
         int player = interpreter.getObjectId(message);
         GameMessage.Type type = message.getType();
 
         if(type == GameMessage.Type.MOVE_CLIENT)
-            messages[player][0] = message;
+            j = 0;
         else if(type == GameMessage.Type.ATTACK)
-            messages[player][1] = message;
+            j = 1;
         else
             throw new RuntimeException(); //TODO????
+
+        if(messages[player][j]==null) count++;
+
+        messages[player][j] = message;
     }
 
     @Override
@@ -94,5 +105,6 @@ public class ServerMessageReceiver implements MessageReceiver {
         for(int i=0 ; i< messages.length ; i++)
             for(int j=0 ; j<messages[0].length ; j++)
                 messages[i][j] = null;
+        count = 0;
     }
 }

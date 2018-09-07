@@ -3,7 +3,8 @@ package com.acg.outtamycircle;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.acg.outtamycircle.network.googleimpl.GoogleRoom;
+import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
@@ -21,7 +22,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
     private final AndroidButton rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
     private final AndroidButton rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
-    private final AndroidButton fakeButton = new AndroidCircularButton(androidGame.getGraphics(),150,150,50);
+    private final AndroidButton fakeButton = new AndroidCircularButton(androidGame.getGraphics(),150,150,100);
 
     private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124);
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
@@ -29,10 +30,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private boolean unchanged;
 
 
-    private MyGoogleSignIn myGoogleSignIn = MyGoogleSignIn.getInstance();
-
-    public CustomizeGameCharacterScreen(AndroidGame androidGame) {
-        super(androidGame);
+    public CustomizeGameCharacterScreen(GoogleAndroidGame googleAndroidGame) {
+        super(googleAndroidGame);
         leftSkin.setPixmap(Assets.leftArrow);
         rightSkin.setPixmap(Assets.rightArrow);
         leftAttack.setPixmap(Assets.leftArrow);
@@ -40,7 +39,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         fakeButton.setColor(Color.RED);
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
-        myGoogleSignIn.signIn();
+        googleAndroidGame.getMyGoogleSignIn().signIn();
     }
 
     @Override
@@ -49,11 +48,14 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
         boolean goBack = false;
         boolean goForward = false;
+        Log.d("GoogleS", fakeButton.isEnabled() ? "enabled" : "disabled");
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
             if(fakeButton.inBounds(event) && fakeButton.isEnabled()) {
+                Log.d("GoogleS", "click");
                 rom = true;
+                break;
             } else if(backButton.inBounds(event)) {
                 goBack = true;
                 if(Settings.soundEnabled)
@@ -103,7 +105,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         }
         if(rom) {
             fakeButton.enable(false);
-            GoogleRoom.getInstance().quickGame(2,2);
+            Log.d("GoogleS", "click____");
+            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2);
             return;
         }
     }

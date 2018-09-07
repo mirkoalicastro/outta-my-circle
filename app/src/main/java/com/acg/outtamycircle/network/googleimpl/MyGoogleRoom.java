@@ -9,68 +9,79 @@ import android.util.Log;
 
 import com.acg.outtamycircle.R;
 import com.acg.outtamycircle.network.ServerClientMessageHandler;
-import com.badlogic.androidgames.framework.impl.AndroidGame;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
 import com.google.android.gms.games.multiplayer.Participant;
+import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceivedListener;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateCallback;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateCallback;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class GoogleRoom {
+public class MyGoogleRoom {
 
-    public static volatile String mMyId;
-    public static volatile String mRoomId;
-    public static volatile ArrayList<Participant> mParticipants;
-
+    private String mMyId;
+    private String mRoomId;
+    private ArrayList<Participant> mParticipants;
 
     public static final int MIN_PLAYERS = 2;
     public static final int MAX_PLAYERS = 4;
-    private static GoogleRoom instance;
 
     private final MyGoogleSignIn myGoogleSignIn;
     private final GoogleAndroidGame googleAndroidGame;
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
-    private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler();
-    private final MessageReceiver defaultFirstReceiver = new ClientMessageReceiver(GoogleRoom.MAX_PLAYERS);
-    private final MessageReceiver defaultSecondReceiver = new ClientMessageReceiver(GoogleRoom.MAX_PLAYERS);
+    private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler(this);
+    private final MessageReceiver defaultFirstReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
+    private final MessageReceiver defaultSecondReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
 
-    private volatile Room room;
+    private Room room;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
     private RoomConfig config;
 
     private static String TAG = "GoogleS";
 
-    public ServerClientMessageHandler getServerClientMessageHandler() {
-        return serverClientMessageHandler;
+    public String getPlayerId() {
+        return mMyId;
     }
 
-    public static void createInstance(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
-        instance = new GoogleRoom(googleAndroidGame, myGoogleSignIn);
+    void leave() {
+        if (realTimeMultiplayerClient != null) {
+            realTimeMultiplayerClient.leave(config, mRoomId)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            reset();
+                        }
+                    });
+        }
+    }
+
+    public ServerClientMessageHandler getServerClientMessageHandler() {
+        return serverClientMessageHandler;
     }
 
     private void reset() {
         room = null;
         config = null;
         realTimeMultiplayerClient = null;
+        mRoomId = null;
+        mParticipants = null;
+        mMyId = null;
         serverClientMessageHandler.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
-        serverClientMessageHandler.setClient(null);
     }
 
-    public static GoogleRoom getInstance() {
-        if(instance == null)
-            throw new IllegalStateException("first create");
-        return instance;
-    }
-
-    private GoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
+    public MyGoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
         this.googleAndroidGame = googleAndroidGame;
         this.myGoogleSignIn = myGoogleSignIn;
         if(myGoogleSignIn.isSignedIn())
@@ -102,9 +113,11 @@ public class GoogleRoom {
 
     void updateRoom(Room room) {
         Log.d("PEPPE","Aggiorno la stanza");
+        setRoom(room);
+        Log.d("JUAN", Strings.nullToEmpty(mRoomId) + " -> " + room.getRoomId());
         mRoomId = room.getRoomId();
         mParticipants = room.getParticipants();
-        mMyId = room.getParticipantId(MyGoogleSignIn.getInstance().getPlayerId());
+        mMyId = room.getParticipantId(myGoogleSignIn.getPlayerId());
         //TODO
     }
 
@@ -135,12 +148,15 @@ public class GoogleRoom {
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
         reset();
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
-        serverClientMessageHandler.setClient(realTimeMultiplayerClient);
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
 
-
-
         config = RoomConfig.builder(myRoomUpdatedCallback)
+/*                .setOnMessageReceivedListener(new OnRealTimeMessageReceivedListener() {
+                    @Override
+                    public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
+                        Log.d("JUAN", "ricevo " + Arrays.toString(realTimeMessage.getMessageData()));
+                    }
+                })*/
                 .setOnMessageReceivedListener(serverClientMessageHandler)
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
                 .setAutoMatchCriteria(autoMatchCriteria)
