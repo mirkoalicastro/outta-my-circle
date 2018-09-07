@@ -17,7 +17,7 @@ public class DrawableComponentFactory{
     private Integer strokeColor;
     private Entity owner;
 
-    private DrawableShape shape = DrawableShape.RECTANGLE;
+    private DrawableShape shape = DrawableShape.CIRCLE;
     public enum DrawableShape{CIRCLE, RECTANGLE}
 
 
@@ -78,6 +78,12 @@ public class DrawableComponentFactory{
         return this;
     }
 
+    public void resetFactory(){
+        x = y = width = height = strokeWidth = -1;
+        pixmap = null; color = null; effect = null;
+        strokeColor = null; owner = null;
+    }
+
     public DrawableComponent makeComponent(){
         DrawableComponent component = null;
 
@@ -104,7 +110,7 @@ public class DrawableComponentFactory{
             if(strokeWidth > 0 && strokeColor != null)
                 graphics.drawCircleBorder(x,y,radius,strokeWidth,strokeColor);
             if(color != null)
-                graphics.drawCircle(x,y,radius,color);
+                graphics.drawCircle(x, y, radius, color);
             if(effect != null)
                 graphics.drawEffect(effect, x, y, width, height);
             if(pixmap != null)

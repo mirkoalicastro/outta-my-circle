@@ -2,6 +2,7 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 import android.graphics.Shader;
+import android.util.Log;
 
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
@@ -32,7 +33,6 @@ public class ServerScreen extends ClientServerScreen {
     private long previousTime = System.currentTimeMillis();
 
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
-    private final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
 
     private int[][] spawnPositions;
 
@@ -59,9 +59,6 @@ public class ServerScreen extends ClientServerScreen {
 
         status.setCharacters(characters);
         status.setPlayerOne(characters[0]);
-
-        initArenaSetting();
-        status.setArena(createArena());
 
         ContactHandler contactHandler = new ContactHandler();
         contactHandler.init();
@@ -127,7 +124,7 @@ public class ServerScreen extends ClientServerScreen {
             if (isOut(character)) {
                 status.dying.add(character);
                 iterator.remove();
-                //TODO elimina il body
+                disablePhysicsComponent(character);
             }
         }
         status.living.resetIterator();
@@ -150,11 +147,9 @@ public class ServerScreen extends ClientServerScreen {
         return delta > Converter.frameToPhysics(arenaRadius) + circle.getWidth()/4;
     }
 
-    private void initCharacterSettings(float r){
-        drawableComponentFactory.setGraphics(game.getGraphics())
-                .setStroke(6,Color.BLACK)
-                .setHeight((int)(r*2)).setWidth((int)(r*2))
-                .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
+    @Override
+    protected void initCharacterSettings(float r){
+        super.initCharacterSettings(r);
 
         physicsComponentFactory.setWorld(world).setDensity(1f).setFriction(1f).setRestitution(1f)
                 .setType(BodyType.dynamicBody).setShape(new CircleShape())
@@ -162,37 +157,14 @@ public class ServerScreen extends ClientServerScreen {
                 .setBullet(true).setSleepingAllowed(true);
     }
 
-    private GameCharacter createCharacter(int x, int y, int color){
-        GameCharacter gc = new GameCharacter();
+    @Override
+    protected GameCharacter createCharacter(int x, int y, int color){
+        GameCharacter gc = super.createCharacter(x, y, color);
 
-        drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
         physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y)).setOwner(gc);
-
         gc.addComponent(physicsComponentFactory.makeComponent());
-        gc.addComponent(drawableComponentFactory.makeComponent());
 
         return gc;
-    }
-
-    private void initArenaSetting(){
-        int x = frameWeight/2, y = frameHeight/2;
-
-        drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
-                .setX(x).setY(y)
-                .setEffect(new ComposerAndroidEffect(
-                        new RadialGradientEffect(x,y,arenaRadius,
-                                new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
-                                new float[]{0f,1f}, Shader.TileMode.CLAMP
-                        ),
-                        (AndroidEffect)Assets.arenaTile)
-                );
-    }
-
-    private Arena createArena(){
-        Arena arena = new Arena();
-        arena.addComponent(drawableComponentFactory.makeComponent());
-
-        return arena;
     }
 
     private void updateDrawablesPosition(){
@@ -212,14 +184,21 @@ public class ServerScreen extends ClientServerScreen {
     private void updateDyingRadius(){
         int diam;
         DrawableComponent component = null;
-        for(GameCharacter ch : status.dying) {
-            component = (DrawableComponent) ch.getComponent(Component.Type.Drawable);
+        Iterator<GameCharacter> iterator = status.dying.iterator();
+
+        while(iterator.hasNext()) {
+            GameCharacter ch = iterator.next();
+            component = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
             diam = component.getHeight();
             component.setHeight(diam - 1);
-            if(diam <= 0) {
-                //TODO e mo?
-            }
+
+            if(diam <= 0) iterator.remove();
         }
         status.dying.resetIterator();
+    }
+
+    private void disablePhysicsComponent(GameCharacter ch){
+        LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
+        component.deleteBody();
     }
 }

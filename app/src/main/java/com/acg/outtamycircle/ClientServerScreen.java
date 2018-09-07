@@ -7,12 +7,16 @@ import android.widget.Toast;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
+import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
+import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
+import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 
@@ -24,7 +28,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
-    protected int[][] spawnPositions;
+    protected final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
 
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
@@ -53,9 +57,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         setup();
         status = new GameStatus();
 
-        /*EntityFactory.setGraphics(game.getGraphics());
-
-        status.setArena(EntityFactory.createArena(arenaRadius, frameWeight/2, frameHeight /2));*/
+        drawableComponentFactory.setGraphics(game.getGraphics());
+        initArenaSettings();
+        status.setArena(createArena());
     }
 
     @Override
@@ -125,5 +129,46 @@ public abstract class ClientServerScreen extends AndroidScreen {
     public void back() {
         Toast.makeText(androidGame,"E mo che si fa?",Toast.LENGTH_SHORT).show();
         androidGame.setScreen(new MainMenuScreen(androidGame));
+    }
+
+    protected void initCharacterSettings(float r){
+        drawableComponentFactory.resetFactory();
+        drawableComponentFactory.setStroke(6,Color.BLACK)
+                .setHeight((int)(r*2)).setWidth((int)(r*2))
+                .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
+    }
+
+    private void initArenaSettings(){
+        drawableComponentFactory.resetFactory();
+        int x = frameWeight/2, y = frameHeight/2;
+
+        drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
+                .setX(x).setY(y)
+                .setEffect(new ComposerAndroidEffect(
+                        new RadialGradientEffect(x,y,arenaRadius,
+                                new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
+                                new float[]{0f,1f}, Shader.TileMode.CLAMP
+                        ),
+                        (AndroidEffect)Assets.arenaTile)
+                ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
+    }
+
+    //TODO spostare in clientserverscreen
+    private Arena createArena(){
+        Arena arena = new Arena();
+
+        drawableComponentFactory.setOwner(arena);
+        arena.addComponent(drawableComponentFactory.getComponent());
+
+        return arena;
+    }
+
+    protected GameCharacter createCharacter(int x, int y, int color){
+        GameCharacter gc = new GameCharacter();
+
+        drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
+        gc.addComponent(drawableComponentFactory.getComponent());
+
+        return gc;
     }
 }

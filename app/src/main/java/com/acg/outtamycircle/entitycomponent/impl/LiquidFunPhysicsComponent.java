@@ -50,4 +50,9 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
 
     public float getWidth(){ return width; }
     public float getHeight(){ return height; }
+
+    public void deleteBody(){
+        body.getWorld().destroyBody(body);
+        body.delete();
+    }
 }
