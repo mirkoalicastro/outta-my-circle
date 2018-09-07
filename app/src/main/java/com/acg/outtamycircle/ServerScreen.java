@@ -12,6 +12,7 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
@@ -29,21 +30,14 @@ public class ServerScreen extends ClientServerScreen {
     private static final float TIME_STEP = 1 / 60f;   //60 fps
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
-
-    private long previousTime = System.currentTimeMillis();
-
+    protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
-    private int[][] spawnPositions;
-
-    public ServerScreen(AndroidGame game, long []ids) {
-        super(game, ids);
+    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions, byte[] attacks) {
+        super(game, myGoogleRoom, players, skins, spawnPositions);
+        this.attacks = attacks;
 
         world = new World(0, 0);
-
-        /*Inizializzazione Giocatori*/
-        spawnPositions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, 4);
-
 
         /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWeight/2, frameHeight/2);
         status.setPowerup(pu);*/

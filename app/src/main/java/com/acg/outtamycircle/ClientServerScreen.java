@@ -10,6 +10,7 @@ import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
@@ -33,11 +34,19 @@ public abstract class ClientServerScreen extends AndroidScreen {
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
-
     protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100);
+    protected final MyGoogleRoom myGoogleRoom;
+    protected final String[] players;
+    protected final short[] skins;
+    protected final int[][] spawnPositions;
 
-    public ClientServerScreen(AndroidGame game, long[] ids) {
+    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions) {
         super(game);
+        this.myGoogleRoom = myGoogleRoom;
+        this.players = players;
+        this.skins = skins;
+        this.spawnPositions = spawnPositions;
+
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
                 .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
                         new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
@@ -52,7 +61,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         frameHeight = game.getGraphics().getHeight();
         frameWeight = game.getGraphics().getWidth();
-        arenaRadius = frameHeight /2 - 40;
+        arenaRadius = frameHeight/2 - 40;
 
         setup();
         status = new GameStatus();
@@ -158,7 +167,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         Arena arena = new Arena();
 
         drawableComponentFactory.setOwner(arena);
-        arena.addComponent(drawableComponentFactory.getComponent());
+        arena.addComponent(drawableComponentFactory.makeComponent());
 
         return arena;
     }
@@ -167,7 +176,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         GameCharacter gc = new GameCharacter();
 
         drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
-        gc.addComponent(drawableComponentFactory.getComponent());
+        gc.addComponent(drawableComponentFactory.makeComponent());
 
         return gc;
     }

@@ -10,6 +10,11 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class PreMatchScreen extends AndroidScreen {
 
     private int readMessages = 0;
@@ -25,7 +30,8 @@ public class PreMatchScreen extends AndroidScreen {
     private String[] players;
     private short[] skins;
     private byte[] attacks;
-    private int[][] positions;
+    private int[][] spawnPositions;
+    private final Map<String, Short> orderedPlayers = new HashMap<>();
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
@@ -35,6 +41,10 @@ public class PreMatchScreen extends AndroidScreen {
         players = new String[numOpponents+1];
         skins = new short[numOpponents+1];
         attacks = new byte[numOpponents+1];
+        ArrayList<String> ids = myGoogleRoom.getRoom().getParticipantIds();
+        Collections.sort(ids);
+        for(String s: ids)
+            orderedPlayers.put(s,(short)orderedPlayers.size());
         androidGame.getGraphics().clear(Color.BLACK);
     }
 
@@ -58,30 +68,57 @@ public class PreMatchScreen extends AndroidScreen {
                     broadcastInit();
                 else
                     clientGetInit();
+                break;
+            case 4:
+                goMatchScreen();
+                break;
         }
     }
 
+    private void goMatchScreen() {
+        if(myGoogleRoom.isServer())
+            androidGame.setScreen(new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks));
+        else
+            androidGame.setScreen(new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions));
+    }
+
     private void broadcastInit() {
-        Log.d("FINE", "broadcast");
+        ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
+        for(short i=0; i<numOpponents+1; i++) {
+            GameMessage gameMessage = new GameMessage(); //TODO new??
+            interpreter.makeCreateMessage(gameMessage, i, spawnPositions[i][0],spawnPositions[i][1],skins[i]);
+            handler.putInBuffer(gameMessage);
+            handler.broadcastReliable();
+        }
     }
 
     private void clientGetInit() {
-        Log.d("FINE", "client");
+        if(readMessages < numOpponents+1) {
+            for(GameMessage message: myGoogleRoom.getServerClientMessageHandler().getMessages()) {
+                //TODO leggi
+                readMessages++;
+            }
+        }
+        if(readMessages > numOpponents) {
+            //ho finito di leggere
+        }
     }
 
     private void serverGetInit() {
+        if(readMessages == 0) {
+            int offset = orderedPlayers.get(myGoogleRoom.getPlayerId());
+            spawnPositions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, numOpponents+1);
+            players[offset] = myGoogleRoom.getPlayerId();
+            skins[offset] = myGoogleRoom.getCurrentIdSkin();
+            attacks[offset] = myGoogleRoom.getCurrentIdAttack();
+            readMessages++;
+        }
         if(readMessages < numOpponents+1) {
-            if(readMessages == 0) {
-                positions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, numOpponents+1);
-                players[0] = myGoogleRoom.getPlayerId();
-                skins[0] = myGoogleRoom.getCurrentIdSkin();
-                attacks[0] = myGoogleRoom.getCurrentIdAttack();
-                readMessages++;
-            }
             for(GameMessage message: myGoogleRoom.getServerClientMessageHandler().getMessages()) {
-                players[readMessages] = message.getSender();
-                skins[readMessages] = interpreter.getInitClientSkinId(message);
-                attacks[readMessages] = interpreter.getInitClientAttackId(message);
+                int offset = orderedPlayers.get(message.getSender());
+                players[offset] = message.getSender();
+                skins[offset] = interpreter.getInitClientSkinId(message);
+                attacks[offset] = interpreter.getInitClientAttackId(message);
                 readMessages++;
             }
         }
@@ -103,6 +140,7 @@ public class PreMatchScreen extends AndroidScreen {
         interpreter.makeHostOrClientMessage(gameMessage, this.time);
         handler.putInBuffer(gameMessage);
         handler.broadcastReliable();
+        readMessages = 0;
         phase++;
     }
 
@@ -125,6 +163,7 @@ public class PreMatchScreen extends AndroidScreen {
 
         handler.putInBuffer(gameMessage);
         handler.sendReliable(myGoogleRoom.getServerId());
+        readMessages = 0;
         phase++;
     }
 
