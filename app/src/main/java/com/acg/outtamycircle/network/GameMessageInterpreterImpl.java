@@ -9,7 +9,7 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
 
     // INIT
     private static final int INIT_SKIN_ID_IDX = 1;
-    private static final int ATTACK_ID_IDX = 3;
+    private static final int ATTACK_ID_IDX = 2;
 
     // CREATE
     private static final int CREATE_SKIN_ID_IDX = 11;
@@ -32,46 +32,55 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     public int getObjectId(GameMessage message){
         return message.getShortAt(OBJECT_ID_IDX);
     }
-    
+
+    @Override
     public short getInitClientSkinId(GameMessage message){
         return message.getShortAt(INIT_SKIN_ID_IDX);
     }
 
+    @Override
     public byte getInitClientAttackId(GameMessage message){
         return message.getByteAt(ATTACK_ID_IDX);
     }
 
+    @Override
     public float getPosX(GameMessage message){
         return message.getFloatAt(POS_X_IDX);
     }
 
+    @Override
     public float getPosY(GameMessage message){
         return message.getFloatAt(POS_Y_IDX);
     }
 
+    @Override
     public short getSkinId(GameMessage message){
         return message.getShortAt(CREATE_SKIN_ID_IDX);
     }
 
+    @Override
     public float getRotation(GameMessage message){
         return message.getFloatAt(ROTATION_IDX);
     }
 
+    @Override
     public byte getPowerUpId(GameMessage message){
         return message.getByteAt(POWER_UP_IDX);
     }
 
+    @Override
     public int getTimeMillis(GameMessage message){
         return message.getIntAt(HOST_OR_CLIENT_IDX);
     }
 
     /*------------ WRITER ------------*/
 
-    public void makeMessage(GameMessage message, GameMessage.Type type) {
+    private void makeMessage(GameMessage message, GameMessage.Type type) {
         message.putByte(MESSAGE_TYPE_IDX, (byte)(type.ordinal()));
     }
 
-    public void makeMessage(GameMessage message, GameMessage.Type type, int objectId) {
+
+    private void makeMessage(GameMessage message, GameMessage.Type type, int objectId) {
         makeMessage(message, type);
         message.putShort(OBJECT_ID_IDX, (short) objectId);
     }
@@ -133,6 +142,10 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
         message.putInt(HOST_OR_CLIENT_IDX, time);
     }
 
+    @Override
+    public void makeStartMessage(GameMessage message){
+        makeMessage(message, GameMessage.Type.START);
+    }
 
     //TODO remove
     public String toString(GameMessage message){

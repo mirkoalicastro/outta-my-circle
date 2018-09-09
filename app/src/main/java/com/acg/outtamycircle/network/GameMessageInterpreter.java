@@ -16,6 +16,22 @@ public interface GameMessageInterpreter {
 
     /*------------ WRITER ------------*/
 
+    short getInitClientSkinId(GameMessage message);
+
+    byte getInitClientAttackId(GameMessage message);
+
+    float getPosX(GameMessage message);
+
+    float getPosY(GameMessage message);
+
+    short getSkinId(GameMessage message);
+
+    float getRotation(GameMessage message);
+
+    byte getPowerUpId(GameMessage message);
+
+    int getTimeMillis(GameMessage message);
+
     //TODO
     void makeInitClientMessage(GameMessage gameMessage, short skinId, byte attackId);
 
@@ -36,4 +52,6 @@ public interface GameMessageInterpreter {
     void makeEndMessage(GameMessage gameMessage, short winnerId);
 
     void makeHostOrClientMessage(GameMessage message, int time);
+
+    void makeStartMessage(GameMessage message);
 }

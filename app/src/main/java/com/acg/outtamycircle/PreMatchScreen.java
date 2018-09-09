@@ -88,9 +88,10 @@ public class PreMatchScreen extends AndroidScreen {
     private void sendStart() {
         ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
         GameMessage gameMessage = new GameMessage(); //TODO ogni volta new?
-//        interpreter.makeHostOrClientMessage(gameMessage, this.time); TODO make start message
+        interpreter.makeStartMessage(gameMessage); //TODO make start message
         handler.putInBuffer(gameMessage);
         handler.broadcastReliable();
+        handler.clearBuffer();
         //TODO devo aspettare?
         androidGame.setScreen(nextScreen);
     }
@@ -98,9 +99,10 @@ public class PreMatchScreen extends AndroidScreen {
     private void receiveStart() {
         boolean start = false;
         for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
-            // interpreter.getStart() TODO
-            start = true;
-            break;
+            if(message.getType()== GameMessage.Type.START) {
+                start = true;
+                break;
+            }
         }
         if(start)
             androidGame.setScreen(nextScreen);
@@ -124,10 +126,15 @@ public class PreMatchScreen extends AndroidScreen {
             interpreter.makeCreateMessage(gameMessage, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
             handler.putInBuffer(gameMessage);
             handler.broadcastReliable(); //TODO carico tutto e poi faccio un broadcast?
+            handler.clearBuffer();
         }
+        nextPhase();
     }
 
     private void clientGetInit() {
+        if(spawnPositions==null){
+            spawnPositions = new int[numOpponents+1][2];
+        }
         if(readMessages < numOpponents+1) {
             for(GameMessage message: myGoogleRoom.getServerClientMessageHandler().getMessages()) {
                 int offset = interpreter.getObjectId(message);
@@ -180,7 +187,7 @@ public class PreMatchScreen extends AndroidScreen {
         interpreter.makeHostOrClientMessage(gameMessage, this.time);
         handler.putInBuffer(gameMessage);
         handler.broadcastReliable();
-
+        handler.clearBuffer();
         nextPhase();
     }
 
@@ -202,6 +209,7 @@ public class PreMatchScreen extends AndroidScreen {
         ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
         handler.putInBuffer(gameMessage);
         handler.sendReliable(myGoogleRoom.getServerId());
+        handler.clearBuffer();
 
         nextPhase();
     }
@@ -233,7 +241,7 @@ public class PreMatchScreen extends AndroidScreen {
     @Override
     public void present(float deltaTime) {
         androidGame.getGraphics().clear(Color.BLACK);
-        androidGame.getGraphics().drawText("ASHPETTO " + Math.random(),100,100,30,0xFFCA1111);
+        androidGame.getGraphics().drawText("ASHPETTO " + "phase: "+phase+" readMessages: "+readMessages /*Math.random()*/,100,100,30,0xFFCA1111);
     }
 
     /**

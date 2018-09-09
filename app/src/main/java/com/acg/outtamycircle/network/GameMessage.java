@@ -59,14 +59,15 @@ public class GameMessage {
      */
     public enum Type {
         //TODO message length and type description
-        INIT_CLIENT((byte)4),
-        CREATE((byte)13),
+        INIT_CLIENT((byte)3),
+        CREATE((byte)12),
         DESTROY((byte)3),
         MOVE_SERVER((byte)15),
         MOVE_CLIENT((byte)11),
         POWERUP((byte)12),
-        POWERUP_ASSIGN((byte)0), //TODO
+        POWERUP_ASSIGN((byte)4), //TODO
         ATTACK((byte)3),
+        START((byte)1),
         END((byte)3),
         HOST_OR_CLIENT((byte)5); //TODO length
 

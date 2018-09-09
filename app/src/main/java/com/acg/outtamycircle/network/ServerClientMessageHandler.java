@@ -21,7 +21,7 @@ import java.util.List;
 public class ServerClientMessageHandler implements NetworkMessageHandler {
     private static final int MAX_BUFFER_SIZE = 400; //TODO
     private static final byte ENDING_CHAR = 127;
-    private static final int DEFAULT_CAPACITY = 30;
+    private static final int DEFAULT_CAPACITY = 50;
 
     private MessageReceiver first, second;
     private Pools.Pool<GameMessage> pool;
@@ -60,8 +60,9 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
 
     @Override
     public void sendReliable(final String playerId) {
+        byte toSend[] = Arrays.copyOf(buffer,currentBufferSize); //TODO no allocation!
         final Task<Integer> sendTask = myGoogleRoom.getRealTimeMultiplayerClient()
-                .sendReliableMessage(buffer, myGoogleRoom.getRoom().getRoomId(), playerId, mywtf);
+                .sendReliableMessage(toSend, myGoogleRoom.getRoom().getRoomId(), playerId, mywtf);
         //TODO Check
         sendTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -140,7 +141,7 @@ public class ServerClientMessageHandler implements NetworkMessageHandler {
         int cursor = 0;
 
         while( cursor < messageData.length && messageData[cursor]!=ENDING_CHAR) {
-            GameMessage gameMessage = pool.acquire();
+            GameMessage gameMessage = new GameMessage();//pool.acquire(); //TODO pool handle
             gameMessage.setSender(realTimeMessage.getSenderParticipantId());
             int length = GameMessage.Type.values()[messageData[cursor]].length;
             gameMessage.copyBuffer(messageData, cursor, cursor + length - 1); //TODO check
