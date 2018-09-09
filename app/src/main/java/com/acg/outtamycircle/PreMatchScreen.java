@@ -6,7 +6,9 @@ import android.util.Log;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.ServerClientMessageHandler;
+import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
+import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
@@ -17,21 +19,24 @@ import java.util.Map;
 
 public class PreMatchScreen extends AndroidScreen {
 
+    private final Map<String, Short> orderedPlayers = new HashMap<>();
+
     private int readMessages = 0;
+    private int phase = 0;
+
     private int time;
     private String winnerId;
-    private int phase = 0;
+
     private final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
     private final MyGoogleRoom myGoogleRoom;
     private final int numOpponents;
-    private final int frameWeight = game.getGraphics().getWidth();
-    private final int frameHeight = game.getGraphics().getHeight();
-    private final int arenaRadius = frameHeight/2 - 40;
-    private String[] players;
+
     private short[] skins;
     private byte[] attacks;
     private int[][] spawnPositions;
-    private final Map<String, Short> orderedPlayers = new HashMap<>();
+    private String[] players;
+
+    private ClientServerScreen nextScreen;
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
@@ -70,44 +75,77 @@ public class PreMatchScreen extends AndroidScreen {
                     clientGetInit();
                 break;
             case 4:
-                goMatchScreen();
+                createMatchScreen();
                 break;
+            case 5:
+                if(myGoogleRoom.isServer())
+                    sendStart();
+                else
+                    receiveStart();
         }
     }
 
-    private void goMatchScreen() {
-        if(myGoogleRoom.isServer())
-            androidGame.setScreen(new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks));
-        else
-            androidGame.setScreen(new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions));
+    private void sendStart() {
+        ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
+        GameMessage gameMessage = new GameMessage(); //TODO ogni volta new?
+//        interpreter.makeHostOrClientMessage(gameMessage, this.time); TODO make start message
+        handler.putInBuffer(gameMessage);
+        handler.broadcastReliable();
+        //TODO devo aspettare?
+        androidGame.setScreen(nextScreen);
+    }
+
+    private void receiveStart() {
+        boolean start = false;
+        for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
+            // interpreter.getStart() TODO
+            start = true;
+            break;
+        }
+        if(start)
+            androidGame.setScreen(nextScreen);
+    }
+
+    private void createMatchScreen() {
+        if(myGoogleRoom.isServer()) {
+            myGoogleRoom.getServerClientMessageHandler().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
+            nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks);
+        } else {
+            myGoogleRoom.getServerClientMessageHandler().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile?
+            nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions);
+        }
+        nextPhase();
     }
 
     private void broadcastInit() {
         ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
         for(short i=0; i<numOpponents+1; i++) {
             GameMessage gameMessage = new GameMessage(); //TODO new??
-            interpreter.makeCreateMessage(gameMessage, i, spawnPositions[i][0],spawnPositions[i][1],skins[i]);
+            interpreter.makeCreateMessage(gameMessage, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
             handler.putInBuffer(gameMessage);
-            handler.broadcastReliable();
+            handler.broadcastReliable(); //TODO carico tutto e poi faccio un broadcast?
         }
     }
 
     private void clientGetInit() {
         if(readMessages < numOpponents+1) {
             for(GameMessage message: myGoogleRoom.getServerClientMessageHandler().getMessages()) {
-                //TODO leggi
+                int offset = interpreter.getObjectId(message);
+                spawnPositions[offset][0] = (int)interpreter.getPosX(message);
+                spawnPositions[offset][1] = (int)interpreter.getPosY(message);
+                skins[offset] = interpreter.getSkinId(message);
+                players[offset] = message.getSender();
                 readMessages++;
             }
         }
-        if(readMessages > numOpponents) {
-            //ho finito di leggere
-        }
+        if(readMessages > numOpponents)
+            nextPhase();
     }
 
     private void serverGetInit() {
         if(readMessages == 0) {
             int offset = orderedPlayers.get(myGoogleRoom.getPlayerId());
-            spawnPositions = distributePoints(arenaRadius -40, frameWeight/2, frameHeight /2, numOpponents+1);
+            spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, numOpponents+1);
             players[offset] = myGoogleRoom.getPlayerId();
             skins[offset] = myGoogleRoom.getCurrentIdSkin();
             attacks[offset] = myGoogleRoom.getCurrentIdAttack();
@@ -122,10 +160,13 @@ public class PreMatchScreen extends AndroidScreen {
                 readMessages++;
             }
         }
-        if(readMessages >= numOpponents) {
-            readMessages = 0;
-            phase++;
-        }
+        if(readMessages > numOpponents)
+            nextPhase();
+    }
+
+    private void nextPhase() {
+        readMessages = 0;
+        phase++;
     }
 
     private void sendTime() {
@@ -136,12 +177,11 @@ public class PreMatchScreen extends AndroidScreen {
 
         ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
         GameMessage gameMessage = new GameMessage(); //TODO ogni volta new?
-
         interpreter.makeHostOrClientMessage(gameMessage, this.time);
         handler.putInBuffer(gameMessage);
         handler.broadcastReliable();
-        readMessages = 0;
-        phase++;
+
+        nextPhase();
     }
 
     private void naivePrimeTest(int k) {
@@ -160,11 +200,10 @@ public class PreMatchScreen extends AndroidScreen {
         GameMessage gameMessage = new GameMessage();
         interpreter.makeInitClientMessage(gameMessage, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
         ServerClientMessageHandler handler = myGoogleRoom.getServerClientMessageHandler();
-
         handler.putInBuffer(gameMessage);
         handler.sendReliable(myGoogleRoom.getServerId());
-        readMessages = 0;
-        phase++;
+
+        nextPhase();
     }
 
     private void choose() {
@@ -174,8 +213,7 @@ public class PreMatchScreen extends AndroidScreen {
         if(readMessages < numOpponents) {
             for(GameMessage message: myGoogleRoom.getServerClientMessageHandler().getMessages()) {
                 int itsTime = interpreter.getTimeMillis(message);
-                Log.d("AGLIO", "Ricevo " + itsTime + " da  " + message.getSender() + " (rispetto a " + time + ")");
-                if(itsTime < time) {
+                if(itsTime < time || (itsTime == time && message.getSender().compareTo(winnerId) < 0)) {
                     time = itsTime;
                     winnerId = message.getSender();
                 }
@@ -183,14 +221,12 @@ public class PreMatchScreen extends AndroidScreen {
             }
         }
         if(readMessages >= numOpponents) {
-            if (winnerId.equals(myGoogleRoom.getPlayerId())) {
+            if (winnerId.equals(myGoogleRoom.getPlayerId()))
                 Log.d("MAMMAMIA", "sono server");
-            } else {
+            else
                 Log.d("MAMMAMIA", "sono client");
-            }
             myGoogleRoom.setServerId(winnerId);
-            phase++;
-            readMessages = 0;
+            nextPhase();
         }
     }
 
