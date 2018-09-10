@@ -1,25 +1,16 @@
 package com.acg.outtamycircle;
 
-import android.graphics.Color;
-import android.graphics.Shader;
-import android.util.Log;
-
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
-import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
 import com.badlogic.androidgames.framework.Pixmap;
-import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
-import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
-import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.World;
@@ -35,13 +26,16 @@ public class ServerScreen extends ClientServerScreen {
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
+    private float sxX, dxX, downY, upY;
+    private float arenaX, arenaY;
+
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions, byte[] attacks) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
         this.attacks = attacks;
 
         world = new World(0, 0);
 
-        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWeight/2, frameHeight/2);
+        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWidth/2, frameHeight/2);
         status.setPowerup(pu);*/
 
         initCharacterSettings(40);
@@ -61,6 +55,8 @@ public class ServerScreen extends ClientServerScreen {
         contactHandler.init();
 
         world.setContactListener(contactHandler);
+
+        initArenaBounds();
 
         //TODO comunica posizioni etc.
     }
@@ -100,7 +96,7 @@ public class ServerScreen extends ClientServerScreen {
 
     @Override
     public void setup(){
-        Converter.setScale(frameWeight, frameHeight);
+        Converter.setScale(frameWidth, frameHeight);
     }
 
     private void updateCharactersStatus(){
@@ -121,9 +117,8 @@ public class ServerScreen extends ClientServerScreen {
         float chX = circle.getX();
         float chY = circle.getY();
 
-        DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
-        float arenaX = Converter.frameToPhysics(arenaDrawable.getX());
-        float arenaY = Converter.frameToPhysics(arenaDrawable.getY());
+        if(chX > dxX || chX < sxX || chY > upY || chY < downY)
+            return false;
 
         float deltaX = (chX - arenaX)*(chX - arenaX);
         float deltaY = (chY - arenaY)*(chY - arenaY);
@@ -200,5 +195,15 @@ public class ServerScreen extends ClientServerScreen {
         }
         status.living.resetIterator();
         myGoogleRoom.getServerClientMessageHandler().broadcastUnreliable();
+    }
+
+    private void initArenaBounds(){
+        double l = (arenaRadius*Math.sqrt(2))/2;
+        arenaX = Converter.frameToPhysics(frameHeight/2);
+        arenaY = Converter.frameToPhysics(frameWidth/2);
+        dxX = (float)(arenaX + l);
+        sxX = (float)(arenaX - l);
+        upY = (float)(arenaY + l);
+        downY = (float)(arenaY - l);
     }
 }

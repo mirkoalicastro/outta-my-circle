@@ -27,7 +27,7 @@ import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
     protected GameStatus status;
-    protected int frameHeight, frameWeight, arenaRadius; //height, width, radius
+    protected int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
@@ -64,7 +64,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 .setStroke(15, Color.BLACK);
 
         frameHeight = game.getGraphics().getHeight();
-        frameWeight = game.getGraphics().getWidth();
+        frameWidth = game.getGraphics().getWidth();
         arenaRadius = frameHeight/2 - 40;
 
         setup();
@@ -153,7 +153,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private void initArenaSettings(){
         drawableComponentFactory.resetFactory();
-        int x = frameWeight/2, y = frameHeight/2;
+        int x = frameWidth /2, y = frameHeight/2;
 
         drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
                 .setX(x).setY(y)
