@@ -26,8 +26,8 @@ public class ServerScreen extends ClientServerScreen {
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
-    private float x_sx, x_dx, y_dwn, y_up;
-    private float x_a, y_a;
+    private float sxX, dxX, downY, upY;
+    private float arenaX, arenaY;
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions, byte[] attacks) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
@@ -117,12 +117,8 @@ public class ServerScreen extends ClientServerScreen {
         float chX = circle.getX();
         float chY = circle.getY();
 
-        if(chX > x_dx || chX < x_sx || chY > y_up || chY < y_dwn)
+        if(chX > dxX || chX < sxX || chY > upY || chY < downY)
             return false;
-
-        DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
-        float arenaX = Converter.frameToPhysics(arenaDrawable.getX());
-        float arenaY = Converter.frameToPhysics(arenaDrawable.getY());
 
         float deltaX = (chX - arenaX)*(chX - arenaX);
         float deltaY = (chY - arenaY)*(chY - arenaY);
@@ -203,11 +199,11 @@ public class ServerScreen extends ClientServerScreen {
 
     private void initArenaBounds(){
         double l = (arenaRadius*Math.sqrt(2))/2;
-        x_a = Converter.frameToPhysics(frameHeight/2);
-        y_a = Converter.frameToPhysics(frameWidth/2);
-        x_dx = (float)(x_a + l);
-        x_sx = (float)(x_a - l);
-        y_up = (float)(y_a + l);
-        y_dwn = (float)(y_a - l);
+        arenaX = Converter.frameToPhysics(frameHeight/2);
+        arenaY = Converter.frameToPhysics(frameWidth/2);
+        dxX = (float)(arenaX + l);
+        sxX = (float)(arenaX - l);
+        upY = (float)(arenaY + l);
+        downY = (float)(arenaY - l);
     }
 }
