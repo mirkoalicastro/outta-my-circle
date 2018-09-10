@@ -29,7 +29,7 @@ public class ServerScreen extends ClientServerScreen {
     private float sxX, dxX, downY, upY;
     private float arenaX, arenaY;
 
-    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions, byte[] attacks) {
+    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
         this.attacks = attacks;
 
@@ -66,7 +66,7 @@ public class ServerScreen extends ClientServerScreen {
         super.update(deltaTime);
         GameCharacter ch;
 
-        for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
+        for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
             switch (interpreter.getType(message)){
                 case MOVE_CLIENT:
                     ch = status.characters[interpreter.getObjectId(message)];
@@ -185,16 +185,17 @@ public class ServerScreen extends ClientServerScreen {
 
     private void sendStatus(){
         DrawableComponent shape;
-        GameMessage message = new GameMessage(); //TODO usare pool
+        GameMessage message = GameMessage.createInstance(); //TODO usare pool
 
         for(GameCharacter ch : status.living){
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
 
             interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
-            myGoogleRoom.getServerClientMessageHandler().putInBuffer(message);
+            myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
         }
         status.living.resetIterator();
-        myGoogleRoom.getServerClientMessageHandler().broadcastUnreliable();
+        myGoogleRoom.getNetworkMessageHandlerImpl().broadcastUnreliable();
+        GameMessage.deleteInstance(message);
     }
 
     private void initArenaBounds(){
