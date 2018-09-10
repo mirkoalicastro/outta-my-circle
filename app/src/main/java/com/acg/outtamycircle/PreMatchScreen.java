@@ -37,6 +37,8 @@ public class PreMatchScreen extends AndroidScreen {
     private String[] players;
 
     private ClientServerScreen nextScreen;
+    private boolean start;
+
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
@@ -97,7 +99,6 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void receiveStart() {
-        boolean start = false;
         for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
             if(message.getType()== GameMessage.Type.START) {
                 start = true;
@@ -142,6 +143,8 @@ public class PreMatchScreen extends AndroidScreen {
                 spawnPositions[offset][1] = (int)interpreter.getPosY(message);
                 skins[offset] = interpreter.getSkinId(message);
                 players[offset] = message.getSender();
+                if(message.getType() == GameMessage.Type.START)
+                    start = true;
                 readMessages++;
             }
         }
