@@ -48,6 +48,7 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.start = graphics.newPixmap("start.png", PixmapFormat.ARGB8888);
         Assets.back = graphics.newPixmap("back.png", PixmapFormat.ARGB8888);
         Assets.quickGame = graphics.newPixmap("quickgame.png", PixmapFormat.ARGB8888);
+        Assets.random = graphics.newPixmap("random.png", PixmapFormat.ARGB8888);
         setProgress(50);
         Assets.sound = graphics.newPixmap("sound.png", PixmapFormat.ARGB8888);
         Assets.nosound = graphics.newPixmap("nosound.png", PixmapFormat.ARGB8888);

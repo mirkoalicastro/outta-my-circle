@@ -34,8 +34,8 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public short getInitClientSkinId(GameMessage message){
-        return message.getShortAt(INIT_SKIN_ID_IDX);
+    public byte getInitClientSkinId(GameMessage message){
+        return message.getByteAt(INIT_SKIN_ID_IDX);
     }
 
     @Override
@@ -54,8 +54,8 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public short getSkinId(GameMessage message){
-        return message.getShortAt(CREATE_SKIN_ID_IDX);
+    public byte getSkinId(GameMessage message){
+        return message.getByteAt(CREATE_SKIN_ID_IDX);
     }
 
     @Override
@@ -86,15 +86,15 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public void makeInitClientMessage(GameMessage message, short skinId, byte attackId) {
+    public void makeInitClientMessage(GameMessage message, byte skinId, byte attackId) {
         makeMessage(message, GameMessage.Type.INIT_CLIENT);
-        message.putShort(INIT_SKIN_ID_IDX, skinId).putByte(ATTACK_ID_IDX, attackId);
+        message.putByte(INIT_SKIN_ID_IDX, skinId).putByte(ATTACK_ID_IDX, attackId);
     }
 
     @Override
-    public void makeCreateMessage(GameMessage message, short objectId, float posX, float posY, short skinId) {
+    public void makeCreateMessage(GameMessage message, short objectId, float posX, float posY, byte skinId) {
         makeMessage(message, GameMessage.Type.CREATE, objectId);
-        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY).putShort(CREATE_SKIN_ID_IDX, skinId);
+        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY).putByte(CREATE_SKIN_ID_IDX, skinId);
     }
 
     @Override

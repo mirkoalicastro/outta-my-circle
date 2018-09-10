@@ -39,12 +39,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100);
     protected final MyGoogleRoom myGoogleRoom;
     protected final String[] players;
-    protected final short[] skins;
+    protected final byte[] skins;
     protected final int[][] spawnPositions;
 
     protected final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
 
-    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions) {
+    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions) {
         super(game);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;

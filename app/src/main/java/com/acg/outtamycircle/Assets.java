@@ -25,6 +25,7 @@ public class Assets {
     public static Pixmap leftArrow;
     public static Pixmap swordsWhite;
     public static Pixmap swordsBlack;
+    public static Pixmap random;
     public static Effect backgroundTile;
     public static Effect arenaTile;
     public static Sound click;

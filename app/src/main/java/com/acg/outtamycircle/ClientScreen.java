@@ -1,15 +1,15 @@
 package com.acg.outtamycircle;
 
-import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 
 public class ClientScreen extends ClientServerScreen {
-    public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions) {
+    public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
 
+        super.drawableComponentFactory.resetFactory(); //TODO inutile
         initCharacterSettings(40);
 
         GameCharacter[] characters = new GameCharacter[players.length];
@@ -24,7 +24,7 @@ public class ClientScreen extends ClientServerScreen {
         super.update(deltaTime);
         GameCharacter ch;
 
-        for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
+        for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
             switch (interpreter.getType(message)){
                 case MOVE_CLIENT:
                     break;

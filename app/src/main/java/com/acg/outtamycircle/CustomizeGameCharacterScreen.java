@@ -15,7 +15,7 @@ import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
 public class CustomizeGameCharacterScreen extends AndroidScreen {
-    private short currentIdSkin = 0;
+    private byte currentIdSkin = 0;
     private byte currentIdAttack = 0;
 
     private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
@@ -66,7 +66,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                     Assets.click.play(Settings.volume);
                 break;
             } else if(rightSkin.inBounds(event)) {
-                if(currentIdSkin < Assets.skins.length-1) {
+                if(currentIdSkin < Assets.skins.length) {
                     currentIdSkin++;
                     unchanged = false;
                     if(Settings.soundEnabled)
@@ -80,7 +80,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                         Assets.click.play(Settings.volume);
                 }
             } else if (rightAttack.inBounds(event)) {
-                if(currentIdAttack < Assets.attacks.length-1) {
+                if(currentIdAttack < Assets.attacks.length) {
                     currentIdAttack++;
                     unchanged = false;
                     if(Settings.soundEnabled)
@@ -100,12 +100,18 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         }
         if(goForward) {
-//            androidGame.setScreen(new ServerScreen(androidGame, new long[]{0, 1, 2, 3})); //TODO generalizzare
+//            int[][] spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, 2);
+//            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}));
         }
         if(rom) {
             fakeButton.enable(false);
-            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,currentIdSkin,currentIdAttack);
-            return;
+            byte definitiveIdSkin = currentIdSkin;
+            byte definitiveIdAttack = currentIdAttack;
+            if(definitiveIdSkin == Assets.skins.length)
+                definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
+            if(definitiveIdAttack == Assets.attacks.length)
+                definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
+            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack);
         }
     }
 
@@ -119,15 +125,21 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         fakeButton.draw();
         quickGameButton.draw();
         backButton.draw();
-        graphics.drawText(androidGame.getString(R.string.select_player),520,150,40, android.graphics.Color.RED);
-        graphics.drawText(androidGame.getString(R.string.select_attack),500,350,40, android.graphics.Color.RED);
-        graphics.drawPixmap(Assets.skins[currentIdSkin], 590, 190);
-        if(currentIdSkin != Assets.skins.length-1)
+        graphics.drawText(androidGame.getString(R.string.select_player),520,150,40, Color.BLACK);
+        graphics.drawText(androidGame.getString(R.string.select_attack),500,350,40, Color.BLACK);
+        if(currentIdSkin == Assets.skins.length)
+            graphics.drawPixmap(Assets.random, 590, 190);
+        else
+            graphics.drawPixmap(Assets.skins[currentIdSkin], 590, 190);
+        if(currentIdSkin != Assets.skins.length)
             rightSkin.draw();
         if(currentIdSkin != 0)
             leftSkin.draw();
-        graphics.drawPixmap(Assets.attacks[currentIdAttack], 590, 390);
-        if(currentIdAttack != Assets.attacks.length-1)
+        if(currentIdAttack == Assets.attacks.length)
+            graphics.drawPixmap(Assets.random, 590, 390);
+        else
+            graphics.drawPixmap(Assets.attacks[currentIdAttack], 590, 390);
+        if(currentIdAttack != Assets.attacks.length)
             rightAttack.draw();
         if(currentIdAttack != 0)
             leftAttack.draw();
@@ -154,4 +166,5 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             Assets.click.play(Settings.volume);
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }
+
 }

@@ -8,14 +8,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.acg.outtamycircle.R;
-import com.acg.outtamycircle.network.ServerClientMessageHandler;
+import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
-import com.google.android.gms.games.multiplayer.Participant;
-import com.google.android.gms.games.multiplayer.realtime.OnRealTimeMessageReceivedListener;
-import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateCallback;
@@ -25,14 +22,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class MyGoogleRoom {
 
     private String mMyId;
     private String mRoomId;
-    private short currentIdSkin;
+    private byte currentIdSkin;
     private byte currentIdAttack;
 
     public static final int MIN_PLAYERS = 2;
@@ -42,7 +36,7 @@ public class MyGoogleRoom {
     private final GoogleAndroidGame googleAndroidGame;
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
-    private final ServerClientMessageHandler serverClientMessageHandler = new ServerClientMessageHandler(this);
+    private final NetworkMessageHandlerImpl networkMessageHandlerImpl = new NetworkMessageHandlerImpl(this);
     private final MessageReceiver defaultFirstReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
     private final MessageReceiver defaultSecondReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
 
@@ -70,7 +64,7 @@ public class MyGoogleRoom {
         return mMyId;
     }
 
-    public short getCurrentIdSkin() {
+    public byte getCurrentIdSkin() {
         return currentIdSkin;
     }
 
@@ -90,8 +84,8 @@ public class MyGoogleRoom {
         }
     }
 
-    public ServerClientMessageHandler getServerClientMessageHandler() {
-        return serverClientMessageHandler;
+    public NetworkMessageHandlerImpl getNetworkMessageHandlerImpl() {
+        return networkMessageHandlerImpl;
     }
 
     private void reset() {
@@ -100,7 +94,7 @@ public class MyGoogleRoom {
         realTimeMultiplayerClient = null;
         mRoomId = null;
         mMyId = null;
-        serverClientMessageHandler.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
+        networkMessageHandlerImpl.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
     }
 
     public MyGoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
@@ -160,7 +154,7 @@ public class MyGoogleRoom {
                 });
     }
 
-    public void quickGame(int min_players, int max_players, short currentIdSkin, byte currentIdAttack) {
+    public void quickGame(int min_players, int max_players, byte currentIdSkin, byte currentIdAttack) {
         if(!myGoogleSignIn.isSignedIn())
             throw new IllegalStateException("first login bitch"); //TODO non eccezione
         if(min_players < MIN_PLAYERS)
@@ -180,7 +174,7 @@ public class MyGoogleRoom {
                         Log.d("JUAN", "ricevo " + Arrays.toString(realTimeMessage.getMessageData()));
                     }
                 })*/
-                .setOnMessageReceivedListener(serverClientMessageHandler)
+                .setOnMessageReceivedListener(networkMessageHandlerImpl)
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
                 .setAutoMatchCriteria(autoMatchCriteria)
                 .build();
