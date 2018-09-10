@@ -13,10 +13,21 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
     private final GradualProgress thread;
 
     public abstract void doJob();
+    private final int delta;
 
     public AndroidLoadingScreen(AndroidGame androidGame) {
+        this(androidGame, 2);
+    }
+
+    /**
+     *
+     * @param androidGame
+     * @param delta how much it has to increase the percentage in order to reach the desidered value (Default: 2)
+     */
+    public AndroidLoadingScreen(AndroidGame androidGame, int delta) {
         super(androidGame);
         this.androidGame = androidGame;
+        this.delta = delta;
         progressValue = 0;
         animations = new LinkedList<>();
         thread = new GradualProgress();
@@ -68,10 +79,20 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
                         animations.remove();
                         continue;
                     }
-                    int delta = from < to ? 1 : -1;
-                    for (int i = from+delta; delta < 0 ? i >= to : i <= to; i += delta) {
-                        progressValue = i;
-                        onProgress(i);
+                    if(from < to) {
+                        for(int i=from; i+delta<to; i+=delta) {
+                            progressValue = i;
+                            onProgress(i);
+                        }
+                    } else {
+                        for(int i=from; i-delta>to; i-=delta) {
+                            progressValue = i;
+                            onProgress(i);
+                        }
+                    }
+                    if(progressValue != to) {
+                        progressValue = to;
+                        onProgress(to);
                     }
                     animations.remove();
                     animations.notifyAll();
