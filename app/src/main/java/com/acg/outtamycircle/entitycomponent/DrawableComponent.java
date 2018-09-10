@@ -1,8 +1,5 @@
 package com.acg.outtamycircle.entitycomponent;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
 import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;

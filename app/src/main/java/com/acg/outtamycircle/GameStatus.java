@@ -14,6 +14,7 @@ public class GameStatus {
     Powerup powerup;
 
     GameCharacter playerOne;
+    GameCharacter[] characters;
 
     final MyList<GameCharacter> living = new MyList<>();
     final MyList<GameCharacter> dying = new MyList<>();
@@ -27,6 +28,7 @@ public class GameStatus {
     public void setCharacters(GameCharacter ... characters){
         for(int i=0 ; i<characters.length ; i++)
             living.add(characters[i]);
+        this.characters = characters;
     }
 
     public void setPowerup(Powerup pu){ powerup = pu; }
