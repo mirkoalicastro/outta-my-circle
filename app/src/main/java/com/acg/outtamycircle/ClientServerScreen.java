@@ -10,9 +10,11 @@ import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
+import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
+import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
@@ -39,6 +41,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final String[] players;
     protected final short[] skins;
     protected final int[][] spawnPositions;
+
+    protected final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
 
     public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, short[] skins, int[][] spawnPositions) {
         super(game);
@@ -172,10 +176,10 @@ public abstract class ClientServerScreen extends AndroidScreen {
         return arena;
     }
 
-    protected GameCharacter createCharacter(int x, int y, int color){
-        GameCharacter gc = new GameCharacter();
+    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, short id){
+        GameCharacter gc = new GameCharacter(id);
 
-        drawableComponentFactory.setColor(color).setX(x).setY(y).setOwner(gc);
+        drawableComponentFactory.setPixmap(pixmap).setX(x).setY(y).setOwner(gc);
         gc.addComponent(drawableComponentFactory.makeComponent());
 
         return gc;

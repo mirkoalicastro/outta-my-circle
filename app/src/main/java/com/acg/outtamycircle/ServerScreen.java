@@ -12,8 +12,10 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
+import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
@@ -43,16 +45,17 @@ public class ServerScreen extends ClientServerScreen {
         status.setPowerup(pu);*/
 
         initCharacterSettings(40);
-
-        GameCharacter[] characters = {
-                createCharacter(spawnPositions[0][0], spawnPositions[0][1], Color.GREEN),
-                createCharacter(spawnPositions[1][0], spawnPositions[1][1], Color.WHITE),
-                createCharacter(spawnPositions[2][0], spawnPositions[2][1], Color.YELLOW),
-                createCharacter(spawnPositions[3][0], spawnPositions[3][1], Color.RED),
-        };
+        GameCharacter[] characters = new GameCharacter[players.length];
+        for (int i = 0; i < characters.length; i++)
+            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
 
         status.setCharacters(characters);
-        status.setPlayerOne(characters[0]);
+
+        int i;
+        for (i = 0; i < players.length; i++)
+            if(myGoogleRoom.getPlayerId().equals(players[i]))
+                break;
+        status.setPlayerOne(characters[i]);
 
         ContactHandler contactHandler = new ContactHandler();
         contactHandler.init();
@@ -65,9 +68,23 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        GameCharacter ch;
+
+        for (GameMessage message : myGoogleRoom.getServerClientMessageHandler().getMessages()) {
+            switch (interpreter.getType(message)){
+                case MOVE_CLIENT:
+                    ch = status.characters[interpreter.getObjectId(message)];
+                    LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
+                    comp.applyForce(interpreter.getPosX(message), interpreter.getPosY(message));
+                    break;
+                case ATTACK:
+                    break;
+            }
+        }
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
+
 
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
@@ -76,39 +93,14 @@ public class ServerScreen extends ClientServerScreen {
         updateDyingRadius();
 
         //TODO invia posizione
+
+        sendStatus();
+        //recv
     }
 
     @Override
     public void setup(){
         Converter.setScale(frameWeight, frameHeight);
-    }
-
-    /**
-     * Distribuzione di n cordinate equidistanti su di una circonferenza
-     *
-     * @param r raggio
-     * @param w fattore di shift sull'asse x
-     * @param h fattore di shift sull'asse y
-     * @param n numero di giocatori
-     * @return
-     */
-    private int[][] distributePoints(int r, int w, int h, int n){
-        int[][] points = new int[n][2];
-        double x, y;
-        double p = (Math.PI*2)/n;
-        double theta = Math.PI/2;
-
-        for(int i=0 ; i<n ; i++){
-            x = Math.cos(theta)*r;
-            y = Math.sin(theta)*r;
-
-
-            points[i][0] = (int)x + w;
-            points[i][1] = (int)y + h;
-
-            theta += p;
-        }
-        return points;
     }
 
     private void updateCharactersStatus(){
@@ -152,8 +144,8 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     @Override
-    protected GameCharacter createCharacter(int x, int y, int color){
-        GameCharacter gc = super.createCharacter(x, y, color);
+    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, short id){
+        GameCharacter gc = super.createCharacter(x, y, pixmap, id);
 
         physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y)).setOwner(gc);
         gc.addComponent(physicsComponentFactory.makeComponent());
@@ -194,5 +186,19 @@ public class ServerScreen extends ClientServerScreen {
     private void disablePhysicsComponent(GameCharacter ch){
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
         component.deleteBody();
+    }
+
+    private void sendStatus(){
+        DrawableComponent shape;
+        GameMessage message = new GameMessage(); //TODO usare pool
+
+        for(GameCharacter ch : status.living){
+            shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
+
+            interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
+            myGoogleRoom.getServerClientMessageHandler().putInBuffer(message);
+        }
+        status.living.resetIterator();
+        myGoogleRoom.getServerClientMessageHandler().broadcastUnreliable();
     }
 }
