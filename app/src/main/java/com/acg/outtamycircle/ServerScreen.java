@@ -1,8 +1,11 @@
 package com.acg.outtamycircle;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
+import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
@@ -26,6 +29,9 @@ public class ServerScreen extends ClientServerScreen {
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
+    boolean end = false; //TODO
+    int noPlayers;
+
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
         this.attacks = attacks;
@@ -48,6 +54,7 @@ public class ServerScreen extends ClientServerScreen {
         for (i = 0; i < players.length; i++)
             if(myGoogleRoom.getPlayerId().equals(players[i]))
                 break;
+        Log.d("SERVERA","io sono " + i);
         status.setPlayerOne(characters[i]);
 
         ContactHandler contactHandler = new ContactHandler();
@@ -56,15 +63,17 @@ public class ServerScreen extends ClientServerScreen {
         world.setContactListener(contactHandler);
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
-        arenaX = Converter.frameToPhysics(frameHeight/2);
-        arenaY = Converter.frameToPhysics(frameWidth/2);
+        arenaX = Converter.frameToPhysics(frameWidth/2);
+        arenaY = Converter.frameToPhysics(frameHeight/2);
         rightX = arenaX + squareHalfSide;
         leftX = arenaX - squareHalfSide;
         topY = arenaY + squareHalfSide;
         bottomY = arenaY - squareHalfSide;
-        threshold = Converter.frameToPhysics(arenaRadius);
+        threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
 
         //TODO comunica posizioni etc.
+
+        noPlayers = spawnPositions.length;
     }
 
     private final float arenaX, arenaY;
@@ -74,6 +83,12 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+        if(noPlayers==0)
+            back();
+
+
+        Log.d("SERVERINA","io sto a " + ((LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics)).getX());
         GameCharacter ch;
 
         for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
@@ -89,9 +104,11 @@ public class ServerScreen extends ClientServerScreen {
         }
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
+        Log.d("SERVERA", "applico forza " + androidJoystick.getNormX());
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
 
+        Log.d("SERVERA","deltatime " + deltaTime);
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         updateDrawablesPosition();
@@ -101,7 +118,9 @@ public class ServerScreen extends ClientServerScreen {
         //TODO invia posizione
 
         sendStatus();
+
         //recv
+
     }
 
     @Override
@@ -116,7 +135,8 @@ public class ServerScreen extends ClientServerScreen {
             if (isOut(character)) {
                 status.dying.add(character);
                 iterator.remove();
-                disablePhysicsComponent(character);
+                disablePhysicsComponent(character); //TODO
+                Log.d("AGLIA", "sei fuori!");
             }
         }
         status.living.resetIterator();
@@ -127,12 +147,18 @@ public class ServerScreen extends ClientServerScreen {
         float chX = circle.getX();
         float chY = circle.getY();
 
-//        if(chX <= rightX && chX >= leftX && chY <= topY && chY >= bottomY)
-  //          return false;
+        if(chX <= rightX && chX >= leftX && chY <= topY && chY >= bottomY)
+            return false;
 
-        DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
+        //Log.d("ATTENZIONE","arenax: " +arenaX + ", arenay: " + arenaY);
 
-        float delta = (float)Math.sqrt(Math.pow(chX - arenaX,2) + Math.pow(chY - arenaY,2));
+        float deltaX = (chX - arenaX) * (chX - arenaX);
+        float deltaY = (chY - arenaY) * (chY - arenaY);
+
+        float delta = (float)Math.sqrt(deltaX + deltaY);
+
+        //Log.d("ATTENZIONE", "delta: " + delta + "\nthreshold: " + threshold);
+        //Log.d("ATTENZIONE", "Il corpo a " + chX + "," + chY + "  e' morto!");
 
         return delta > threshold;
     }
@@ -182,7 +208,10 @@ public class ServerScreen extends ClientServerScreen {
             diam = component.getHeight();
             component.setHeight(diam - 1);
 
-            if(diam <= 0) iterator.remove();
+            if(diam <= 0) {
+                iterator.remove();
+                noPlayers--;
+            }
         }
         status.dying.resetIterator();
     }

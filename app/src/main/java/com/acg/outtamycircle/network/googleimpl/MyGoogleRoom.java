@@ -76,7 +76,10 @@ public class MyGoogleRoom {
         return currentIdAttack;
     }
 
+    private volatile boolean locked = false;
+
     void leave() {
+        locked = true;
         if(mRoomId != null && realTimeMultiplayerClient != null) {
             realTimeMultiplayerClient.leave(config, mRoomId)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -99,6 +102,7 @@ public class MyGoogleRoom {
         mRoomId = null;
         mMyId = null;
         networkMessageHandlerImpl.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
+        locked = false;
     }
 
     public MyGoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
@@ -158,7 +162,9 @@ public class MyGoogleRoom {
                 });
     }
 
-    public void quickGame(int min_players, int max_players, byte currentIdSkin, byte currentIdAttack) {
+    public boolean quickGame(int min_players, int max_players, byte currentIdSkin, byte currentIdAttack) {
+        if(locked)
+            return false;
         if(!myGoogleSignIn.isSignedIn())
             throw new IllegalStateException("first login bitch"); //TODO non eccezione
         if(min_players < MIN_PLAYERS)
@@ -183,6 +189,7 @@ public class MyGoogleRoom {
                 .setAutoMatchCriteria(autoMatchCriteria)
                 .build();
         realTimeMultiplayerClient.create(config);
+        return true;
     }
 
     public RealTimeMultiplayerClient getRealTimeMultiplayerClient() {

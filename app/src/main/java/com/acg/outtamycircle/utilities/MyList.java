@@ -2,13 +2,14 @@ package com.acg.outtamycircle.utilities;
 
 import android.support.annotation.NonNull;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class MyList<T> implements Iterable<T>{
+public class MyList<T> implements Iterable<T> {
     private final MyIterator iterator = new MyIterator();
     private Node<T> head = null;
-
+    private int count = 0;
     @NonNull
     @Override
     public Iterator<T> iterator() {
@@ -24,6 +25,10 @@ public class MyList<T> implements Iterable<T>{
         iterator.cur = null;
     }
 
+    public int size(){
+        return count;
+    }
+
     public void add(T key){
         Node<T> node = new Node<>(key);
         if(head != null) {
@@ -31,7 +36,8 @@ public class MyList<T> implements Iterable<T>{
             node.next = head;
         }
         head = node;
-        resetIterator();
+        count++;
+        resetIterator(); //TODO
     }
 
     public boolean remove(T el){
@@ -41,7 +47,8 @@ public class MyList<T> implements Iterable<T>{
             T curr = iterator.next();
             if(curr.equals(el)) {
                 iterator.remove();
-                resetIterator();
+                count--;
+                resetIterator(); //TODO
                 return true;
             }
         }
@@ -70,10 +77,16 @@ public class MyList<T> implements Iterable<T>{
         public void remove() {
             if(cur == null)
                 throw new IllegalStateException("first get next bitch");
-            if(cur == head)
+            if(cur == head) {
                 head = head.next;
-            else
+                if(head != null)
+                    head.prev = null;
+            } else {
                 cur.prev.next = cur.next;
+                if(cur.next!=null)
+                    cur.next.prev = cur.prev;
+            }
+            count--;
         }
     }
 

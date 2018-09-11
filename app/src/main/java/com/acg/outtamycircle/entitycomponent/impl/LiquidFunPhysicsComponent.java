@@ -53,6 +53,6 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
 
     public void deleteBody(){
         body.getWorld().destroyBody(body);
-        body.delete();
+        //body.delete(); //TODO
     }
 }

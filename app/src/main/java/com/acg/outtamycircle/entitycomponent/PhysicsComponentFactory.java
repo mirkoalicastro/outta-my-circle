@@ -114,9 +114,6 @@ public class PhysicsComponentFactory {
         body.setBullet(bullet);
         body.setAwake(awake);
 
-        bodyDef = new BodyDef();
-        fixDef = new FixtureDef();
-
         return component.setBody(body);
     }
 }

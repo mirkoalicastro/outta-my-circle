@@ -104,14 +104,15 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}));
         }
         if(rom) {
-            fakeButton.enable(false);
             byte definitiveIdSkin = currentIdSkin;
             byte definitiveIdAttack = currentIdAttack;
             if(definitiveIdSkin == Assets.skins.length)
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
-            ((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack);
+            fakeButton.enable(
+                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
+            );
         }
     }
 
