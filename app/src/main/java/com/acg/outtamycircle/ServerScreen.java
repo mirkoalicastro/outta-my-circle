@@ -29,11 +29,10 @@ public class ServerScreen extends ClientServerScreen {
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
-    boolean end = false; //TODO
-    int noPlayers;
+    private short winner = -1;
 
-    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks) {
-        super(game, myGoogleRoom, players, skins, spawnPositions);
+    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks, int playerOffset) {
+        super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
         this.attacks = attacks;
 
         world = new World(0, 0);
@@ -50,12 +49,7 @@ public class ServerScreen extends ClientServerScreen {
 
         status.setCharacters(characters);
 
-        int i;
-        for (i = 0; i < players.length; i++)
-            if(myGoogleRoom.getPlayerId().equals(players[i]))
-                break;
-        Log.d("SERVERA","io sono " + i);
-        status.setPlayerOne(characters[i]);
+        status.setPlayerOne(characters[playerOffset]);
 
         ContactHandler contactHandler = new ContactHandler();
         contactHandler.init();
@@ -72,8 +66,6 @@ public class ServerScreen extends ClientServerScreen {
         threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
 
         //TODO comunica posizioni etc.
-
-        noPlayers = spawnPositions.length;
     }
 
     private final float arenaX, arenaY;
@@ -83,10 +75,6 @@ public class ServerScreen extends ClientServerScreen {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
-        if(noPlayers==0)
-            back();
-
 
         Log.d("SERVERINA","io sto a " + ((LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics)).getX());
         GameCharacter ch;
@@ -119,7 +107,8 @@ public class ServerScreen extends ClientServerScreen {
 
         sendStatus();
 
-        //recv
+        if(winner!=-1)
+            back();
 
     }
 
@@ -130,16 +119,29 @@ public class ServerScreen extends ClientServerScreen {
 
     private void updateCharactersStatus(){
         Iterator<GameCharacter> iterator = status.living.iterator();
+        short lastAlive = -1, charId = -1;
         while(iterator.hasNext()) {
             GameCharacter character = iterator.next();
+            charId = character.getObjectId();
             if (isOut(character)) {
                 status.dying.add(character);
+                GameMessage message = GameMessage.createInstance();
+                if(lastAlive==-1)
+                    lastAlive = charId;
+                interpreter.makeDestroyMessage(message, character.getObjectId());
+                myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+                GameMessage.deleteInstance(message);
                 iterator.remove();
                 disablePhysicsComponent(character); //TODO
                 Log.d("AGLIA", "sei fuori!");
+            } else {
+                lastAlive = charId;
             }
         }
         status.living.resetIterator();
+
+        if(status.living.size()<=1)
+            winner = lastAlive;
     }
 
     private boolean isOut(GameCharacter ch){
@@ -208,10 +210,9 @@ public class ServerScreen extends ClientServerScreen {
             diam = component.getHeight();
             component.setHeight(diam - 1);
 
-            if(diam <= 0) {
+            if(diam <= 0)
                 iterator.remove();
-                noPlayers--;
-            }
+
         }
         status.dying.resetIterator();
     }
@@ -225,15 +226,25 @@ public class ServerScreen extends ClientServerScreen {
         DrawableComponent shape;
         GameMessage message = GameMessage.createInstance(); //TODO usare pool
 
+        if(winner!=-1){
+            interpreter.makeEndMessage(message, winner);
+            myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+            myGoogleRoom.getNetworkMessageHandlerImpl().broadcastReliable();
+            GameMessage.deleteInstance(message);
+            return;
+        }
+
         for(GameCharacter ch : status.living){
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
-
             interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
             myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
         }
-        GameMessage.deleteInstance(message);
+
         status.living.resetIterator();
-        myGoogleRoom.getNetworkMessageHandlerImpl().clearBuffer();
-//        myGoogleRoom.getNetworkMessageHandlerImpl().broadcastUnreliable();
+
+        GameMessage.deleteInstance(message);
+
+        myGoogleRoom.getNetworkMessageHandlerImpl().broadcastUnreliable();
+        //myGoogleRoom.getNetworkMessageHandlerImpl().clearBuffer();
     }
 }
