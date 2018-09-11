@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
@@ -20,7 +21,17 @@ public class AndroidAudio implements Audio {
     public AndroidAudio(Activity activity) {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
         this.assets = activity.getAssets();
-        this.soundPool = new SoundPool(SIMULTANEOUS_CHANNELS, AudioManager.STREAM_MUSIC, 0);
+
+        AudioAttributes attributes=new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        this.soundPool=new SoundPool.Builder()
+                .setAudioAttributes(attributes)
+                .setMaxStreams(SIMULTANEOUS_CHANNELS)
+                .build();
+
+        //this.soundPool = new SoundPool(SIMULTANEOUS_CHANNELS, AudioManager.STREAM_MUSIC, 0);
     }
 
     @Override
