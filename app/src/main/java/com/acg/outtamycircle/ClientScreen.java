@@ -20,7 +20,7 @@ public class ClientScreen extends ClientServerScreen {
         initCharacterSettings(radiusCharacter);
 
         GameCharacter[] characters = new GameCharacter[players.length];
-        for (int i = 0; i < characters.length; i++)
+        for (int i=0; i<characters.length; i++)
             characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
 
         status.setCharacters(characters);
@@ -30,19 +30,38 @@ public class ClientScreen extends ClientServerScreen {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        if(isAlive) {
-            GameMessage message = GameMessage.createInstance();
-            interpreter.makeMoveClientMessage(message, (short)playerOffset, androidJoystick.getNormX(), androidJoystick.getNormY());
-            myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
-            if(shouldAttack) {
-                shouldAttack = false;
-                interpreter.makeAttackMessage(message, (short)playerOffset);
-                myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
-            }
-            myGoogleRoom.getNetworkMessageHandlerImpl().sendUnreliable(myGoogleRoom.getServerId());
-            GameMessage.deleteInstance(message);
-        }
+        if(isAlive)
+            send();
 
+        receive();
+    }
+
+    @Override
+    public void present(float deltaTime) {
+        super.present(deltaTime);
+        if(!isAlive)
+            androidGame.getGraphics().drawPixmap(Assets.sad, 515, 235);
+    }
+
+    @Override
+    public void setup(){
+
+    }
+
+    private void send() {
+        GameMessage message = GameMessage.createInstance();
+        interpreter.makeMoveClientMessage(message, (short)playerOffset, androidJoystick.getNormX(), androidJoystick.getNormY());
+        myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+        if(shouldAttack) {
+            shouldAttack = false;
+            interpreter.makeAttackMessage(message, (short)playerOffset);
+            myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+        }
+        myGoogleRoom.getNetworkMessageHandlerImpl().sendUnreliable(myGoogleRoom.getServerId());
+        GameMessage.deleteInstance(message);
+    }
+
+    private void receive() {
         for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
             Log.d("JUANNINO", "ho ricevuot qualcosa");
             switch (interpreter.getType(message)){
@@ -93,18 +112,5 @@ public class ClientScreen extends ClientServerScreen {
                 break;
             }
         }
-    }
-
-    @Override
-    public void present(float deltaTime) {
-        super.present(deltaTime);
-        if(!isAlive) {
-            androidGame.getGraphics().drawPixmap(Assets.sad, 515, 235);
-        }
-    }
-
-    @Override
-    public void setup(){
-
     }
 }

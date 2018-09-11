@@ -26,8 +26,8 @@ import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
-    protected GameStatus status;
-    protected int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
+    protected final GameStatus status;
+    protected final int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
@@ -81,8 +81,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
     @Override
     public void present(float deltaTime) {
         //TODO
-        Graphics g = game.getGraphics(); //se lo sfondo è un gameobject si può separare graphics da screen
-        g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight()); //inutile?
+        Graphics g = game.getGraphics();
+        g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
 
         drawArena();
         drawCharacters();
@@ -116,11 +116,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         for (Input.TouchEvent event : events) {
             if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
-                Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
                     shouldAttack = true;
-                    if(Settings.soundEnabled)
-                        Assets.attackEnabled.play(Settings.volume);
+//  TODO va fanno in server e client screen:
+//                  if(Settings.soundEnabled)
+  //                      Assets.attackEnabled.play(Settings.volume);
                     timedCircularButton.resetTime();
                 } else if(Settings.soundEnabled)
                     Assets.attackDisabled.play(Settings.volume);
@@ -144,6 +144,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     @Override
     public void back() {
+        //TODO
         //Toast.makeText(androidGame,"E mo che si fa?",Toast.LENGTH_SHORT).show();
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }
@@ -157,7 +158,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private void initArenaSettings(){
         drawableComponentFactory.resetFactory();
-        int x = frameWidth /2, y = frameHeight/2;
+        int x = frameWidth/2, y = frameHeight/2;
 
         drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
                 .setX(x).setY(y)
@@ -170,7 +171,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
-    //TODO spostare in clientserverscreen
     private Arena createArena(){
         Arena arena = new Arena();
 
