@@ -81,7 +81,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     @Override
     public void sendUnreliable(String player) {
-        myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessage(buffer, myGoogleRoom.getRoomId(), player);
+        myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessage(Arrays.copyOf(buffer, currentBufferSize), myGoogleRoom.getRoomId(), player);
         clearBuffer();
     }
 
@@ -99,7 +99,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     @Override
     public void broadcastUnreliable() {
-        final Task<Void> task = myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessageToOthers(buffer, myGoogleRoom.getRoomId());
+        final Task<Void> task = myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessageToOthers(Arrays.copyOf(buffer, currentBufferSize), myGoogleRoom.getRoomId());
         clearBuffer();
     }
 

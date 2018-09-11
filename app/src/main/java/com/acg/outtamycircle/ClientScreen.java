@@ -44,33 +44,62 @@ public class ClientScreen extends ClientServerScreen {
         }
 
         for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
+            Log.d("JUANNINO", "ho ricevuot qualcosa");
             switch (interpreter.getType(message)){
-                case MOVE_SERVER:
+                case MOVE_SERVER: {
                     int objectId = interpreter.getObjectId(message);
                     float posX = interpreter.getPosX(message);
                     float posY = interpreter.getPosY(message);
                     float rotation = interpreter.getRotation(message);
                     DrawableComponent comp = (DrawableComponent) status.characters[objectId].getComponent(Component.Type.Drawable);
-                    comp.setX((int)posX).setY((int)posY);
-                    break;
-                case ATTACK:
-                    //TODO
-                    break;
-                case DESTROY:
-                    //TODO se muoio setta vivo a false
-                    //TODO
-                    break;
-                case POWERUP:
+                    comp.setX((int) posX).setY((int) posY);
+                }
+                break;
+                case ATTACK: {
+                    int objectId = interpreter.getObjectId(message);
+                    if(Settings.soundEnabled) {
+                        Assets.attackEnabled.play(Settings.volume);
+                        //TODO devo far succedere altro?
+                    }
+                }
+                break;
+                case DESTROY: {
+                    //TODO controlla che funziona
+                    int objectId = interpreter.getObjectId(message);
+                    if(objectId == playerOffset)
+                        isAlive = false;
+                    status.living.remove(status.characters[objectId]);
+                    status.dying.add(status.characters[objectId]);
+                }
+                break;
+                case POWERUP: {
+                    int objectId = interpreter.getObjectId(message);
+                    float posX = interpreter.getPosX(message);
+                    float posY = interpreter.getPosY(message);
+                    int powerUpId = interpreter.getPowerUpId(message);
                     //TODO piazza powerup da qualche parte
-                    break;
-                case POWERUP_ASSIGN:
-                    //TODO devo gestirlo?
-                    break;
-                case END:
+                }
+                break;
+                case POWERUP_ASSIGN: {
+                    int objectId = interpreter.getObjectId(message);
+                    byte powerUpId = interpreter.getPowerUpId(message);
+                    //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
+                }
+                break;
+                case END: {
                     int winnerId = interpreter.getObjectId(message);
                     Log.d("WINNERIS", winnerId + " ha vinto");
-                    break;
+                }
+                break;
             }
+        }
+    }
+
+    @Override
+    public void present(float deltaTime) {
+        super.present(deltaTime);
+        if(!isAlive) {
+            androidGame.getGraphics().drawPixmap(Assets.sad, 515, 235);
         }
     }
 

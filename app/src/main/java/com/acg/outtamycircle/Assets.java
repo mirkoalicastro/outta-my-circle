@@ -1,12 +1,8 @@
 package com.acg.outtamycircle;
 
-import android.graphics.Color;
-import android.graphics.Shader;
-
 import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Sound;
 import com.badlogic.androidgames.framework.Pixmap;
-import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 
 public class Assets {
     public static Pixmap[] skins;
@@ -16,7 +12,7 @@ public class Assets {
     public static Pixmap nosound;
     public static Pixmap start;
     public static Pixmap quickGame;
-    public static Pixmap joystick;
+    public static Pixmap sad;
     public static Pixmap logo;
     public static Pixmap background;
     public static Pixmap arena;

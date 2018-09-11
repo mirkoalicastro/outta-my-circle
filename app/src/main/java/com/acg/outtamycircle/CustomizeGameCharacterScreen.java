@@ -101,7 +101,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         }
         if(goForward) {
             int[][] spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, 2);
-            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}));
+            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}, 0));
         }
         if(rom) {
             byte definitiveIdSkin = currentIdSkin;

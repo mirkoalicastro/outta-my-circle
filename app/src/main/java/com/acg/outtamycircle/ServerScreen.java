@@ -82,11 +82,13 @@ public class ServerScreen extends ClientServerScreen {
         for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
             switch (interpreter.getType(message)){
                 case MOVE_CLIENT:
+                    Log.d("JUANNINO", "ho ricevuto move_client");
                     ch = status.characters[interpreter.getObjectId(message)];
                     LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
                     comp.applyForce(interpreter.getPosX(message), interpreter.getPosY(message));
                     break;
                 case ATTACK:
+                    Log.d("JUANNINO", "ho ricevuto attack");
                     break;
             }
         }
@@ -238,6 +240,7 @@ public class ServerScreen extends ClientServerScreen {
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
             interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
             myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+            Log.d("JUANNINO", "ho creato un move_server");
         }
 
         status.living.resetIterator();
