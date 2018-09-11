@@ -39,6 +39,7 @@ public class PreMatchScreen extends AndroidScreen {
 
     private ClientServerScreen nextScreen;
     private boolean start;
+    private int playerOffset;
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
@@ -50,8 +51,11 @@ public class PreMatchScreen extends AndroidScreen {
         attacks = new byte[numOpponents+1];
         ArrayList<String> ids = myGoogleRoom.getRoom().getParticipantIds();
         Collections.sort(ids);
-        for(String s: ids)
-            orderedPlayers.put(s,(short)orderedPlayers.size());
+        for(String s: ids) {
+            if(s.equals(myGoogleRoom.getPlayerId()))
+                playerOffset = orderedPlayers.size();
+            orderedPlayers.put(s, (short) orderedPlayers.size());
+        }
         androidGame.getGraphics().clear(Color.BLACK);
     }
 
@@ -114,9 +118,9 @@ public class PreMatchScreen extends AndroidScreen {
 
     private void createMatchScreen() {
         if(myGoogleRoom.isServer()) {
-            nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks);
+            nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks, playerOffset);
         } else {
-            nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions);
+            nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, playerOffset);
         }
         nextPhase();
     }

@@ -41,15 +41,18 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final String[] players;
     protected final byte[] skins;
     protected final int[][] spawnPositions;
+    protected final int playerOffset;
+    protected boolean shouldAttack;
 
     protected final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
 
-    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions) {
+    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, int playerOffset) {
         super(game);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;
         this.skins = skins;
         this.spawnPositions = spawnPositions;
+        this.playerOffset = playerOffset;
 
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
                 .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
@@ -115,6 +118,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
             if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 Log.d("TCB", "PRESSED");
                 if (timedCircularButton.isEnabled()) {
+                    shouldAttack = true;
                     if(Settings.soundEnabled)
                         Assets.attackEnabled.play(Settings.volume);
                     timedCircularButton.resetTime();
