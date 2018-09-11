@@ -95,6 +95,7 @@ public class PreMatchScreen extends AndroidScreen {
         handler.broadcastReliable();
         GameMessage.deleteInstance(message);
         //TODO devo aspettare?
+        myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
         androidGame.setScreen(nextScreen);
     }
 
@@ -105,16 +106,16 @@ public class PreMatchScreen extends AndroidScreen {
                 break;
             }
         }
-        if(start)
+        if(start) {
             androidGame.setScreen(nextScreen);
+            myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile
+        }
     }
 
     private void createMatchScreen() {
         if(myGoogleRoom.isServer()) {
-            myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
             nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks);
         } else {
-            myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile?
             nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions);
         }
         nextPhase();

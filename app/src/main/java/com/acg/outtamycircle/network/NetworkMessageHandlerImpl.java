@@ -65,7 +65,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 //        Log.d("LAGLOG", "to send: \n" + Arrays.toString(toSend) + "\ne invece tosend__: \n" + Arrays.toString(toSend_));
 
         final Task<Integer> sendTask = myGoogleRoom.getRealTimeMultiplayerClient()
-                .sendReliableMessage(toSend_, myGoogleRoom.getRoom().getRoomId(), playerId, null);
+                .sendReliableMessage(toSend, myGoogleRoom.getRoomId(), playerId, null); //TODO toSend_
         sendTask.addOnCompleteListener(new OnCompleteListener<Integer>() {
             @Override
             public void onComplete(@NonNull Task<Integer> task) {
@@ -81,7 +81,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     @Override
     public void sendUnreliable(String player) {
-        myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessage(buffer, myGoogleRoom.getRoom().getRoomId(), player);
+        myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessage(buffer, myGoogleRoom.getRoomId(), player);
         clearBuffer();
     }
 
@@ -99,7 +99,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     @Override
     public void broadcastUnreliable() {
-        final Task<Void> task = myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessageToOthers(buffer, myGoogleRoom.getRoom().getRoomId());
+        final Task<Void> task = myGoogleRoom.getRealTimeMultiplayerClient().sendUnreliableMessageToOthers(buffer, myGoogleRoom.getRoomId());
         clearBuffer();
     }
 
@@ -135,7 +135,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
                 int length = GameMessage.Type.values()[messageData[cursor]].length;
                 Log.d("LAGLOG", Arrays.toString(messageData) + "\n\n\n" + cursor + " ; " + (cursor + length - 1));
                 message.copyBuffer(messageData, cursor, cursor + length - 1); //TODO check
-                Log.d("LAGLOG", "Il tipo e' " + message.getType().toString());
+                Log.d("JUANNINO", "Il tipo e' " + message.getType().toString());
                 first.storeMessage(message);
                 cursor += length;
             }

@@ -100,8 +100,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         }
         if(goForward) {
-//            int[][] spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, 2);
-//            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}));
+            int[][] spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, 2);
+            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}));
         }
         if(rom) {
             fakeButton.enable(false);
@@ -165,6 +165,25 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         if(Settings.soundEnabled)
             Assets.click.play(Settings.volume);
         androidGame.setScreen(new MainMenuScreen(androidGame));
+    }
+
+    private int[][] distributePoints(int r, int w, int h, int n){
+        int[][] points = new int[n][2];
+        double x, y;
+        double p = (Math.PI*2)/n;
+        double theta = Math.PI/2;
+
+        for(int i=0 ; i<n ; i++){
+            x = Math.cos(theta)*r;
+            y = Math.sin(theta)*r;
+
+
+            points[i][0] = (int)x + w;
+            points[i][1] = (int)y + h;
+
+            theta += p;
+        }
+        return points;
     }
 
 }

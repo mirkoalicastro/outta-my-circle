@@ -1,8 +1,11 @@
 package com.acg.outtamycircle.network.googleimpl;
 
+import android.support.annotation.NonNull;
+
 import com.acg.outtamycircle.network.GameMessage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ClientMessageReceiver implements MessageReceiver {
@@ -15,7 +18,7 @@ public class ClientMessageReceiver implements MessageReceiver {
     }
 
     public ClientMessageReceiver(int capacity){
-        this.messages = new ArrayList<>(capacity);
+        this.messages = new ArrayList<GameMessage>(capacity);
     }
 
     public ClientMessageReceiver(){

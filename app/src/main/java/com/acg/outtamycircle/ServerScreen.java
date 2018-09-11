@@ -26,19 +26,18 @@ public class ServerScreen extends ClientServerScreen {
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
 
-    private float sxX, dxX, downY, upY;
-    private float arenaX, arenaY;
-
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks) {
         super(game, myGoogleRoom, players, skins, spawnPositions);
         this.attacks = attacks;
 
         world = new World(0, 0);
 
-        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWidth/2, frameHeight/2);
+        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWeight/2, frameHeight/2);
         status.setPowerup(pu);*/
 
-        initCharacterSettings(40);
+        int radiusCharacter = 40;
+
+        initCharacterSettings(radiusCharacter);
         GameCharacter[] characters = new GameCharacter[players.length];
         for (int i = 0; i < characters.length; i++)
             characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
@@ -56,10 +55,21 @@ public class ServerScreen extends ClientServerScreen {
 
         world.setContactListener(contactHandler);
 
-        initArenaBounds();
+        float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
+        arenaX = Converter.frameToPhysics(frameHeight/2);
+        arenaY = Converter.frameToPhysics(frameWidth/2);
+        rightX = arenaX + squareHalfSide;
+        leftX = arenaX - squareHalfSide;
+        topY = arenaY + squareHalfSide;
+        bottomY = arenaY - squareHalfSide;
+        threshold = Converter.frameToPhysics(arenaRadius);
 
         //TODO comunica posizioni etc.
     }
+
+    private final float arenaX, arenaY;
+    private final float rightX, leftX, topY, bottomY;
+    private final float threshold;
 
     @Override
     public void update(float deltaTime) {
@@ -117,15 +127,14 @@ public class ServerScreen extends ClientServerScreen {
         float chX = circle.getX();
         float chY = circle.getY();
 
-        if(chX > dxX || chX < sxX || chY > upY || chY < downY)
-            return false;
+//        if(chX <= rightX && chX >= leftX && chY <= topY && chY >= bottomY)
+  //          return false;
 
-        float deltaX = (chX - arenaX)*(chX - arenaX);
-        float deltaY = (chY - arenaY)*(chY - arenaY);
+        DrawableComponent arenaDrawable = (DrawableComponent)status.arena.getComponent(Component.Type.Drawable);
 
-        float delta = (float)Math.sqrt(deltaX + deltaY);
+        float delta = (float)Math.sqrt(Math.pow(chX - arenaX,2) + Math.pow(chY - arenaY,2));
 
-        return delta > Converter.frameToPhysics(arenaRadius) + circle.getWidth()/4;
+        return delta > threshold;
     }
 
     @Override
@@ -193,18 +202,9 @@ public class ServerScreen extends ClientServerScreen {
             interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
             myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
         }
-        status.living.resetIterator();
-        myGoogleRoom.getNetworkMessageHandlerImpl().broadcastUnreliable();
         GameMessage.deleteInstance(message);
-    }
-
-    private void initArenaBounds(){
-        double l = (arenaRadius*Math.sqrt(2))/2;
-        arenaX = Converter.frameToPhysics(frameHeight/2);
-        arenaY = Converter.frameToPhysics(frameWidth/2);
-        dxX = (float)(arenaX + l);
-        sxX = (float)(arenaX - l);
-        upY = (float)(arenaY + l);
-        downY = (float)(arenaY - l);
+        status.living.resetIterator();
+        myGoogleRoom.getNetworkMessageHandlerImpl().clearBuffer();
+//        myGoogleRoom.getNetworkMessageHandlerImpl().broadcastUnreliable();
     }
 }

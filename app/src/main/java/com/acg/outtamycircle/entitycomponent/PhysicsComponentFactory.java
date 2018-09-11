@@ -12,8 +12,8 @@ public class PhysicsComponentFactory {
     private World world;
     private Entity owner;
 
-    private final BodyDef bodyDef = new BodyDef();
-    private final FixtureDef fixDef = new FixtureDef();
+    private BodyDef bodyDef = new BodyDef();
+    private FixtureDef fixDef = new FixtureDef();
 
     private Shape shape;
     private float radius, width, height;
@@ -113,6 +113,9 @@ public class PhysicsComponentFactory {
 
         body.setBullet(bullet);
         body.setAwake(awake);
+
+        bodyDef = new BodyDef();
+        fixDef = new FixtureDef();
 
         return component.setBody(body);
     }

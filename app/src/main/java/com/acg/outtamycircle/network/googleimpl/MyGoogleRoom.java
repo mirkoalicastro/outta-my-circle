@@ -60,6 +60,10 @@ public class MyGoogleRoom {
 
     private static String TAG = "GoogleS";
 
+    public String getRoomId() {
+        return mRoomId;
+    }
+
     public String getPlayerId() {
         return mMyId;
     }
@@ -111,10 +115,10 @@ public class MyGoogleRoom {
                 googleAndroidGame.startGame();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Log.d(TAG,"CANCELLED");
-                realTimeMultiplayerClient.leave(config, room.getRoomId());
+                realTimeMultiplayerClient.leave(config, getRoomId());
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
                 Log.d(TAG,"LEFT");
-                realTimeMultiplayerClient.leave(config, room.getRoomId());
+                realTimeMultiplayerClient.leave(config, getRoomId());
             }
         }
     }

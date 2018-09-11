@@ -1,6 +1,7 @@
 package com.acg.outtamycircle.network.googleimpl;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreter;
@@ -49,6 +50,8 @@ public class ServerMessageReceiver implements MessageReceiver {
                 if(!hasNext()) throw new NoSuchElementException();
 
                 GameMessage ret = messages[player][message];
+
+                Log.d("JUANNINO", "NEXT: " + ret.getType().toString());
 
                 findNext();
 

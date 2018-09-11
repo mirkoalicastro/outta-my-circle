@@ -51,7 +51,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable {
     }
 
     public void pause() {                        
-        running = false;                        
+        running = false;
         while(true) {
             try {
                 renderThread.join();
