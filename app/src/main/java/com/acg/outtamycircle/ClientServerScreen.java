@@ -36,7 +36,17 @@ public abstract class ClientServerScreen extends AndroidScreen {
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
     protected List<Input.TouchEvent> events;
-    protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100);
+    protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
+        @Override
+        public float getNormX(){
+            return super.getNormX() * 1000;
+        }
+
+        @Override
+        public float getNormY(){
+            return super.getNormY() * 1000;
+        }
+    };
     protected final MyGoogleRoom myGoogleRoom;
     protected final String[] players;
     protected final byte[] skins;

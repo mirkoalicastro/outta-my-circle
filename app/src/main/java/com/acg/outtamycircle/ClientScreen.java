@@ -47,7 +47,7 @@ public class ClientScreen extends ClientServerScreen {
 
     private void send() {
         GameMessage message = GameMessage.createInstance();
-        interpreter.makeMoveClientMessage(message, (short)playerOffset, androidJoystick.getNormX(), androidJoystick.getNormY());
+        interpreter.makeMoveClientMessage(message, (short)playerOffset, (short) androidJoystick.getNormX(), (short) androidJoystick.getNormY());
         networkMessageHandler.putInBuffer(message);
         if(shouldAttack) {
             shouldAttack = false;
@@ -63,11 +63,11 @@ public class ClientScreen extends ClientServerScreen {
             switch (interpreter.getType(message)){
                 case MOVE_SERVER: {
                     int objectId = interpreter.getObjectId(message);
-                    float posX = interpreter.getPosX(message);
-                    float posY = interpreter.getPosY(message);
+                    short posX = interpreter.getPosX(message);
+                    short posY = interpreter.getPosY(message);
                     float rotation = interpreter.getRotation(message);
                     DrawableComponent comp = (DrawableComponent) status.characters[objectId].getComponent(Component.Type.Drawable);
-                    comp.setX((int) posX).setY((int) posY);
+                    comp.setX(posX).setY(posY);
                 }
                 break;
                 case ATTACK: {
