@@ -13,9 +13,9 @@ import java.util.Arrays;
 public class GameMessage {
     //TODO sender??
     private String sender;
-    private static int MAX_BUFFER_SIZE = 40;
+    private static int MAX_BUFFER_SIZE = 11;
 
-    private static final int CAPACITY = 50;
+    private static final int CAPACITY = 20;
     private static final Pool<GameMessage> pool;
 
     public byte buffer[]; //TODO package-private
