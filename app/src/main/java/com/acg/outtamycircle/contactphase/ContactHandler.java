@@ -1,5 +1,6 @@
 package com.acg.outtamycircle.contactphase;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
@@ -13,17 +14,19 @@ public class ContactHandler extends ContactListener{
     private SparseArray<ContactType> map;
 
     @Override
-    public void beginContact(Contact contact){
+    public void beginContact(Contact contact) {
+        super.beginContact(contact);
         Fixture fa = contact.getFixtureA(),
                 fb = contact.getFixtureB();
         Body ba = fa.getBody(), bb = fb.getBody();
 
         ContactType contactType = map.get(ContactType.myHashCode(ba.getUserData().getClass(), bb.getUserData().getClass()));
 
-        if(contactType != null) contactType.handle();
+        if (contactType != null)
+            contactType.handle();
     }
 
-    public void init(){
+    public void init() {
         map = new SparseArray<>();
 
         CharactersContact cc = new CharactersContact();

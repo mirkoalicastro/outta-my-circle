@@ -28,6 +28,7 @@ public class ServerScreen extends ClientServerScreen {
     private static final int POSITION_ITERATIONS = 3;
     protected final byte[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
+    private final ContactHandler contactHandler;
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, byte[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
@@ -49,10 +50,10 @@ public class ServerScreen extends ClientServerScreen {
 
         status.setPlayerOne(characters[playerOffset]);
 
-        ContactHandler contactHandler = new ContactHandler();
+        contactHandler = new ContactHandler();
         contactHandler.init();
 
-        world.setContactListener(contactHandler);
+        world.setContactListener(contactHandler); //TODO
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
         arenaX = Converter.frameToPhysics(frameWidth/2);
@@ -93,7 +94,11 @@ public class ServerScreen extends ClientServerScreen {
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
-        world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
+        try {
+            world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
+        } catch (Exception e) {
+            Log.d("EMOSOCAZZI", "world step " + e);
+        }
 
         updateDrawablesPosition();
         updateCharactersStatus();
@@ -187,6 +192,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private void disablePhysicsComponent(GameCharacter ch){
+        Log.d("EMOSOCAZZI", "delete body!!!1"); //TODO nell'angolino
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
         component.deleteBody();
     }

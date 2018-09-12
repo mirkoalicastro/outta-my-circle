@@ -24,6 +24,8 @@ public class PhysicsComponentFactory {
 
 
     public PhysicsComponentFactory setWorld(World world){
+        bodyDef = new BodyDef(); //TODO deelete
+        fixDef = new FixtureDef(); //TODO delete
         this.world = world;
         return this;
     }

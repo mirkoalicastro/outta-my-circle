@@ -37,7 +37,15 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     @Override
     public void sendReliable(final String playerId) {
-        sendReliable(playerId, true);
+        sendReliable(playerId, true, null);
+    }
+
+    public static interface OnComplete {
+        void work(Task<Integer> task);
+    }
+
+    public void sendReliable(final String playerId, OnComplete onComplete) {
+        sendReliable(playerId, true, onComplete);
     }
 
 //    private final Pools.Pool<Object> bufferSyncPool = new Pools.SynchronizedPool<>(100);
@@ -57,7 +65,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
             bufferPool.free(new byte[MAX_BUFFER_SIZE]);
     }
 
-    private void sendReliable(final String playerId, boolean clearBuffer) {
+    private void sendReliable(final String playerId, boolean clearBuffer, final OnComplete onComplete) {
         final byte[] toSend = (byte[]) bufferPool.newObject();
         System.arraycopy(buffer, 0, toSend, 0, currentBufferSize);
         if(currentBufferSize < MAX_BUFFER_SIZE)
@@ -69,6 +77,8 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
                     @Override
                     public void onComplete(@NonNull Task<Integer> task) {
                         bufferPool.free(toSend);
+                        if(onComplete != null)
+                            onComplete.work(task);
                     }
                 });
         if(clearBuffer)
@@ -98,10 +108,17 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
     }
 
     @Override
-    public void broadcastReliable(){
+    public void broadcastReliable() {
         for(String playerId: myGoogleRoom.getParticipantIds())
             if(!playerId.equals(myGoogleRoom.getPlayerId()))
-                sendReliable(playerId, false);
+                sendReliable(playerId, false, null);
+        clearBuffer();
+    }
+
+    public void broadcastReliable(OnComplete onComplete) {
+        for(String playerId: myGoogleRoom.getParticipantIds())
+            if(!playerId.equals(myGoogleRoom.getPlayerId()))
+                sendReliable(playerId, false, onComplete);
         clearBuffer();
     }
 

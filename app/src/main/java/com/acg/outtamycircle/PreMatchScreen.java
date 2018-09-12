@@ -6,12 +6,14 @@ import android.util.Log;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandler;
+import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 import com.google.android.gms.games.multiplayer.Participant;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,15 +129,22 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void broadcastInit() {
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
+        NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
+        GameMessage message = GameMessage.createInstance();
+        Log.d("HEYHEYHEY", Arrays.toString(skins));
         for(short i=0; i<numOpponents+1; i++) {
-            GameMessage message = GameMessage.createInstance(); //TODO new??
             interpreter.makeCreateMessage(message, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
             handler.putInBuffer(message);
-            handler.broadcastReliable(); //TODO carico tutto e poi faccio un broadcast?
-            GameMessage.deleteInstance(message);
         }
-        nextPhase();
+        handler.broadcastReliable(new NetworkMessageHandlerImpl.OnComplete(){
+            @Override
+            public void work(Task<Integer> task) {
+                if(task.isSuccessful()) {
+                    nextPhase(); //TODO non mndare sempre
+                }
+            }
+        });
+        GameMessage.deleteInstance(message);
     }
 
     private void clientGetInit() {
@@ -148,11 +157,14 @@ public class PreMatchScreen extends AndroidScreen {
                 if(message.getType() == GameMessage.Type.START) {
                     start = true;
                     continue;
+                } else if(message.getType() != GameMessage.Type.CREATE) {
+                    continue;
                 }
                 int offset = interpreter.getObjectId(message);
                 spawnPositions[offset][0] = (int)interpreter.getPosX(message);
                 spawnPositions[offset][1] = (int)interpreter.getPosY(message);
                 skins[offset] = interpreter.getSkinId(message);
+                Log.d("HEYHEYHEY", "ho ricevuto " + offset + " = " + skins[offset]);
                 players[offset] = message.getSender();
                 readMessages++;
             }
@@ -217,17 +229,21 @@ public class PreMatchScreen extends AndroidScreen {
 
 
     private void sendInit() {
-
         GameMessage message = GameMessage.createInstance();
         interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
         Log.d("HUAN","should be " + myGoogleRoom.getCurrentIdSkin() + " , " + myGoogleRoom.getCurrentIdAttack());
         Log.d("HUAN", Arrays.toString(message.buffer));
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
+        NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         handler.putInBuffer(message);
-        handler.sendReliable(myGoogleRoom.getServerId());
+        handler.sendReliable(myGoogleRoom.getServerId(), new NetworkMessageHandlerImpl.OnComplete() {
+            @Override
+            public void work(Task<Integer> task) {
+                if(task.isSuccessful()) {
+                    nextPhase(); //TODO non mndare sempre
+                }
+            }
+        });
         GameMessage.deleteInstance(message);
-
-        nextPhase();
     }
 
     private void choose() {
