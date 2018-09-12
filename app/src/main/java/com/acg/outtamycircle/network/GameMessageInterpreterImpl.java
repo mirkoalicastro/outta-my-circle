@@ -5,20 +5,20 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     private static final int MESSAGE_TYPE_IDX = 0;
     private static final int OBJECT_ID_IDX = 1;
     private static final int POS_X_IDX = 3;
-    private static final int POS_Y_IDX = 5;
+    private static final int POS_Y_IDX = 7;
 
     // INIT
     private static final int INIT_SKIN_ID_IDX = 1;
     private static final int ATTACK_ID_IDX = 2;
 
     // CREATE
-    private static final int CREATE_SKIN_ID_IDX = 7;
+    private static final int CREATE_SKIN_ID_IDX = 11;
 
-    // MOVE_SERVER
-    private static final int ROTATION_IDX = 7;
+    // MOVE
+    private static final int ROTATION_IDX = 11;
 
     // POWERUP
-    private static final int POWER_UP_IDX = 7;
+    private static final int POWER_UP_IDX = 11;
 
     // HOST_OR_CLIENT
     private static final int HOST_OR_CLIENT_IDX = 1;
@@ -44,13 +44,13 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public short getPosX(GameMessage message){
-        return message.getShortAt(POS_X_IDX);
+    public float getPosX(GameMessage message){
+        return message.getFloatAt(POS_X_IDX);
     }
 
     @Override
-    public short getPosY(GameMessage message){
-        return message.getShortAt(POS_Y_IDX);
+    public float getPosY(GameMessage message){
+        return message.getFloatAt(POS_Y_IDX);
     }
 
     @Override

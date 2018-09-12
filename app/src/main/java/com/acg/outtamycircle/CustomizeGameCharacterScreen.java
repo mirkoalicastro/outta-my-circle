@@ -22,7 +22,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
     private final AndroidButton rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
     private final AndroidButton rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
-    private final AndroidButton fakeButton = new AndroidCircularButton(androidGame.getGraphics(),150,150,100);
 
     private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124);
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
@@ -35,7 +34,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         rightSkin.setPixmap(Assets.rightArrow);
         leftAttack.setPixmap(Assets.leftArrow);
         rightAttack.setPixmap(Assets.rightArrow);
-        fakeButton.setColor(Color.RED);
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
         googleAndroidGame.getMyGoogleSignIn().signIn();
@@ -50,17 +48,14 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
-            if(fakeButton.inBounds(event) && fakeButton.isEnabled()) {
+            if(quickGameButton.inBounds(event) && quickGameButton.isEnabled()) {
                 Log.d("GoogleS", "click");
-                rom = true;
-                break;
-            } else if(backButton.inBounds(event)) {
-                goBack = true;
+                goForward = true;
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
                 break;
-            } else if(quickGameButton.inBounds(event)) {
-                goForward = true;
+            } else if(backButton.inBounds(event)) {
+                goBack = true;
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
                 break;
@@ -99,17 +94,13 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             return;
         }
         if(goForward) {
-            int[][] spawnPositions = distributePoints(game.getGraphics().getHeight()/2 - 80, game.getGraphics().getWidth()/2, game.getGraphics().getHeight() /2, 2);
-            androidGame.setScreen(new ServerScreen(androidGame,((GoogleAndroidGame)androidGame).getMyGoogleRoom(),new String[]{"",""},new byte[]{currentIdSkin,1},spawnPositions,new byte[]{0,1}, 0));
-        }
-        if(rom) {
             byte definitiveIdSkin = currentIdSkin;
             byte definitiveIdAttack = currentIdAttack;
             if(definitiveIdSkin == Assets.skins.length)
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
-            fakeButton.enable(
+            quickGameButton.enable(
                     !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
             );
         }
@@ -122,7 +113,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         final Graphics graphics = androidGame.getGraphics();
         unchanged = true;
         graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
-        fakeButton.draw();
         quickGameButton.draw();
         backButton.draw();
         graphics.drawText(androidGame.getString(R.string.select_player),520,150,40, Color.BLACK);

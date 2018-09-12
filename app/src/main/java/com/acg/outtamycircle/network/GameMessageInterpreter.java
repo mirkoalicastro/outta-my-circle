@@ -20,9 +20,9 @@ public interface GameMessageInterpreter {
 
     byte getInitClientAttackId(GameMessage message);
 
-    short getPosX(GameMessage message);
+    float getPosX(GameMessage message);
 
-    short getPosY(GameMessage message);
+    float getPosY(GameMessage message);
 
     byte getSkinId(GameMessage message);
 

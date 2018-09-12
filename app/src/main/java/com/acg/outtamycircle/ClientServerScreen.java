@@ -1,6 +1,7 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
+import android.graphics.Shader;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -13,9 +14,12 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
+import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
+import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 
 import java.util.Iterator;
@@ -179,13 +183,13 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
                 .setX(x).setY(y)
-        /*        .setEffect(new ComposerAndroidEffect(
+                .setEffect(new ComposerAndroidEffect(
                         new RadialGradientEffect(x,y,arenaRadius,
                                 new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
                                 new float[]{0f,1f}, Shader.TileMode.CLAMP
                         ),
-                        (AndroidEffect)Assets.arenaTile)*/
-        .setColor(Color.RED
+                        (AndroidEffect)Assets.arenaTile)
+        //.setColor(Color.RED
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 

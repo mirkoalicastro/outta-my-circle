@@ -61,12 +61,12 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.sad = graphics.newPixmap("etc/sad.png", PixmapFormat.ARGB8888);
         Assets.happy = graphics.newPixmap("etc/happy.png", PixmapFormat.ARGB8888);
         setProgress(80);
-        Assets.click = androidGame.getAudio().newSound("audio/click.wav"); //TODO
-        Assets.powerupCollision = androidGame.getAudio().newSound("audio/powerupcollision.wav");
-        Assets.newPowerup = androidGame.getAudio().newSound("audio/powerupcollision.wav");
-        Assets.gameCharacterCollision = androidGame.getAudio().newSound("audio/gamecharcollision.wav");
-        Assets.attackEnabled = androidGame.getAudio().newSound("audio/attackenabled.wav");
-        Assets.attackDisabled = androidGame.getAudio().newSound("audio/attackdisabled.wav");
+        Assets.click = androidGame.getAudio().newSound("audio/click.mp3"); //TODO
+        Assets.powerupCollision = androidGame.getAudio().newSound("audio/powerupcollision.mp3");
+        Assets.newPowerup = androidGame.getAudio().newSound("audio/powerupcollision.mp3");
+        Assets.gameCharacterCollision = androidGame.getAudio().newSound("audio/gamecharcollision.mp3");
+        Assets.attackEnabled = androidGame.getAudio().newSound("audio/attackenabled.mp3");
+        Assets.attackDisabled = androidGame.getAudio().newSound("audio/attackdisabled.mp3");
         setProgress(100);
         androidGame.setScreen(new MainMenuScreen(androidGame));
     }

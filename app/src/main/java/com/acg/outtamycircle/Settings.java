@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 
 public class Settings {
-    public static int volume = 50;
+    public static int volume = 100;
     public static boolean soundEnabled = true;
 
     public static final int DKGREEN = Color.parseColor("#0b4d10");
