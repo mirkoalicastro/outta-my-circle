@@ -21,7 +21,7 @@ public class GameMessage {
     public byte buffer[]; //TODO package-private
 
     static {
-        pool = new Pool<>(new Pool.PoolObjectFactory<GameMessage>() {
+        pool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<GameMessage>() {
             @Override
             public GameMessage createObject() {
                 return new GameMessage();

@@ -22,7 +22,7 @@ public class SingleTouchHandler implements TouchHandler {
     private static final int MAXPOOLSIZE = 100;
     
     public SingleTouchHandler(View view, float scaleX, float scaleY) {
-        touchEventPool = new Pool<TouchEvent>(new PoolObjectFactory<TouchEvent>() {
+        touchEventPool = new Pool.SimplePool<TouchEvent>(new PoolObjectFactory<TouchEvent>() {
             @Override
             public TouchEvent createObject() {
                 return new TouchEvent();

@@ -47,7 +47,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
         boolean goBack = false;
         boolean goForward = false;
-        Log.d("GoogleS", fakeButton.isEnabled() ? "enabled" : "disabled");
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;

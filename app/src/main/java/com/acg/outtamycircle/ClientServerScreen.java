@@ -1,9 +1,6 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
-import android.graphics.Shader;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -11,27 +8,30 @@ import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.Arena;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
+import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
-import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
-import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
-import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
     protected final GameStatus status;
     protected final int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
+    protected boolean isAlive = true;
+    protected int winnerId = -1;
+    protected boolean endGame;
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
     protected final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
+    protected final NetworkMessageHandlerImpl networkMessageHandler;
 
     /*La cattura degli eventi è equivalente in client e server,
      ma va processata in maniera differente*/
@@ -53,11 +53,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
         this.skins = skins;
         this.spawnPositions = spawnPositions;
         this.playerOffset = playerOffset;
+        this.networkMessageHandler = myGoogleRoom.getNetworkMessageHandler();
 
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
-                .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
+        /*        .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
                         new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
-                        new float[]{0f,1f}, Shader.TileMode.CLAMP))
+                        new float[]{0f,1f}, Shader.TileMode.CLAMP)) */
                 .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);
 
         timedCircularButton.setSecondaryColor(Settings.DKRED)
@@ -92,6 +93,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         androidJoystick.draw();
         timedCircularButton.draw();
+
+        if(winnerId == playerOffset)
+            g.drawPixmap(Assets.happy, 515, 235);
+        else if(!isAlive)
+            g.drawPixmap(Assets.sad, 515, 235);
     }
 
     @Override
@@ -126,6 +132,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
                     Assets.attackDisabled.play(Settings.volume);
             }
         }
+
+        updateDyingRadius();
     }
 
     private void drawCharacters(){
@@ -151,8 +159,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     protected void initCharacterSettings(float r){
         drawableComponentFactory.resetFactory();
-        drawableComponentFactory.setStroke(6,Color.BLACK)
-                .setHeight((int)(r*2)).setWidth((int)(r*2))
+        drawableComponentFactory.setHeight((int)(r*2)).setWidth((int)(r*2))
                 .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
@@ -162,12 +169,13 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         drawableComponentFactory.setWidth(arenaRadius*2).setHeight(arenaRadius*2)
                 .setX(x).setY(y)
-                .setEffect(new ComposerAndroidEffect(
+        /*        .setEffect(new ComposerAndroidEffect(
                         new RadialGradientEffect(x,y,arenaRadius,
                                 new int[]{Color.parseColor("#348496"), Color.parseColor("#4DC1DD")},
                                 new float[]{0f,1f}, Shader.TileMode.CLAMP
                         ),
-                        (AndroidEffect)Assets.arenaTile)
+                        (AndroidEffect)Assets.arenaTile)*/
+        .setColor(Color.RED
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
@@ -188,4 +196,23 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         return gc;
     }
+
+    private void updateDyingRadius() {
+        int diam;
+        DrawableComponent component = null;
+        Iterator<GameCharacter> iterator = status.dying.iterator();
+
+        while(iterator.hasNext()) {
+            GameCharacter ch = iterator.next();
+            component = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
+            diam = component.getHeight();
+            component.setHeight(diam - 1);
+
+            if(diam <= 0)
+                iterator.remove();
+
+        }
+        status.dying.resetIterator();
+    }
+
 }

@@ -26,7 +26,7 @@ public class MultiTouchHandler implements TouchHandler {
     private static final int MAXPOOLSIZE = 100;
 
     public MultiTouchHandler(View view, float scaleX, float scaleY) {
-        touchEventPool = new Pool<>(new PoolObjectFactory<TouchEvent>() {
+        touchEventPool = new Pool.SimplePool<>(new PoolObjectFactory<TouchEvent>() {
             @Override
             public TouchEvent createObject() {
                 return new TouchEvent();

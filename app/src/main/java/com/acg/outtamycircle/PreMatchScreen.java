@@ -11,6 +11,7 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.google.android.gms.games.multiplayer.Participant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,11 +46,11 @@ public class PreMatchScreen extends AndroidScreen {
         super(androidGame);
         this.winnerId = myGoogleRoom.getPlayerId();
         this.myGoogleRoom = myGoogleRoom;
-        this.numOpponents = myGoogleRoom.getRoom().getParticipants().size()-1;
+        this.numOpponents = myGoogleRoom.getParticipants().size()-1;
         players = new String[numOpponents+1];
         skins = new byte[numOpponents+1];
         attacks = new byte[numOpponents+1];
-        ArrayList<String> ids = myGoogleRoom.getRoom().getParticipantIds();
+        ArrayList<String> ids = myGoogleRoom.getParticipantIds();
         Collections.sort(ids);
         for(String s: ids) {
             if(s.equals(myGoogleRoom.getPlayerId()))
@@ -92,19 +93,19 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void sendStart() {
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandlerImpl();
+        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
         interpreter.makeStartMessage(message); //TODO make start message
         handler.putInBuffer(message);
         handler.broadcastReliable();
         GameMessage.deleteInstance(message);
         //TODO devo aspettare?
-        myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
+        myGoogleRoom.getNetworkMessageHandler().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
         androidGame.setScreen(nextScreen);
     }
 
     private void receiveStart() {
-        for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
+        for (GameMessage message : myGoogleRoom.getNetworkMessageHandler().getMessages()) {
             if(message.getType() == GameMessage.Type.START) {
                 start = true;
                 break;
@@ -112,7 +113,7 @@ public class PreMatchScreen extends AndroidScreen {
         }
         if(start) {
             androidGame.setScreen(nextScreen);
-            myGoogleRoom.getNetworkMessageHandlerImpl().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile
+            myGoogleRoom.getNetworkMessageHandler().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile
         }
     }
 
@@ -126,7 +127,7 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void broadcastInit() {
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandlerImpl();
+        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         for(short i=0; i<numOpponents+1; i++) {
             GameMessage message = GameMessage.createInstance(); //TODO new??
             interpreter.makeCreateMessage(message, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
@@ -142,7 +143,7 @@ public class PreMatchScreen extends AndroidScreen {
             spawnPositions = new int[numOpponents+1][2];
         }
         if(readMessages < numOpponents+1) {
-            for(GameMessage message: myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
+            for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
                 Log.d("JUANNINO", message.getType().toString());
                 if(message.getType() == GameMessage.Type.START) {
                     start = true;
@@ -170,7 +171,7 @@ public class PreMatchScreen extends AndroidScreen {
             readMessages++;
         }
         if(readMessages < numOpponents+1) {
-            for(GameMessage message: myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
+            for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
                 Log.d("HUAN", Arrays.toString(message.buffer));
                 Log.d("JUANNINO", message.getType().toString());
                 int offset = orderedPlayers.get(message.getSender());
@@ -195,7 +196,7 @@ public class PreMatchScreen extends AndroidScreen {
         time += System.currentTimeMillis();
         this.time = (int)time;
 
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandlerImpl();
+        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
         interpreter.makeHostOrClientMessage(message, this.time);
         handler.putInBuffer(message);
@@ -221,7 +222,7 @@ public class PreMatchScreen extends AndroidScreen {
         interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
         Log.d("HUAN","should be " + myGoogleRoom.getCurrentIdSkin() + " , " + myGoogleRoom.getCurrentIdAttack());
         Log.d("HUAN", Arrays.toString(message.buffer));
-        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandlerImpl();
+        NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         handler.putInBuffer(message);
         handler.sendReliable(myGoogleRoom.getServerId());
         GameMessage.deleteInstance(message);
@@ -234,7 +235,7 @@ public class PreMatchScreen extends AndroidScreen {
             Log.d("AGLIO", "Io sono " + time + " con id " + winnerId + " <=> " + myGoogleRoom.getPlayerId());
         }
         if(readMessages < numOpponents) {
-            for(GameMessage message: myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
+            for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
                 Log.d("JUANNINO", message.getType().toString());
                 if(message.getType() == GameMessage.Type.START) {
                     start = true;

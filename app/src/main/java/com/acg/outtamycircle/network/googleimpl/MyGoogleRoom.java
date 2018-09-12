@@ -13,6 +13,7 @@ import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
+import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateCallback;
@@ -22,8 +23,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
+
 public class MyGoogleRoom {
 
+    private ArrayList<Participant> mParticipants;
+    private ArrayList<String> mParticipantIds;
     private String mMyId;
     private String mRoomId;
     private byte currentIdSkin;
@@ -91,8 +96,16 @@ public class MyGoogleRoom {
         }
     }
 
-    public NetworkMessageHandlerImpl getNetworkMessageHandlerImpl() {
+    public NetworkMessageHandlerImpl getNetworkMessageHandler() {
         return networkMessageHandlerImpl;
+    }
+
+    public ArrayList<String> getParticipantIds() {
+        return mParticipantIds;
+    }
+
+    public ArrayList<Participant> getParticipants() {
+        return mParticipants;
     }
 
     private void reset() {
@@ -101,6 +114,8 @@ public class MyGoogleRoom {
         realTimeMultiplayerClient = null;
         mRoomId = null;
         mMyId = null;
+        mParticipants = null;
+        mParticipantIds = null;
         networkMessageHandlerImpl.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
         locked = false;
     }
@@ -134,14 +149,12 @@ public class MyGoogleRoom {
                 .setNeutralButton(android.R.string.ok, null).create().show();
     }
 
-
     void updateRoom(Room room) {
-        Log.d("PEPPE","Aggiorno la stanza");
         setRoom(room);
-        Log.d("JUAN", Strings.nullToEmpty(mRoomId) + " -> " + room.getRoomId());
         mRoomId = room.getRoomId();
         mMyId = room.getParticipantId(myGoogleSignIn.getPlayerId());
-        //TODO
+        mParticipants = room.getParticipants();
+        mParticipantIds = room.getParticipantIds();
     }
 
     void showWaitingRoom(Room room) {

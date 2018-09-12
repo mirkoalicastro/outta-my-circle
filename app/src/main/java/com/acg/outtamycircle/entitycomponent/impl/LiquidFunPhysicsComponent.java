@@ -14,7 +14,7 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
     private float width, height;
 
     public void applyForce(float x, float y){
-        x *= 15; y *= 15;
+        x *= 5; y *= 5;
 
         //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();

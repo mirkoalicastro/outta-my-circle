@@ -10,8 +10,9 @@ import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 
+import java.util.Iterator;
+
 public class ClientScreen extends ClientServerScreen {
-    private boolean isAlive = true;
     public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
 
@@ -30,17 +31,13 @@ public class ClientScreen extends ClientServerScreen {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+        if(endGame)
+            return;
+
         if(isAlive)
             send();
 
         receive();
-    }
-
-    @Override
-    public void present(float deltaTime) {
-        super.present(deltaTime);
-        if(!isAlive)
-            androidGame.getGraphics().drawPixmap(Assets.sad, 515, 235);
     }
 
     @Override
@@ -51,19 +48,18 @@ public class ClientScreen extends ClientServerScreen {
     private void send() {
         GameMessage message = GameMessage.createInstance();
         interpreter.makeMoveClientMessage(message, (short)playerOffset, androidJoystick.getNormX(), androidJoystick.getNormY());
-        myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+        networkMessageHandler.putInBuffer(message);
         if(shouldAttack) {
             shouldAttack = false;
             interpreter.makeAttackMessage(message, (short)playerOffset);
-            myGoogleRoom.getNetworkMessageHandlerImpl().putInBuffer(message);
+            networkMessageHandler.putInBuffer(message);
         }
-        myGoogleRoom.getNetworkMessageHandlerImpl().sendUnreliable(myGoogleRoom.getServerId());
+        networkMessageHandler.sendUnreliable(myGoogleRoom.getServerId());
         GameMessage.deleteInstance(message);
     }
 
     private void receive() {
-        for (GameMessage message : myGoogleRoom.getNetworkMessageHandlerImpl().getMessages()) {
-            Log.d("JUANNINO", "ho ricevuot qualcosa");
+        for (GameMessage message : networkMessageHandler.getMessages()) {
             switch (interpreter.getType(message)){
                 case MOVE_SERVER: {
                     int objectId = interpreter.getObjectId(message);
@@ -87,8 +83,14 @@ public class ClientScreen extends ClientServerScreen {
                     int objectId = interpreter.getObjectId(message);
                     if(objectId == playerOffset)
                         isAlive = false;
-                    status.living.remove(status.characters[objectId]);
-                    status.dying.add(status.characters[objectId]);
+                    Iterator<GameCharacter> iterator = status.living.iterator();
+                    while(iterator.hasNext()) {
+                        GameCharacter curr = iterator.next();
+                        if(curr.getObjectId() == objectId) {
+                            iterator.remove();
+                            status.dying.add(curr);
+                        }
+                    }
                 }
                 break;
                 case POWERUP: {
@@ -106,8 +108,8 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case END: {
-                    int winnerId = interpreter.getObjectId(message);
-                    Log.d("WINNERIS", winnerId + " ha vinto");
+                    winnerId = interpreter.getObjectId(message);
+                    endGame = true;
                 }
                 break;
             }

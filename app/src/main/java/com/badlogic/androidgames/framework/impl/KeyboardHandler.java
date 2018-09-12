@@ -18,7 +18,7 @@ public class KeyboardHandler implements OnKeyListener {
     private static final int MAXPOOLSIZE = 100;
 
     public KeyboardHandler(View view) {
-        keyEventPool = new Pool<KeyEvent>(new PoolObjectFactory<KeyEvent>() {
+        keyEventPool = new Pool.SimplePool<KeyEvent>(new PoolObjectFactory<KeyEvent>() {
             @Override
             public KeyEvent createObject() {
                 return new KeyEvent();

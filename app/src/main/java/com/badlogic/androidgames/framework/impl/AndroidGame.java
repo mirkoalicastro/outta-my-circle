@@ -36,8 +36,8 @@ public abstract class AndroidGame extends Activity implements Game {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int frameBufferWidth = 1280;
-        int frameBufferHeight = 720;
+        int frameBufferWidth = 1280; //1280;
+        int frameBufferHeight = 720; //720;
 
         System.loadLibrary("liquidfun");
         System.loadLibrary("liquidfun_jni");

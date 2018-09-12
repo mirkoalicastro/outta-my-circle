@@ -71,7 +71,9 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
                     while(animations.isEmpty()) {
                         try {
                             animations.wait();
-                        } catch (InterruptedException e) { }
+                        } catch (InterruptedException e) {
+                            return;
+                        }
                     }
                     int from = progressValue;
                     int to = animations.peek();
