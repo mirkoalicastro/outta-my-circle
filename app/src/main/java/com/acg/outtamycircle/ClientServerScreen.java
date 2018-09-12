@@ -53,14 +53,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
     };
     protected final MyGoogleRoom myGoogleRoom;
     protected final String[] players;
-    protected final byte[] skins;
+    protected final int[] skins;
     protected final int[][] spawnPositions;
     protected final int playerOffset;
     protected boolean shouldAttack;
 
     protected final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
 
-    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, int playerOffset) {
+    public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;

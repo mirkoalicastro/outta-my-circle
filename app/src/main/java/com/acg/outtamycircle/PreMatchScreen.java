@@ -35,8 +35,8 @@ public class PreMatchScreen extends AndroidScreen {
     private final MyGoogleRoom myGoogleRoom;
     private final int numOpponents;
 
-    private byte[] skins;
-    private byte[] attacks;
+    private int[] skins;
+    private int[] attacks;
     private int[][] spawnPositions;
     private String[] players;
 
@@ -50,8 +50,8 @@ public class PreMatchScreen extends AndroidScreen {
         this.myGoogleRoom = myGoogleRoom;
         this.numOpponents = myGoogleRoom.getParticipants().size()-1;
         players = new String[numOpponents+1];
-        skins = new byte[numOpponents+1];
-        attacks = new byte[numOpponents+1];
+        skins = new int[numOpponents+1];
+        attacks = new int[numOpponents+1];
         ArrayList<String> ids = myGoogleRoom.getParticipantIds();
         Collections.sort(ids);
         for(String s: ids) {

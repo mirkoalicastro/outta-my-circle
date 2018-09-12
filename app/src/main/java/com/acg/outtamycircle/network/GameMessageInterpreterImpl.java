@@ -5,20 +5,20 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     private static final int MESSAGE_TYPE_IDX = 0;
     private static final int OBJECT_ID_IDX = 1;
     private static final int POS_X_IDX = 3;
-    private static final int POS_Y_IDX = 7;
+    private static final int POS_Y_IDX = 5;
 
     // INIT
     private static final int INIT_SKIN_ID_IDX = 1;
     private static final int ATTACK_ID_IDX = 2;
 
     // CREATE
-    private static final int CREATE_SKIN_ID_IDX = 11;
+    private static final int CREATE_SKIN_ID_IDX = 7;
 
     // MOVE
-    private static final int ROTATION_IDX = 11;
+    private static final int ROTATION_IDX = 7;
 
     // POWERUP
-    private static final int POWER_UP_IDX = 11;
+    private static final int POWER_UP_IDX = 7;
 
     // HOST_OR_CLIENT
     private static final int HOST_OR_CLIENT_IDX = 1;
@@ -34,27 +34,27 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public byte getInitClientSkinId(GameMessage message){
+    public int getInitClientSkinId(GameMessage message){
         return message.getByteAt(INIT_SKIN_ID_IDX);
     }
 
     @Override
-    public byte getInitClientAttackId(GameMessage message){
+    public int getInitClientAttackId(GameMessage message){
         return message.getByteAt(ATTACK_ID_IDX);
     }
 
     @Override
-    public float getPosX(GameMessage message){
-        return message.getFloatAt(POS_X_IDX);
+    public int getPosX(GameMessage message){
+        return message.getShortAt(POS_X_IDX);
     }
 
     @Override
-    public float getPosY(GameMessage message){
-        return message.getFloatAt(POS_Y_IDX);
+    public int getPosY(GameMessage message){
+        return message.getShortAt(POS_Y_IDX);
     }
 
     @Override
-    public byte getSkinId(GameMessage message){
+    public int getSkinId(GameMessage message){
         return message.getByteAt(CREATE_SKIN_ID_IDX);
     }
 
@@ -64,7 +64,7 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public byte getPowerUpId(GameMessage message){
+    public int getPowerUpId(GameMessage message){
         return message.getByteAt(POWER_UP_IDX);
     }
 
@@ -86,53 +86,53 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public void makeInitClientMessage(GameMessage message, byte skinId, byte attackId) {
+    public void makeInitClientMessage(GameMessage message, int skinId, int attackId) {
         makeMessage(message, GameMessage.Type.INIT_CLIENT);
-        message.putByte(INIT_SKIN_ID_IDX, skinId).putByte(ATTACK_ID_IDX, attackId);
+        message.putByte(INIT_SKIN_ID_IDX, (byte) skinId).putByte(ATTACK_ID_IDX, (byte) attackId);
     }
 
     @Override
-    public void makeCreateMessage(GameMessage message, short objectId, float posX, float posY, byte skinId) {
+    public void makeCreateMessage(GameMessage message, int objectId, int posX, int posY, int skinId) {
         makeMessage(message, GameMessage.Type.CREATE, objectId);
-        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY).putByte(CREATE_SKIN_ID_IDX, skinId);
+        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY).putByte(CREATE_SKIN_ID_IDX, (byte) skinId);
     }
 
     @Override
-    public void makeDestroyMessage(GameMessage message, short objectId) {
+    public void makeDestroyMessage(GameMessage message, int objectId) {
         makeMessage(message, GameMessage.Type.DESTROY, objectId);
     }
 
     @Override
-    public void makeMoveServerMessage(GameMessage message, short objectId, float posX, float posY, float rotation) {
+    public void makeMoveServerMessage(GameMessage message, int objectId, int posX, int posY, float rotation) {
         makeMessage(message, GameMessage.Type.MOVE_SERVER, objectId);
-        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY).putFloat(ROTATION_IDX, rotation);
+        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY).putFloat(ROTATION_IDX, rotation);
     }
 
     @Override
-    public void makeMoveClientMessage(GameMessage message, short objectId, float posX, float posY) {
+    public void makeMoveClientMessage(GameMessage message, int objectId, int posX, int posY) {
         makeMessage(message, GameMessage.Type.MOVE_CLIENT, objectId);
-        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY);
+        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY);
     }
 
     @Override
-    public void makePowerUpMessage(GameMessage message, short objectId, float posX, float posY, byte powerupId) {
+    public void makePowerUpMessage(GameMessage message, int objectId, int posX, int posY, int powerupId) {
         makeMessage(message, GameMessage.Type.POWERUP, objectId);
-        message.putFloat(POS_X_IDX, posX).putFloat(POS_Y_IDX, posY).putByte(POWER_UP_IDX, powerupId);
+        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY).putByte(POWER_UP_IDX, (byte) powerupId);
     }
 
     @Override
-    public void makePowerUpAssign(GameMessage message, short objectId, byte powerupId) {
-        makeMessage(message, GameMessage.Type.POWERUP_ASSIGN, objectId);
+    public void makePowerUpAssign(GameMessage message, int objectId, int powerupId) {
+        makeMessage(message, GameMessage.Type.POWERUP_ASSIGN, (byte) objectId);
         //TODO CONTROLLAAAA
     }
 
     @Override
-    public void makeAttackMessage(GameMessage message, short objectId) {
+    public void makeAttackMessage(GameMessage message, int objectId) {
         makeMessage(message, GameMessage.Type.ATTACK, objectId);
     }
 
     @Override
-    public void makeEndMessage(GameMessage message, short winnerId) {
+    public void makeEndMessage(GameMessage message, int winnerId) {
         makeMessage(message, GameMessage.Type.END, winnerId);
     }
 

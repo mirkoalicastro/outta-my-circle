@@ -13,7 +13,7 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import java.util.Iterator;
 
 public class ClientScreen extends ClientServerScreen {
-    public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, byte[] skins, int[][] spawnPositions, int playerOffset) {
+    public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
 
         int radiusCharacter = 40;
@@ -103,7 +103,7 @@ public class ClientScreen extends ClientServerScreen {
                 break;
                 case POWERUP_ASSIGN: {
                     int objectId = interpreter.getObjectId(message);
-                    byte powerUpId = interpreter.getPowerUpId(message);
+                    int powerUpId = interpreter.getPowerUpId(message);
                     //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
                 }
                 break;

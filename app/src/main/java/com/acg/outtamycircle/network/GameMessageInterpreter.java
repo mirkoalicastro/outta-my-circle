@@ -16,40 +16,40 @@ public interface GameMessageInterpreter {
 
     /*------------ WRITER ------------*/
 
-    byte getInitClientSkinId(GameMessage message);
+    int getInitClientSkinId(GameMessage message);
 
-    byte getInitClientAttackId(GameMessage message);
+    int getInitClientAttackId(GameMessage message);
 
-    float getPosX(GameMessage message);
+    int getPosX(GameMessage message);
 
-    float getPosY(GameMessage message);
+    int getPosY(GameMessage message);
 
-    byte getSkinId(GameMessage message);
+    int getSkinId(GameMessage message);
 
     float getRotation(GameMessage message);
 
-    byte getPowerUpId(GameMessage message);
+    int getPowerUpId(GameMessage message);
 
     int getTimeMillis(GameMessage message);
 
     //TODO
-    void makeInitClientMessage(GameMessage gameMessage, byte skinId, byte attackId);
+    void makeInitClientMessage(GameMessage gameMessage, int skinId, int attackId);
 
-    void makeCreateMessage(GameMessage gameMessage, short objectId, float posX, float posY, byte skinId);
+    void makeCreateMessage(GameMessage gameMessage, int objectId, int posX, int posY, int skinId);
 
-    void makeDestroyMessage(GameMessage gameMessage, short objectId);
+    void makeDestroyMessage(GameMessage gameMessage, int objectId);
 
-    void makeMoveServerMessage(GameMessage gameMessage, short objectId, float posX, float posY, float rotation);
+    void makeMoveServerMessage(GameMessage gameMessage, int objectId, int posX, int posY, float rotation);
 
-    void makeMoveClientMessage(GameMessage gameMessage, short objectId, float posX, float posY);
+    void makeMoveClientMessage(GameMessage gameMessage, int objectId, int posX, int posY);
 
-    void makePowerUpMessage(GameMessage gameMessage, short objectId, float posX, float posY, byte powerupId);
+    void makePowerUpMessage(GameMessage gameMessage, int objectId, int posX, int posY, int powerupId);
 
-    void makePowerUpAssign(GameMessage gameMessage, short objectId, byte powerupId);
+    void makePowerUpAssign(GameMessage gameMessage, int objectId, int powerupId);
 
-    void makeAttackMessage(GameMessage gameMessage, short objectId);
+    void makeAttackMessage(GameMessage gameMessage, int objectId);
 
-    void makeEndMessage(GameMessage gameMessage, short winnerId);
+    void makeEndMessage(GameMessage gameMessage, int winnerId);
 
     void makeHostOrClientMessage(GameMessage message, int time);
 
