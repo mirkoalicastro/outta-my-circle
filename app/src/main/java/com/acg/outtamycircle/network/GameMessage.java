@@ -55,7 +55,7 @@ public class GameMessage {
      */
     public void putInBuffer(byte dest[], int start){
         int n = getType().length;
-        for(int i=0 ; i<n ; i++)
+        for(int i=0; i<n; i++)
             dest[start++] = buffer[i];
     }
 
@@ -67,10 +67,8 @@ public class GameMessage {
      */
     public void copyBuffer(byte buffer[], int start, int end){
         int i = 0;
-        for(; start<=end ; start++){
-            Log.d("COPIO", "[" + i + "] = [" + start + "]");
+        for(; start<=end ; start++)
             this.buffer[i++] = buffer[start];
-        }
     }
 
     /**

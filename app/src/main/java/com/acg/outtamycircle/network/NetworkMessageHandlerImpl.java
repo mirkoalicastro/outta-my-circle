@@ -163,8 +163,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
                 GameMessage message = GameMessage.createInstance();
                 message.setSender(realTimeMessage.getSenderParticipantId());
                 int length = GameMessage.Type.values()[messageData[cursor]].length;
-//                System.arraycopy(messageData, 0, message.buffer, cursor, length); TODO
-                message.copyBuffer(messageData, cursor, cursor + length - 1); //TODO check
+                message.copyBuffer(messageData, cursor, cursor + length - 1); //TODO fai con arraycopy
                 first.storeMessage(message);
                 cursor += length;
             }

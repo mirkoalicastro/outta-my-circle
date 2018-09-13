@@ -31,10 +31,10 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected static final int ROUNDS = 3;
     protected int roundNum = 1;
 
-    protected int radiusCharacter = 40;
+    protected int radiusCharacter = 35;
 
     protected GameStatus status;
-    protected final int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
+    protected final int frameHeight, frameWidth, arenaRadius;
     protected boolean isAlive = true;
     protected final int[] winnerId ;
     protected boolean endGame, endRound;
@@ -115,7 +115,16 @@ public abstract class ClientServerScreen extends AndroidScreen {
         androidJoystick.draw();
         timedCircularButton.draw();
 
-        g.drawText("Round " + Math.min(roundNum, ROUNDS) + "/" + ROUNDS, 100,100, 40, 0xFFFF5555);
+        for(int i=0; i<ROUNDS; i++) {
+            Pixmap winnerSkin;
+            if(winnerId[i] == -1)
+                winnerSkin = Assets.unknownSkin;
+            else
+                winnerSkin = Assets.skins[skins[winnerId[i]]];
+            g.drawPixmap(winnerSkin, 30+(70*i),80, 50, 50);
+        }
+
+        g.drawText(androidGame.getString(R.string.round) + " " + Math.min(roundNum, ROUNDS) + "/" + ROUNDS, 30,60, 40, Color.BLACK);
 
         if(endGame) {
             g.drawText("FINE DL GIOCO", 500, 400, 50, Color.BLACK);

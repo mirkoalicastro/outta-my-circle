@@ -76,7 +76,7 @@ public class MyList<T> implements Iterable<T> {
         @Override
         public void remove() {
             if(cur == null)
-                throw new IllegalStateException("first get next bitch");
+                throw new IllegalStateException();
             if(cur == head) {
                 head = head.next;
                 if(head != null)
