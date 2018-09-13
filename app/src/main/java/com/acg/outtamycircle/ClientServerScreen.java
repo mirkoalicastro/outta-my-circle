@@ -5,14 +5,15 @@ import android.graphics.Shader;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.impl.factory.DrawableComponentFactory;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Arena;
+import com.acg.outtamycircle.entitycomponent.Entity;
+import com.acg.outtamycircle.entitycomponent.impl.factories.DrawableComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
+import com.acg.outtamycircle.utilities.MyList;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
@@ -107,7 +108,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
 
         drawArena();
-        drawCharacters();
+        drawList(status.living);
+        drawList(status.dying);
+        drawList(status.inactives);
 
         //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.makeComponent(Component.Type.Drawable);
         //powerupDrawable.draw();
@@ -163,18 +166,18 @@ public abstract class ClientServerScreen extends AndroidScreen {
         updateDyingRadius();
     }
 
-    private void drawCharacters(){
-        for(GameCharacter ch : status.living)
-            ((DrawableComponent)ch.getComponent(Component.Type.Drawable)).draw();
-        for(GameCharacter ch : status.dying)
-            ((DrawableComponent)ch.getComponent(Component.Type.Drawable)).draw();
-        status.living.resetIterator();
-        status.dying.resetIterator();
-    }
-
     private void drawArena(){
         DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
         arenaDrawable.draw();
+    }
+
+
+    private void drawList(MyList<? extends Entity> list){
+        DrawableComponent comp;
+        for(Entity e : list)
+            if((comp = (DrawableComponent)e.getComponent(Component.Type.Drawable)) != null)
+                comp.draw();
+        list.resetIterator();
     }
 
     @Override
@@ -211,8 +214,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
-    protected Arena createArena(){
-        Arena arena = new Arena();
+    protected Entity createArena(){
+        Entity arena = new Entity();
 
         drawableComponentFactory.setOwner(arena);
         arena.addComponent(drawableComponentFactory.makeComponent());
