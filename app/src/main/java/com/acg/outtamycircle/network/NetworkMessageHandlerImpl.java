@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.Arrays;
 
 public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
-    private static final int MAX_BUFFER_SIZE = 400; //TODO
+    private static final int MAX_BUFFER_SIZE = 127; //TODO
     private static final byte ENDING_CHAR = 127;
     private static final int MAX_CAPACITY = 40;
     private static final int INITIAL_CAPACITY = 20;
@@ -123,7 +123,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
         if(currentBufferSize < MAX_BUFFER_SIZE)
             toSend[currentBufferSize] = ENDING_CHAR;
         myGoogleRoom.getRealTimeMultiplayerClient()
-                .sendUnreliableMessageToOthers(Arrays.copyOf(buffer, currentBufferSize), myGoogleRoom.getRoomId())
+                .sendUnreliableMessageToOthers(toSend, myGoogleRoom.getRoomId())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -163,8 +163,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
                 GameMessage message = GameMessage.createInstance();
                 message.setSender(realTimeMessage.getSenderParticipantId());
                 int length = GameMessage.Type.values()[messageData[cursor]].length;
-//                System.arraycopy(messageData, 0, message.buffer, cursor, length); TODO
-                message.copyBuffer(messageData, cursor, cursor + length - 1); //TODO check
+                System.arraycopy(messageData, cursor, message.buffer, 0, length);
                 first.storeMessage(message);
                 cursor += length;
             }

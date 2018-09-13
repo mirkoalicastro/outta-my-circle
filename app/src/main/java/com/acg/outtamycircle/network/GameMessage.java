@@ -7,7 +7,7 @@ import com.badlogic.androidgames.framework.Pool;
 public class GameMessage {
     //TODO sender??
     private String sender;
-    private static int MAX_BUFFER_SIZE = 11;
+    private static int MAX_BUFFER_SIZE = 11; //TODO
 
     private static final int MAX_CAPACITY = 40;
     private static final int INITIAL_CAPACITY = 20;
@@ -55,7 +55,7 @@ public class GameMessage {
      */
     public void putInBuffer(byte dest[], int start){
         int n = getType().length;
-        for(int i=0 ; i<n ; i++)
+        for(int i=0; i<n; i++)
             dest[start++] = buffer[i];
     }
 
@@ -67,10 +67,8 @@ public class GameMessage {
      */
     public void copyBuffer(byte buffer[], int start, int end){
         int i = 0;
-        for(; start<=end ; start++){
-            Log.d("COPIO", "[" + i + "] = [" + start + "]");
+        for(; start<=end ; start++)
             this.buffer[i++] = buffer[start];
-        }
     }
 
     /**

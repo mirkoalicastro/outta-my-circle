@@ -34,8 +34,8 @@ public class MyGoogleRoom {
     private byte currentIdSkin;
     private byte currentIdAttack;
 
-    public static final int MIN_PLAYERS = 2;
-    public static final int MAX_PLAYERS = 4;
+    private static final int MIN_PLAYERS = 2;
+    private static final int MAX_PLAYERS = 4;
 
     private final MyGoogleSignIn myGoogleSignIn;
     private final GoogleAndroidGame googleAndroidGame;
