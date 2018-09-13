@@ -7,7 +7,7 @@ import com.badlogic.androidgames.framework.Pool;
 public class GameMessage {
     //TODO sender??
     private String sender;
-    private static int MAX_BUFFER_SIZE = 11;
+    private static int MAX_BUFFER_SIZE = 11; //TODO
 
     private static final int MAX_CAPACITY = 40;
     private static final int INITIAL_CAPACITY = 20;
