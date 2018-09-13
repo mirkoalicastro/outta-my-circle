@@ -1,5 +1,7 @@
 package com.acg.outtamycircle.network;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.Pool;
 
 public class GameMessage {
@@ -16,7 +18,7 @@ public class GameMessage {
         }
     }, MAX_CAPACITY);
 
-    public byte buffer[]; //TODO package-private
+    byte buffer[];
 
     static {
         for(int i=0; i<INITIAL_CAPACITY; i++)
@@ -66,6 +68,7 @@ public class GameMessage {
     public void copyBuffer(byte buffer[], int start, int end){
         int i = 0;
         for(; start<=end ; start++){
+            Log.d("COPIO", "[" + i + "] = [" + start + "]");
             this.buffer[i++] = buffer[start];
         }
     }

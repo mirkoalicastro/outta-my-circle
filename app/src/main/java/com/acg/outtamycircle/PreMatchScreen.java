@@ -197,8 +197,6 @@ public class PreMatchScreen extends AndroidScreen {
         }
         if(readMessages < numOpponents+1) {
             for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
-                Log.d("HUAN", Arrays.toString(message.buffer));
-                Log.d("JUANNINO", message.getType().toString());
                 int offset = orderedPlayers.get(message.getSender());
                 players[offset] = message.getSender();
                 skins[offset] = interpreter.getInitClientSkinId(message);
@@ -246,8 +244,6 @@ public class PreMatchScreen extends AndroidScreen {
         repeatSendInit = false;
         GameMessage message = GameMessage.createInstance();
         interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
-        Log.d("HUAN","should be " + myGoogleRoom.getCurrentIdSkin() + " , " + myGoogleRoom.getCurrentIdAttack());
-        Log.d("HUAN", Arrays.toString(message.buffer));
         NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         handler.putInBuffer(message);
         handler.sendReliable(myGoogleRoom.getServerId(), new NetworkMessageHandlerImpl.OnComplete() {
