@@ -61,8 +61,9 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.swordsWhite = graphics.newPixmap("etc/swords_white.png", PixmapFormat.ARGB8888);
         Assets.sad = graphics.newPixmap("etc/sad.png", PixmapFormat.ARGB8888);
         Assets.happy = graphics.newPixmap("etc/happy.png", PixmapFormat.ARGB8888);
+        Assets.neutral = graphics.newPixmap("etc/neutral.png", PixmapFormat.ARGB8888);
         setProgress(80);
-        Assets.click = androidGame.getAudio().newSound("audio/click.mp3"); //TODO
+        Assets.click = androidGame.getAudio().newSound("audio/click.mp3");
         Assets.powerupCollision = androidGame.getAudio().newSound("audio/powerupcollision.mp3");
         Assets.newPowerup = androidGame.getAudio().newSound("audio/powerupcollision.mp3");
         Assets.gameCharacterCollision = androidGame.getAudio().newSound("audio/gamecharcollision.mp3");

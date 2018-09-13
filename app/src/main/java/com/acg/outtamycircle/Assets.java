@@ -15,6 +15,7 @@ public class Assets {
     public static Pixmap quickGame;
     public static Pixmap sad;
     public static Pixmap happy;
+    public static Pixmap neutral;
     public static Pixmap logo;
     public static Pixmap background;
     public static Pixmap arena;

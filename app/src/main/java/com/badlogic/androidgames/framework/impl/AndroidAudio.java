@@ -8,6 +8,7 @@ import android.content.res.AssetManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.Log;
 
 import com.badlogic.androidgames.framework.Audio;
 import com.badlogic.androidgames.framework.Music;
@@ -30,8 +31,6 @@ public class AndroidAudio implements Audio {
                 .setAudioAttributes(attributes)
                 .setMaxStreams(SIMULTANEOUS_CHANNELS)
                 .build();
-
-        //this.soundPool = new SoundPool(SIMULTANEOUS_CHANNELS, AudioManager.STREAM_MUSIC, 0);
     }
 
     @Override
