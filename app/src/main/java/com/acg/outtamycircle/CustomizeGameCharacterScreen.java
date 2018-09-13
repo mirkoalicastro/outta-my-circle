@@ -104,7 +104,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             skin 0 = 3 giocatori
              */
             quickGameButton.enable(
-                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
+                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(3,3,definitiveIdSkin, definitiveIdAttack)
             );
         }
     }

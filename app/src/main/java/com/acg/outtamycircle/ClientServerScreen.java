@@ -128,7 +128,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         if(endGame) {
             g.drawText("FINE DL GIOCO", 500, 400, 50, Color.BLACK);
-        } else if(endRound) {
+        } else if(endRound || !isAlive) {
             if (winnerId[roundNum - 1] == playerOffset)
                 g.drawPixmap(Assets.happy, 515, 235);
             else if (!isAlive)
