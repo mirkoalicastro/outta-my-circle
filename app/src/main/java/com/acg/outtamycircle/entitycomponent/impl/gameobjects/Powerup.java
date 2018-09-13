@@ -7,14 +7,9 @@ public abstract class Powerup extends GameObject{
     protected GameCharacter character;
 
     public Powerup(GameStatus status, short id){
-        super(id);
+        super(id, Type.POWERUP);
         this.status = status;
     }
-
-    /*@Override
-    public Type type() {
-        return Type.Powerup;
-    }*/
 
     public abstract void start();
 
@@ -22,7 +17,7 @@ public abstract class Powerup extends GameObject{
 
     public abstract boolean isEnded();
 
-    public Powerup setGameCharacter(){
+    public Powerup setGameCharacter(GameCharacter character){
         this.character = character;
         return this;
     }

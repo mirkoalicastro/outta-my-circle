@@ -1,12 +1,13 @@
 package com.acg.outtamycircle;
 
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Arena;
+import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.utilities.MyList;
 
 public class GameStatus {
-    //TODO private final
-    Arena arena;
+    //TODO private final a TUTTO!?!?!?
+    Entity arena;
 
     GameCharacter playerOne;
     GameCharacter[] characters;
@@ -14,14 +15,13 @@ public class GameStatus {
     final MyList<GameCharacter> living = new MyList<>();
     final MyList<GameCharacter> dying = new MyList<>();
 
-    final MyList<GameCharacter> powerups = new MyList<>();
+    final MyList<Powerup> actives = new MyList<>();
+    final MyList<Powerup> inactives = new MyList<>();
     private int activePowerupsNumber;
 
-    void setArena(Arena arena){
+    void setArena(Entity arena){
         this.arena = arena;
     }
-
-    public void add(GameCharacter gc){ living.add(gc); }
 
     public void setCharacters(GameCharacter... characters){
         for(int i=0 ; i<characters.length ; i++)
@@ -37,9 +37,13 @@ public class GameStatus {
         return living;
     }
 
-    public MyList<GameCharacter> getPowerups(){
-        return powerups;
+    public int getActivePowerupsNumber(){ return activePowerupsNumber; }
+
+    public MyList<Powerup> getActivePowerups() {
+        return actives;
     }
 
-    public int getActivePowerupsNumber(){ return activePowerupsNumber; }
+    public MyList<Powerup> getInactivePowerups() {
+        return inactives;
+    }
 }

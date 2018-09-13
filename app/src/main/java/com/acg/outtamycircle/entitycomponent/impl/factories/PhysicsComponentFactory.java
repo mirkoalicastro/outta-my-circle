@@ -1,4 +1,4 @@
-package com.acg.outtamycircle.entitycomponent.impl.factory;
+package com.acg.outtamycircle.entitycomponent.impl.factories;
 
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;

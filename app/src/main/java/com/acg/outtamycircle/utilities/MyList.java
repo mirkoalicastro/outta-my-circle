@@ -29,6 +29,7 @@ public class MyList<T> implements Iterable<T> {
         return count;
     }
 
+    //TODO usare un pool di nodi
     public void add(T key){
         Node<T> node = new Node<>(key);
         if(head != null) {

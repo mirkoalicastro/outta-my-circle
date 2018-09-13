@@ -1,20 +1,18 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
-import com.acg.outtamycircle.entitycomponent.impl.factory.PhysicsComponentFactory;
+import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
+import com.acg.outtamycircle.utilities.PowerupRandomManager;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
-import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.PolygonShape;
@@ -30,6 +28,7 @@ public class ServerScreen extends ClientServerScreen {
     protected final int[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory;
     private final ContactHandler contactHandler;
+    private final PowerupRandomManager powerupRandomManager;
 
     private void startRound() { //TODO porta sopra
         if(startAt > System.currentTimeMillis())
@@ -67,7 +66,7 @@ public class ServerScreen extends ClientServerScreen {
         roundNum--;
 
         contactHandler = new ContactHandler();
-        contactHandler.init();
+        contactHandler.init(status);
 
         world.setContactListener(contactHandler); //TODO
 
@@ -79,6 +78,8 @@ public class ServerScreen extends ClientServerScreen {
         topY = arenaY + squareHalfSide;
         bottomY = arenaY - squareHalfSide;
         threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
+
+        powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
 
         //TODO comunica posizioni etc.
     }
@@ -119,6 +120,7 @@ public class ServerScreen extends ClientServerScreen {
 
         updateDrawablesPosition();
         updateCharactersStatus();
+        updatePowerupsStatus();
 
         sendStatus();
     }
@@ -222,13 +224,12 @@ public class ServerScreen extends ClientServerScreen {
                 .setType(BodyType.dynamicBody).setShape(new PolygonShape());
     }
 
-
-    @Override
-    protected Powerup createPowerup(int x, int y, short id){
-        Powerup powerup = super.createPowerup(x, y, id);
+    protected Powerup createPowerup(float x, float y, short id){
+        Powerup powerup = super.createPowerup((int)Converter.physicsToFrame(x),
+                (int)Converter.physicsToFrame(y), id);
 
         physicsComponentFactory.setOwner(powerup)
-                .setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y));
+                .setPosition(x, y);
         powerup.addComponent(physicsComponentFactory.makeComponent());
 
         return powerup;
@@ -263,7 +264,18 @@ public class ServerScreen extends ClientServerScreen {
         networkMessageHandler.broadcastUnreliable();
     }
 
-    private void powerupPhase(){
-        //TODO
+    private void updatePowerupsStatus(){
+        if(powerupRandomManager.randomBoolean()){
+            Powerup powerup = createPowerup(powerupRandomManager.randomX(),
+                    powerupRandomManager.randomY(),
+                    powerupRandomManager.randomPowerup());
+
+            status.inactives.add(powerup);
+        }
+
+        for(Powerup pu : status.actives)
+            if(!pu.isEnded())
+                pu.start();
+        status.actives.resetIterator();
     }
 }

@@ -3,7 +3,9 @@ package com.acg.outtamycircle.contactphase;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
@@ -19,19 +21,20 @@ public class ContactHandler extends ContactListener{
         Fixture fa = contact.getFixtureA(),
                 fb = contact.getFixtureB();
         Body ba = fa.getBody(), bb = fb.getBody();
+        GameObject a = (GameObject)ba.getUserData(), b = (GameObject)bb.getUserData();
 
-        ContactType contactType = map.get(ContactType.myHashCode(ba.getUserData().getClass(), bb.getUserData().getClass()));
+        ContactType contactType = map.get(ContactType.myHashCode(a.getClass(), b.getClass()));
 
         if (contactType != null)
-            contactType.handle();
+            contactType.handle(a, b);
     }
 
-    public void init() {
+    public void init(GameStatus status) {
         map = new SparseArray<>();
 
         CharactersContact cc = new CharactersContact();
 
-        CharacterPowerupContact cp = new CharacterPowerupContact();
+        CharacterPowerupContact cp = new CharacterPowerupContact(status);
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
         map.put(ContactType.myHashCode(GameCharacter.class,Powerup.class), cp);
