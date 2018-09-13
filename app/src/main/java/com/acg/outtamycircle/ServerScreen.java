@@ -5,7 +5,6 @@ import android.util.Log;
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
@@ -14,6 +13,7 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
+import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.World;
@@ -23,12 +23,36 @@ import java.util.Iterator;
 public class ServerScreen extends ClientServerScreen {
     private final World world;
 
-    private static final float TIME_STEP = 1 / 60f;   //60 fps
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
     protected final int[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
     private final ContactHandler contactHandler;
+
+    private void startRound() { //TODO porta sopra
+        if(startAt > System.currentTimeMillis())
+            return;
+        if(status != null)
+            for(GameCharacter gameCharacter: status.living)
+                ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
+        roundNum++;
+        if(roundNum > ROUNDS) {
+            endGame = true;
+            return;
+        }
+        isAlive = true;
+        endRound = false;
+        status = new GameStatus();
+        initArenaSettings();
+        status.setArena(createArena());
+        initCharacterSettings(radiusCharacter);
+        GameCharacter[] characters = new GameCharacter[players.length];
+        for (int i = 0; i < characters.length; i++)
+            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
+        status.setCharacters(characters);
+
+        status.setPlayerOne(characters[playerOffset]);
+    }
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
@@ -36,19 +60,8 @@ public class ServerScreen extends ClientServerScreen {
 
         world = new World(0, 0);
 
-        /*Powerup pu = EntityFactory.createServerDefaultPowerup(20, frameWeight/2, frameHeight/2);
-        status.setPowerup(pu);*/
-
-        int radiusCharacter = 40;
-
-        initCharacterSettings(radiusCharacter);
-        GameCharacter[] characters = new GameCharacter[players.length];
-        for (int i = 0; i < characters.length; i++)
-            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
-
-        status.setCharacters(characters);
-
-        status.setPlayerOne(characters[playerOffset]);
+        startRound();
+        roundNum--;
 
         contactHandler = new ContactHandler();
         contactHandler.init();
@@ -78,6 +91,11 @@ public class ServerScreen extends ClientServerScreen {
         if(endGame)
             return;
 
+        if(endRound) {
+            startRound();
+            return;
+        }
+
         for (GameMessage message : networkMessageHandler.getMessages()) {
             GameCharacter gameCharacter;
             switch (interpreter.getType(message)){
@@ -94,11 +112,7 @@ public class ServerScreen extends ClientServerScreen {
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
-        try {
-            world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
-        } catch (Exception e) {
-            Log.d("EMOSOCAZZI", "world step " + e);
-        }
+        world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
         updateDrawablesPosition();
         updateCharactersStatus();
@@ -118,7 +132,7 @@ public class ServerScreen extends ClientServerScreen {
             GameCharacter character = iterator.next();
             short charId = character.getObjectId();
             if(status.living.size()==1) {
-                winnerId = charId;
+                winnerId[roundNum-1] = charId;
                 break;
             }
             if (isOut(character)) {
@@ -192,21 +206,23 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private void disablePhysicsComponent(GameCharacter ch){
-        Log.d("EMOSOCAZZI", "delete body!!!1"); //TODO nell'angolino
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
         component.deleteBody();
     }
+
+    private long startAt;
 
     private void sendStatus(){
         DrawableComponent shape;
         GameMessage message = GameMessage.createInstance();
 
-        if(winnerId!=-1) {
-            interpreter.makeEndMessage(message, (short)winnerId);
+        if(winnerId[roundNum-1] != -1) {
+            interpreter.makeEndMessage(message, (short)winnerId[roundNum-1]);
             networkMessageHandler.putInBuffer(message);
             networkMessageHandler.broadcastReliable();
             GameMessage.deleteInstance(message);
-            endGame = true;
+            startAt = System.currentTimeMillis()+5000;
+            endRound = true;
             return;
         }
 

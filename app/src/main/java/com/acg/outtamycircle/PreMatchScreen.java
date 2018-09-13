@@ -12,7 +12,6 @@ import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
-import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;

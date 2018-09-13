@@ -26,11 +26,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
-    protected final GameStatus status;
+    protected static final int ROUNDS = 3;
+    protected int roundNum = 1;
+
+    protected int radiusCharacter = 40;
+
+    protected GameStatus status;
     protected final int frameHeight, frameWidth, arenaRadius; //TODO cambia weight! height, width, radius
     protected boolean isAlive = true;
-    protected int winnerId = -1;
-    protected boolean endGame;
+    protected final int[] winnerId ;
+    protected boolean endGame, endRound;
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
@@ -68,6 +73,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         this.spawnPositions = spawnPositions;
         this.playerOffset = playerOffset;
         this.networkMessageHandler = myGoogleRoom.getNetworkMessageHandler();
+        this.winnerId = new int[ROUNDS];
+        for(int i=0; i<winnerId.length; i++)
+            this.winnerId[i] = -1;
 
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
         /*        .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
@@ -86,11 +94,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
         arenaRadius = frameHeight/2 - 40;
 
         setup();
-        status = new GameStatus();
 
         drawableComponentFactory.setGraphics(game.getGraphics());
-        initArenaSettings();
-        status.setArena(createArena());
     }
 
     @Override
@@ -108,10 +113,16 @@ public abstract class ClientServerScreen extends AndroidScreen {
         androidJoystick.draw();
         timedCircularButton.draw();
 
-        if(winnerId == playerOffset)
-            g.drawPixmap(Assets.happy, 515, 235);
-        else if(!isAlive)
-            g.drawPixmap(Assets.sad, 515, 235);
+        g.drawText("Round " + Math.min(roundNum, ROUNDS) + "/" + ROUNDS, 100,100, 40, 0xFFFF5555);
+
+        if(endGame) {
+            g.drawText("FINE DL GIOCO", 500, 400, 50, Color.BLACK);
+        } else if(endRound) {
+            if (winnerId[roundNum - 1] == playerOffset)
+                g.drawPixmap(Assets.happy, 515, 235);
+            else if (!isAlive)
+                g.drawPixmap(Assets.sad, 515, 235);
+        }
     }
 
     @Override
@@ -177,7 +188,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
-    private void initArenaSettings(){
+    protected void initArenaSettings(){
         drawableComponentFactory.resetFactory();
         int x = frameWidth/2, y = frameHeight/2;
 
@@ -193,7 +204,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
-    private Arena createArena(){
+    protected Arena createArena(){
         Arena arena = new Arena();
 
         drawableComponentFactory.setOwner(arena);
@@ -212,14 +223,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
     }
 
     private void updateDyingRadius() {
-        int diam;
-        DrawableComponent component = null;
         Iterator<GameCharacter> iterator = status.dying.iterator();
 
         while(iterator.hasNext()) {
             GameCharacter ch = iterator.next();
-            component = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
-            diam = component.getHeight();
+            DrawableComponent component = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
+            int diam = component.getHeight();
             component.setHeight(diam - 1);
 
             if(diam <= 0)

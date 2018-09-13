@@ -16,14 +16,27 @@ public class ClientScreen extends ClientServerScreen {
     public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
 
-        int radiusCharacter = 40;
+        startRound();
+        roundNum--;
+    }
 
+    private void startRound() { //TODO porta sopra
+        if (startAt > System.currentTimeMillis())
+            return;
+        roundNum++;
+        if (roundNum > ROUNDS) {
+            endGame = true;
+            return;
+        }
+        isAlive = true;
+        endRound = false;
+        status = new GameStatus();
+        initArenaSettings();
+        status.setArena(createArena());
         initCharacterSettings(radiusCharacter);
-
         GameCharacter[] characters = new GameCharacter[players.length];
         for (int i=0; i<characters.length; i++)
             characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
-
         status.setCharacters(characters);
     }
 
@@ -33,6 +46,11 @@ public class ClientScreen extends ClientServerScreen {
 
         if(endGame)
             return;
+
+        if(endRound) {
+            startRound();
+            return;
+        }
 
         if(isAlive)
             send();
@@ -108,11 +126,15 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case END: {
-                    winnerId = interpreter.getObjectId(message);
-                    endGame = true;
+                    startAt = System.currentTimeMillis()+5000;
+                    winnerId[roundNum-1] = interpreter.getObjectId(message);
+                    endRound = true;
                 }
                 break;
             }
         }
     }
+
+    private long startAt;
+
 }
