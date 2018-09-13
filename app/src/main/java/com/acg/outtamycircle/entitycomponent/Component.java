@@ -9,4 +9,8 @@ public abstract class Component {
         this.owner = owner;
         return this;
     }
+
+    public Entity getOwner() {
+        return owner;
+    }
 }

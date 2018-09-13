@@ -4,9 +4,8 @@ import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.network.GameMessage;
-import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 

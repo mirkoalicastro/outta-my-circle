@@ -1,13 +1,15 @@
-package com.acg.outtamycircle.entitycomponent;
+package com.acg.outtamycircle.entitycomponent.impl.factory;
 
-import android.util.Log;
-
+import com.acg.outtamycircle.entitycomponent.DrawableComponent;
+import com.acg.outtamycircle.entitycomponent.Entity;
+import com.acg.outtamycircle.entitycomponent.impl.components.CircleDrawableComponent;
+import com.acg.outtamycircle.entitycomponent.impl.components.RectangleDrawableComponent;
 import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
 
 public class DrawableComponentFactory{
-    private Graphics graphics;
+    private final Graphics graphics;
     private int x, y;
     private int width, height;
     private Pixmap pixmap;
@@ -17,14 +19,11 @@ public class DrawableComponentFactory{
     private Integer strokeColor;
     private Entity owner;
 
-    private DrawableShape shape = DrawableShape.CIRCLE;
+    private DrawableShape shape = DrawableShape.CIRCLE; //TODO lasciare null
     public enum DrawableShape{CIRCLE, RECTANGLE}
 
-
-
-    public DrawableComponentFactory setGraphics(Graphics graphics){
+    public DrawableComponentFactory(Graphics graphics){
         this.graphics = graphics;
-        return this;
     }
 
     public DrawableComponentFactory setStroke(int strokeWidth, Integer strokeColor) {
@@ -82,6 +81,7 @@ public class DrawableComponentFactory{
         x = y = width = height = strokeWidth = -1;
         pixmap = null; color = null; effect = null;
         strokeColor = null; owner = null;
+        shape = null;
     }
 
     public DrawableComponent makeComponent(){
@@ -91,6 +91,8 @@ public class DrawableComponentFactory{
             case CIRCLE:
                 component = new CircleDrawableComponent(graphics);
                 break;
+            case RECTANGLE:
+                component = new RectangleDrawableComponent(graphics);
         }
 
         component.setStroke(strokeWidth, strokeColor).setColor(color)
@@ -98,40 +100,5 @@ public class DrawableComponentFactory{
                 .setHeight(height).setX(x).setY(y).setOwner(owner);
 
         return component;
-    }
-
-    private class CircleDrawableComponent extends DrawableComponent{
-        private int radius;
-
-        CircleDrawableComponent(Graphics graphics){ super(graphics); }
-
-        @Override
-        public void draw() {
-            if(strokeWidth > 0 && strokeColor != null)
-                graphics.drawCircleBorder(x,y,radius,strokeWidth,strokeColor);
-            if(color != null)
-                graphics.drawCircle(x, y, radius, color);
-            if(effect != null)
-                graphics.drawEffect(effect, x, y, width, height);
-            if(pixmap != null)
-                graphics.drawPixmap(pixmap, x-radius, y-radius, width,height);
-        }
-
-        @Override
-        public DrawableComponent setWidth(int width) {
-            return setRadius(width/2);
-        }
-
-        @Override
-        public DrawableComponent setHeight(int height) {
-            return setRadius(height/2);
-        }
-
-        DrawableComponent setRadius(int radius) {
-            this.radius = radius;
-            width = radius*2;
-            height = radius*2;
-            return this;
-        }
     }
 }

@@ -3,8 +3,8 @@ package com.acg.outtamycircle.contactphase;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
-import com.acg.outtamycircle.entitycomponent.impl.Powerup;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;

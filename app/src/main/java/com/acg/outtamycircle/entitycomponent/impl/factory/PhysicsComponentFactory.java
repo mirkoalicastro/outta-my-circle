@@ -1,6 +1,8 @@
-package com.acg.outtamycircle.entitycomponent;
+package com.acg.outtamycircle.entitycomponent.impl.factory;
 
-import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.Entity;
+import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyDef;
 import com.google.fpl.liquidfun.BodyType;
@@ -9,11 +11,11 @@ import com.google.fpl.liquidfun.Shape;
 import com.google.fpl.liquidfun.World;
 
 public class PhysicsComponentFactory {
-    private World world;
-    private Entity owner;
+    private final World world;
+    private final BodyDef bodyDef = new BodyDef();
+    private final FixtureDef fixDef = new FixtureDef();
 
-    private BodyDef bodyDef = new BodyDef();
-    private FixtureDef fixDef = new FixtureDef();
+    private Entity owner;
 
     private Shape shape;
     private float radius, width, height;
@@ -22,12 +24,8 @@ public class PhysicsComponentFactory {
     private boolean awake = false;
     private boolean bullet = false;
 
-
-    public PhysicsComponentFactory setWorld(World world){
-        bodyDef = new BodyDef(); //TODO deelete
-        fixDef = new FixtureDef(); //TODO delete
+    public PhysicsComponentFactory(World world){
         this.world = world;
-        return this;
     }
 
     public PhysicsComponentFactory setPosition(float x, float y) {
@@ -104,7 +102,7 @@ public class PhysicsComponentFactory {
 
         Body body = world.createBody(bodyDef);
         body.setSleepingAllowed(sleepingAllowed);
-        body.setUserData(component.owner);
+        body.setUserData(component.getOwner());
 
         if(shape == null)
             throw new NullPointerException("Create a shape before");
@@ -117,5 +115,13 @@ public class PhysicsComponentFactory {
         body.setAwake(awake);
 
         return component.setBody(body);
+    }
+
+    public void resetFactory(){
+        owner = null; shape = null;
+        radius = width = height = 0f;
+
+        sleepingAllowed = true;
+        awake = bullet = false;
     }
 }

@@ -5,9 +5,10 @@ import android.util.Log;
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.PhysicsComponentFactory;
-import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
-import com.acg.outtamycircle.entitycomponent.impl.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.impl.factory.PhysicsComponentFactory;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
@@ -16,6 +17,7 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
+import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.World;
 
 import java.util.Iterator;
@@ -26,7 +28,7 @@ public class ServerScreen extends ClientServerScreen {
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
     protected final int[] attacks;
-    private final PhysicsComponentFactory physicsComponentFactory = new PhysicsComponentFactory();
+    private final PhysicsComponentFactory physicsComponentFactory;
     private final ContactHandler contactHandler;
 
     private void startRound() { //TODO porta sopra
@@ -59,6 +61,7 @@ public class ServerScreen extends ClientServerScreen {
         this.attacks = attacks;
 
         world = new World(0, 0);
+        physicsComponentFactory = new PhysicsComponentFactory(world);
 
         startRound();
         roundNum--;
@@ -175,7 +178,7 @@ public class ServerScreen extends ClientServerScreen {
     protected void initCharacterSettings(float r){
         super.initCharacterSettings(r);
 
-        physicsComponentFactory.setWorld(world).setDensity(1f).setFriction(1f).setRestitution(1f)
+        physicsComponentFactory.setDensity(1f).setFriction(1f).setRestitution(1f)
                 .setType(BodyType.dynamicBody).setShape(new CircleShape())
                 .setRadius(Converter.frameToPhysics(r)).setAwake(true)
                 .setBullet(true).setSleepingAllowed(true);
@@ -210,6 +213,27 @@ public class ServerScreen extends ClientServerScreen {
         component.deleteBody();
     }
 
+    @Override
+    protected void initPowerupSettings(int side){
+        super.initPowerupSettings(side);
+
+        physicsComponentFactory.resetFactory();
+        physicsComponentFactory.setDensity(0f).setFriction(0f).setRestitution(0f)
+                .setType(BodyType.dynamicBody).setShape(new PolygonShape());
+    }
+
+
+    @Override
+    protected Powerup createPowerup(int x, int y, short id){
+        Powerup powerup = super.createPowerup(x, y, id);
+
+        physicsComponentFactory.setOwner(powerup)
+                .setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y));
+        powerup.addComponent(physicsComponentFactory.makeComponent());
+
+        return powerup;
+    }
+
     private long startAt;
 
     private void sendStatus(){
@@ -237,5 +261,9 @@ public class ServerScreen extends ClientServerScreen {
         GameMessage.deleteInstance(message);
 
         networkMessageHandler.broadcastUnreliable();
+    }
+
+    private void powerupPhase(){
+        //TODO
     }
 }

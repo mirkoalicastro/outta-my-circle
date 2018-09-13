@@ -5,9 +5,11 @@ import android.graphics.Shader;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
-import com.acg.outtamycircle.entitycomponent.DrawableComponentFactory;
-import com.acg.outtamycircle.entitycomponent.impl.Arena;
-import com.acg.outtamycircle.entitycomponent.impl.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.factory.DrawableComponentFactory;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Arena;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
@@ -39,7 +41,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
-    protected final DrawableComponentFactory drawableComponentFactory = new DrawableComponentFactory();
+    protected final DrawableComponentFactory drawableComponentFactory;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
 
     /*La cattura degli eventi è equivalente in client e server,
@@ -78,9 +80,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
             this.winnerId[i] = -1;
 
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
-        /*        .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
+                .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
                         new int[]{Settings.INTERNAL_GRADIENT, Settings.EXTERNAL_GRADIENT},
-                        new float[]{0f,1f}, Shader.TileMode.CLAMP)) */
+                        new float[]{0f,1f}, Shader.TileMode.CLAMP))
                 .setColor(Settings.DKGRAY).setStroke(15,Color.BLACK);
 
         timedCircularButton.setSecondaryColor(Settings.DKRED)
@@ -95,7 +97,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
         setup();
 
-        drawableComponentFactory.setGraphics(game.getGraphics());
+        drawableComponentFactory = new DrawableComponentFactory(game.getGraphics());
     }
 
     @Override
@@ -188,6 +190,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
+    protected void initPowerupSettings(int side){
+        drawableComponentFactory.resetFactory();
+        drawableComponentFactory.setShape(DrawableComponentFactory.DrawableShape.RECTANGLE)
+                .setHeight(side).setWidth(side).setStroke(6,Color.BLACK);
+    }
+
     protected void initArenaSettings(){
         drawableComponentFactory.resetFactory();
         int x = frameWidth/2, y = frameHeight/2;
@@ -200,7 +208,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
                                 new float[]{0f,1f}, Shader.TileMode.CLAMP
                         ),
                         (AndroidEffect)Assets.arenaTile)
-        //.setColor(Color.RED
                 ).setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
     }
 
@@ -238,4 +245,19 @@ public abstract class ClientServerScreen extends AndroidScreen {
         status.dying.resetIterator();
     }
 
+
+    protected Powerup createPowerup(int x, int y, short id){
+        Powerup powerup = null;
+        switch (id){
+            case RadialForcePowerup.id:
+                powerup = new RadialForcePowerup(status);
+                break;
+        }
+
+        drawableComponentFactory.setPixmap(Assets.skins[id]).setX(x).setY(y).setOwner(powerup);
+        //TODO Assets.powerups[id]
+
+        powerup.addComponent(drawableComponentFactory.makeComponent());
+        return powerup;
+    }
 }

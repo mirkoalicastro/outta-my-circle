@@ -1,4 +1,4 @@
-package com.acg.outtamycircle.entitycomponent.impl;
+package com.acg.outtamycircle.entitycomponent.impl.components;
 
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.google.fpl.liquidfun.Body;
@@ -7,12 +7,15 @@ import com.google.fpl.liquidfun.Vec2;
 /**
  * Generalizzazione delle componenti fisiche di liquid fun
  */
+
+//TODO generalizzare i metodi e rendere la classe interna al factory
 public class LiquidFunPhysicsComponent extends PhysicsComponent{
     protected Body body;
     private final Vec2 v = new Vec2();
 
     private float width, height;
 
+    @Override
     public void applyForce(float x, float y){
         x /= 150; y /= 150;
 
@@ -25,10 +28,12 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
         body.applyForceToCenter(v,true);
     }
 
+    @Override
     public float getX(){
         return body.getPositionX();
     }
 
+    @Override
     public float getY(){
         return body.getPositionY();
     }
