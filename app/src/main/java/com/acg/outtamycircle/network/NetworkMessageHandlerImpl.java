@@ -15,6 +15,8 @@ import java.util.Arrays;
 public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
     private static final int MAX_BUFFER_SIZE = 400; //TODO
     private static final byte ENDING_CHAR = 127;
+    private static final int MAX_CAPACITY = 40;
+    private static final int INITIAL_CAPACITY = 20;
 
     private MessageReceiver first, second;
 
@@ -26,6 +28,8 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
 
     public NetworkMessageHandlerImpl(MyGoogleRoom myGoogleRoom) {
         this.myGoogleRoom = myGoogleRoom;
+        for(int i=0; i<INITIAL_CAPACITY; i++)
+            bufferPool.free(new byte[MAX_BUFFER_SIZE]);
     }
 
     //TODO change
@@ -40,7 +44,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
         sendReliable(playerId, true, null);
     }
 
-    public static interface OnComplete {
+    public interface OnComplete {
         void work(Task<Integer> task);
     }
 
@@ -48,22 +52,12 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
         sendReliable(playerId, true, onComplete);
     }
 
-//    private final Pools.Pool<Object> bufferSyncPool = new Pools.SynchronizedPool<>(100);
-
-    private final com.badlogic.androidgames.framework.Pool<Object> bufferPool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<Object>() {
+    private final Pool<Object> bufferPool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<Object>() {
         @Override
         public Object createObject() {
             return new byte[MAX_BUFFER_SIZE];
         }
-    }, 20);
-
-    {
-//        for(int i=0; i<100; i++)
-  //          bufferSyncPool.release(new byte[MAX_BUFFER_SIZE]);
-
-        for(int i=0; i<20; i++)
-            bufferPool.free(new byte[MAX_BUFFER_SIZE]);
-    }
+    }, MAX_CAPACITY);
 
     private void sendReliable(final String playerId, boolean clearBuffer, final OnComplete onComplete) {
         final byte[] toSend = (byte[]) bufferPool.newObject();

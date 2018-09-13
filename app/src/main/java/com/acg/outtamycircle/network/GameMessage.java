@@ -1,33 +1,25 @@
 package com.acg.outtamycircle.network;
 
-import android.support.v4.util.Pools;
-
-import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
-import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
-import com.badlogic.androidgames.framework.Game;
 import com.badlogic.androidgames.framework.Pool;
-import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
-
-import java.util.Arrays;
 
 public class GameMessage {
     //TODO sender??
     private String sender;
     private static int MAX_BUFFER_SIZE = 11;
 
-    private static final int CAPACITY = 20;
-    private static final Pool<GameMessage> pool;
+    private static final int MAX_CAPACITY = 40;
+    private static final int INITIAL_CAPACITY = 20;
+    private static final Pool<GameMessage> pool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<GameMessage>() {
+        @Override
+        public GameMessage createObject() {
+            return new GameMessage();
+        }
+    }, MAX_CAPACITY);
 
     public byte buffer[]; //TODO package-private
 
     static {
-        pool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<GameMessage>() {
-            @Override
-            public GameMessage createObject() {
-                return new GameMessage();
-            }
-        }, CAPACITY);
-        for(int i=0;i<CAPACITY;i++)
+        for(int i=0; i<INITIAL_CAPACITY; i++)
             pool.free(new GameMessage());
     }
 
