@@ -27,9 +27,11 @@ public class PreMatchScreen extends AndroidScreen {
 
     private int readMessages = 0;
     private int phase = 0;
+    private boolean repeatSendInit = true;
+    private boolean repeatBroadcastInit = true;
+    private volatile int countBroadcastInit = 0;
 
     private int time;
-    private String winnerId;
 
     private final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
     private final MyGoogleRoom myGoogleRoom;
@@ -46,7 +48,7 @@ public class PreMatchScreen extends AndroidScreen {
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
-        this.winnerId = myGoogleRoom.getPlayerId();
+        myGoogleRoom.setServerId(myGoogleRoom.getPlayerId());
         this.myGoogleRoom = myGoogleRoom;
         this.numOpponents = myGoogleRoom.getParticipants().size()-1;
         players = new String[numOpponents+1];
@@ -95,6 +97,8 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void sendStart() {
+        if(nextScreen == null)
+            return;
         NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
         interpreter.makeStartMessage(message); //TODO make start message
@@ -122,13 +126,18 @@ public class PreMatchScreen extends AndroidScreen {
     private void createMatchScreen() {
         if(myGoogleRoom.isServer()) {
             nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks, playerOffset);
+            Log.d("IOSOSERVER", "ISTANZIO nextScreen");
         } else {
             nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, playerOffset);
+            Log.d("IOSOCLIENT", "ISTANZIO nextScreen");
         }
         nextPhase();
     }
 
     private void broadcastInit() {
+        if(!repeatBroadcastInit)
+            return;
+        repeatBroadcastInit = false;
         NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance();
         Log.d("HEYHEYHEY", Arrays.toString(skins));
@@ -140,7 +149,11 @@ public class PreMatchScreen extends AndroidScreen {
             @Override
             public void work(Task<Integer> task) {
                 if(task.isSuccessful()) {
-                    nextPhase(); //TODO non mndare sempre
+                    countBroadcastInit++;
+                    if(countBroadcastInit == numOpponents)
+                        nextPhase();
+                } else {
+                    repeatBroadcastInit = true;
                 }
             }
         });
@@ -158,6 +171,7 @@ public class PreMatchScreen extends AndroidScreen {
                     start = true;
                     continue;
                 } else if(message.getType() != GameMessage.Type.CREATE) {
+                    Log.d("ATTENZIONEATT", "devo saltare causa " + message.getType().toString());
                     continue;
                 }
                 int offset = interpreter.getObjectId(message);
@@ -227,8 +241,10 @@ public class PreMatchScreen extends AndroidScreen {
         }
     }
 
-
     private void sendInit() {
+        if(!repeatSendInit)
+            return;
+        repeatSendInit = false;
         GameMessage message = GameMessage.createInstance();
         interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
         Log.d("HUAN","should be " + myGoogleRoom.getCurrentIdSkin() + " , " + myGoogleRoom.getCurrentIdAttack());
@@ -238,39 +254,35 @@ public class PreMatchScreen extends AndroidScreen {
         handler.sendReliable(myGoogleRoom.getServerId(), new NetworkMessageHandlerImpl.OnComplete() {
             @Override
             public void work(Task<Integer> task) {
-                if(task.isSuccessful()) {
-                    nextPhase(); //TODO non mndare sempre
-                }
+                if(task.isSuccessful())
+                    nextPhase();
+                else
+                    repeatSendInit = true;
             }
         });
         GameMessage.deleteInstance(message);
     }
 
     private void choose() {
-        if(readMessages == 0) {
-            Log.d("AGLIO", "Io sono " + time + " con id " + winnerId + " <=> " + myGoogleRoom.getPlayerId());
-        }
         if(readMessages < numOpponents) {
             for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
-                Log.d("JUANNINO", message.getType().toString());
                 if(message.getType() == GameMessage.Type.START) {
                     start = true;
                     continue;
                 }
                 int itsTime = interpreter.getTimeMillis(message);
-                if(itsTime < time || (itsTime == time && message.getSender().compareTo(winnerId) < 0)) {
+                if(itsTime < time || (itsTime == time && message.getSender().compareTo(myGoogleRoom.getServerId()) < 0)) {
                     time = itsTime;
-                    winnerId = message.getSender();
+                    myGoogleRoom.setServerId(message.getSender());
                 }
                 readMessages++;
             }
         }
         if(readMessages >= numOpponents) {
-            if (winnerId.equals(myGoogleRoom.getPlayerId()))
+            if (myGoogleRoom.getPlayerId().equals(myGoogleRoom.getServerId()))
                 Log.d("MAMMAMIA", "sono server");
             else
                 Log.d("MAMMAMIA", "sono client");
-            myGoogleRoom.setServerId(winnerId);
             nextPhase();
         }
     }
@@ -292,20 +304,17 @@ public class PreMatchScreen extends AndroidScreen {
      */
     private int[][] distributePoints(int r, int w, int h, int n){
         int[][] points = new int[n][2];
-        double x, y;
-        double p = (Math.PI*2)/n;
+        double p = Math.PI*2/n;
         double theta = Math.PI/2;
 
-        for(int i=0 ; i<n ; i++){
-            x = Math.cos(theta)*r;
-            y = Math.sin(theta)*r;
-
-
-            points[i][0] = (int)x + w;
-            points[i][1] = (int)y + h;
-
+        for(int i=0; i<n; i++){
+            int x = (int)(Math.cos(theta)*r);
+            int y = (int)(Math.sin(theta)*r);
+            points[i][0] = x + w;
+            points[i][1] = y + h;
             theta += p;
         }
+
         return points;
     }
 

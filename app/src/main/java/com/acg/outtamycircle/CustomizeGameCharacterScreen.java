@@ -100,8 +100,11 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
+            /*
+            skin 0 = 3 giocatori
+             */
             quickGameButton.enable(
-                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
+                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(3,3,definitiveIdSkin, definitiveIdAttack)
             );
         }
     }
@@ -155,25 +158,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         if(Settings.soundEnabled)
             Assets.click.play(Settings.volume);
         androidGame.setScreen(new MainMenuScreen(androidGame));
-    }
-
-    private int[][] distributePoints(int r, int w, int h, int n){
-        int[][] points = new int[n][2];
-        double x, y;
-        double p = (Math.PI*2)/n;
-        double theta = Math.PI/2;
-
-        for(int i=0 ; i<n ; i++){
-            x = Math.cos(theta)*r;
-            y = Math.sin(theta)*r;
-
-
-            points[i][0] = (int)x + w;
-            points[i][1] = (int)y + h;
-
-            theta += p;
-        }
-        return points;
     }
 
 }
