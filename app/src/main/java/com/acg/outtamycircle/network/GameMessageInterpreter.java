@@ -53,7 +53,7 @@ public interface GameMessageInterpreter {
 
     void makePowerUpAssign(GameMessage gameMessage, int objectId, int powerupId);
 
-    void makeAttackMessage(GameMessage gameMessage, int objectId);
+    void makeAttackMessage(GameMessage gameMessage, int objectId, int xDirection, int yDirection);
 
     void makeEndMessage(GameMessage gameMessage, int winnerId);
 

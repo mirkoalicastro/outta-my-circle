@@ -48,7 +48,7 @@ public class ClientScreen extends ClientServerScreen {
             if(Settings.soundEnabled)
                 Assets.attackEnabled.play(Settings.volume);
             shouldAttack = false;
-            interpreter.makeAttackMessage(message, (short)playerOffset);
+            interpreter.makeAttackMessage(message, (short)playerOffset, (int)androidJoystick.getNormX(),(int) androidJoystick.getNormY());
             networkMessageHandler.putInBuffer(message);
         }
         networkMessageHandler.sendUnreliable(myGoogleRoom.getServerId());

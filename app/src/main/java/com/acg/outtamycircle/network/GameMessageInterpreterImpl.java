@@ -127,8 +127,9 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public void makeAttackMessage(GameMessage message, int objectId) {
+    public void makeAttackMessage(GameMessage message, int objectId, int xDirection, int yDirection) {
         makeMessage(message, GameMessage.Type.ATTACK, objectId);
+        message.putShort(POS_X_IDX,(short) xDirection).putShort(POS_Y_IDX, (short) yDirection);
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.acg.outtamycircle;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.impl.factories.AttackFactory;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
@@ -19,6 +22,7 @@ import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.World;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class ServerScreen extends ClientServerScreen {
@@ -35,6 +39,7 @@ public class ServerScreen extends ClientServerScreen {
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
+        Log.d("ATTACKS", Arrays.toString(attacks));
         this.attacks = attacks;
 
         world = new World(0, 0);
@@ -58,6 +63,8 @@ public class ServerScreen extends ClientServerScreen {
         threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
 
         powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
+
+
 
         //TODO comunica posizioni etc.
     }
@@ -107,6 +114,21 @@ public class ServerScreen extends ClientServerScreen {
                     status.activeAttacks.add(attackComponent);
                     break;
             }
+        }
+
+        if(shouldAttack){
+            GameCharacter gameCharacter = status.characters[playerOffset];
+            AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
+            float x = androidJoystick.getNormX();
+            float y = androidJoystick.getNormY();
+            attackComponent.start(x, y);
+            GameMessage message = GameMessage.createInstance();
+            interpreter.makeAttackMessage(message, playerOffset, (int) x, (int) y);
+            networkMessageHandler.putInBuffer(message);
+            messagesInBuffer++;
+            GameMessage.deleteInstance(message);
+            status.activeAttacks.add(attackComponent);
+            shouldAttack = false;
         }
 
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
@@ -289,5 +311,12 @@ public class ServerScreen extends ClientServerScreen {
             for(GameCharacter gameCharacter: status.living)
                 ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
         super.startRound();
+
+        AttackFactory attackFactory = new AttackFactory();
+        for(int i=0 ; i<attacks.length ; i++) {
+            Component comp = attackFactory.makeAttackComponent(attacks[i]);
+            status.characters[i].addComponent(comp);
+            comp.setOwner(status.characters[i]);
+        }
     }
 }
