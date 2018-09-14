@@ -26,6 +26,13 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124);
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
 
+    private final MyGoogleRoom myGoogleRoom;
+    private final MyGoogleRoom.Resetter myResetter = new MyGoogleRoom.Resetter() {
+        @Override
+        public void reset() {
+            enableButtons(true);
+        }
+    };
     private boolean unchanged;
 
     public CustomizeGameCharacterScreen(GoogleAndroidGame googleAndroidGame) {
@@ -36,6 +43,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         rightAttack.setPixmap(Assets.rightArrow);
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
+        myGoogleRoom = googleAndroidGame.getMyGoogleRoom();
         googleAndroidGame.getMyGoogleSignIn().signIn();
     }
 
@@ -53,7 +61,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
                 break;
-            } else if(backButton.inBounds(event)) {
+            } else if(backButton.inBounds(event) && backButton.isEnabled()) {
                 goBack = true;
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
@@ -99,10 +107,15 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
-            quickGameButton.enable( //TODO num players
-                    !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
+            enableButtons( //TODO num players
+                    !myGoogleRoom.quickGame(myResetter,2, 2, definitiveIdSkin, definitiveIdAttack)
             );
         }
+    }
+
+    private void enableButtons(boolean enable) {
+        quickGameButton.enable(enable);
+        backButton.enable(enable);
     }
 
     @Override

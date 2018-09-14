@@ -68,7 +68,6 @@ public class MyGoogleSignIn {
 
     private void onDisconnected() {
         signOut();
-        //TODO other stuff
     }
 
     public void signIn() { //onresume
