@@ -10,6 +10,7 @@ import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.AndroidLoadingScreen;
 import com.badlogic.androidgames.framework.impl.CircularTileAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RectangularTileAndroidEffect;
+import com.badlogic.androidgames.framework.impl.SpinAnimation;
 
 public class StartScreen extends AndroidLoadingScreen {
 
@@ -63,6 +64,7 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.sad = graphics.newPixmap("etc/sad.png", PixmapFormat.ARGB8888);
         Assets.happy = graphics.newPixmap("etc/happy.png", PixmapFormat.ARGB8888);
         Assets.neutral = graphics.newPixmap("etc/neutral.png", PixmapFormat.ARGB8888);
+        Assets.wait = graphics.newPixmap("etc/wait.png", PixmapFormat.ARGB8888);
         setProgress(80);
         Assets.click = androidGame.getAudio().newSound("audio/click.mp3");
         Assets.powerupCollision = androidGame.getAudio().newSound("audio/powerupcollision.mp3");

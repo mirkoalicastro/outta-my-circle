@@ -23,6 +23,7 @@ public class ClientScreen extends ClientServerScreen {
         roundNum++;
         if (roundNum > ROUNDS) {
             endGame = true;
+            timedCircularButton.enable(false);
             return;
         }
         isAlive = true;
@@ -65,6 +66,8 @@ public class ClientScreen extends ClientServerScreen {
         interpreter.makeMoveClientMessage(message, (short)playerOffset, (short) androidJoystick.getNormX(), (short) androidJoystick.getNormY());
         networkMessageHandler.putInBuffer(message);
         if(shouldAttack) {
+            if(Settings.soundEnabled)
+                Assets.attackEnabled.play(Settings.volume);
             shouldAttack = false;
             interpreter.makeAttackMessage(message, (short)playerOffset);
             networkMessageHandler.putInBuffer(message);
@@ -87,7 +90,7 @@ public class ClientScreen extends ClientServerScreen {
                 break;
                 case ATTACK: {
                     int objectId = interpreter.getObjectId(message);
-                    if(Settings.soundEnabled) {
+                    if(objectId != playerOffset && Settings.soundEnabled) {
                         Assets.attackEnabled.play(Settings.volume);
                         //TODO devo far succedere altro?
                     }
@@ -131,7 +134,5 @@ public class ClientScreen extends ClientServerScreen {
             }
         }
     }
-
-    private long startAt;
 
 }

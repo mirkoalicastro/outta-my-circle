@@ -10,11 +10,13 @@ import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.SpinAnimation;
 
 public class MainMenuScreen extends AndroidScreen {
 
     private final AndroidButton startButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
     private final AndroidButton soundButton = new AndroidCircularButton(androidGame.getGraphics(), 1050, 146,86);
+    private final SpinAnimation spinAnimation = new SpinAnimation(androidGame.getGraphics(), 10, 250);
     private boolean unchanged;
 
     public MainMenuScreen(AndroidGame game) {
@@ -25,6 +27,8 @@ public class MainMenuScreen extends AndroidScreen {
             soundButton.setPixmap(Assets.sound);
         else
             soundButton.setPixmap(Assets.nosound);
+
+        spinAnimation.setX(100).setY(100).setPixmap(Assets.wait);
     }
 
     @Override
@@ -64,6 +68,7 @@ public class MainMenuScreen extends AndroidScreen {
 
         startButton.draw();
         soundButton.draw();
+        spinAnimation.draw();
 
         unchanged = true;
     }

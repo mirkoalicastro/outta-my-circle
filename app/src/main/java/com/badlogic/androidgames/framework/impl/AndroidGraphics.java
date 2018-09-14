@@ -201,4 +201,11 @@ public class AndroidGraphics implements Graphics {
         return frameBuffer.getHeight();
     }
 
+    @Override
+    public void drawPixmap(Pixmap pixmap, int x, int y, float degrees) {
+        canvas.rotate(degrees);
+        drawPixmap(pixmap, x, y);
+        canvas.rotate(0);
+    }
+
 }

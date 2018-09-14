@@ -1,5 +1,7 @@
 package com.badlogic.androidgames.framework;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,7 @@ public abstract class Pool<T> {
         }
 
         public void free(T object) {
+            Log.d("POOOOL", freeObjects.size() + "<----");
             if (freeObjects.size() < maxSize)
                 freeObjects.add(object);
         }

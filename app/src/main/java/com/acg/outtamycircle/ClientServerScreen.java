@@ -31,6 +31,7 @@ import java.util.List;
 public abstract class ClientServerScreen extends AndroidScreen {
     protected static final int ROUNDS = 3;
     protected int roundNum = 1;
+    protected long startAt;
 
     protected int radiusCharacter = 35;
 
@@ -40,7 +41,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final int[] winnerId ;
     protected boolean endGame, endRound;
 
-    private final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
+    protected final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
 
     protected final DrawableComponentFactory drawableComponentFactory;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
