@@ -20,6 +20,7 @@ public class Assets {
     public static Pixmap background;
     public static Pixmap arena;
     public static Pixmap loading;
+    public static Pixmap wait;
     public static Pixmap rightArrow;
     public static Pixmap leftArrow;
     public static Pixmap swordsWhite;
