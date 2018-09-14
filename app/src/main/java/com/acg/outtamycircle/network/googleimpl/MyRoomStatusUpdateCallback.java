@@ -19,7 +19,6 @@ public class MyRoomStatusUpdateCallback extends RoomStatusUpdateCallback {
     // is connected yet).
     @Override
     public void onConnectedToRoom(Room room) {
-        Log.d(TAG, "onConnectedToRoom.");
         myGoogleRoom.updateRoom(room);
     }
 

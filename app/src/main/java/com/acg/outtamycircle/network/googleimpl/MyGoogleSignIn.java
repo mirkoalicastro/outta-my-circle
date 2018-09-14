@@ -61,7 +61,6 @@ public class MyGoogleSignIn {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         playerId = null;
-                        Log.d("GoogleS",e.toString());
                     }
                 });
 

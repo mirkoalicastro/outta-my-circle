@@ -47,21 +47,17 @@ public class ServerMessageReceiver implements MessageReceiver {
 
             @Override
             public GameMessage next() {
-                if(!hasNext()) throw new NoSuchElementException();
-
+                if(!hasNext())
+                    throw new NoSuchElementException();
                 GameMessage ret = messages[player][message];
-
-                Log.d("JUANNINO", "NEXT: " + ret.getType().toString());
-
                 findNext();
-
                 return ret;
             }
 
             @Override
             public void remove() {
                 throw new UnsupportedOperationException("Not implemented yet");
-            };
+            }
 
         }
 
