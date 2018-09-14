@@ -7,4 +7,5 @@
     <string name="google_error_signin">Please check your internet connection</string>
     <string name="google_error">Please check your internet connection</string>
     <string name="round">Round</string>
+    <string name="game_over">GAME OVER!</string>
 </resources>

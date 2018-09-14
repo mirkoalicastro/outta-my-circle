@@ -2,6 +2,7 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 import android.graphics.Shader;
+import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -138,7 +139,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 calculateGameResultPixmap();
             g.drawPixmap(gameResultPixmap, 515, 235);
             backButton.draw();
-            g.drawText(androidGame.getString(R.string.game_over),60,1000,40,Color.BLACK);
+            g.drawText(androidGame.getString(R.string.game_over),1000,60,40,Color.BLACK);
             return;
         } else if(endRound || !isAlive) {
             if (winnerId[roundNum - 1] == playerOffset)
@@ -199,6 +200,15 @@ public abstract class ClientServerScreen extends AndroidScreen {
         events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
+            if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
+                Log.d("BBUTT", "pressed");
+                if(backButton.isEnabled()) {
+                    privateBack();
+                    Log.d("BBUTT", "enabled!!");
+                } else {
+                    Log.d("BBUTT", "not enabled!!");
+                }
+            }
             if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 if (timedCircularButton.isEnabled()) {
                     shouldAttack = true;
@@ -208,8 +218,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
                     timedCircularButton.resetTime();
                 } else if(Settings.soundEnabled)
                     Assets.attackDisabled.play(Settings.volume);
-            } else if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP && backButton.isEnabled()) {
-                privateBack();
             }
         }
 
@@ -321,6 +329,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         if (roundNum > ROUNDS) {
             endGame = true;
             backButton.enable(true);
+            Log.d("BBUTT", "attivo" + backButton.isEnabled());
             timedCircularButton.enable(false);
             return;
         }

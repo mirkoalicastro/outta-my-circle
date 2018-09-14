@@ -19,6 +19,8 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
 
     @Override
     public List<Input.TouchEvent> processAndRelease(List<Input.TouchEvent> events) {
+        if(!isEnabled())
+            return events;
         for (Input.TouchEvent event : events) {
             if(event.type == Input.TouchEvent.TOUCH_DOWN)
                 if(Math.pow(event.x-x,2)+Math.pow(event.y-y,2)<Math.pow(radius*2,2))
