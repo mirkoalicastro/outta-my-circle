@@ -16,7 +16,7 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
     private final int delta;
 
     public AndroidLoadingScreen(AndroidGame androidGame) {
-        this(androidGame, 3);
+        this(androidGame, 5);
     }
 
     /**

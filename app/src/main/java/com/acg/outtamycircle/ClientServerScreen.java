@@ -52,7 +52,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final DrawableComponentFactory drawableComponentFactory;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
 
-    private final Button backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124).setPixmap(Assets.back);
+    private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124).setPixmap(Assets.back);
 
     protected List<Input.TouchEvent> events;
     protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
@@ -155,18 +155,19 @@ public abstract class ClientServerScreen extends AndroidScreen {
     private void calculateGameResultPixmap() {
         int[] results = new int[players.length];
         int max = 0;
-        boolean oneWinner = true;
         for(int i=0; i<players.length; i++)
             results[i] = 0;
         for(int i=0; i<ROUNDS; i++) {
             int cur = ++results[winnerId[i]];
-            if(results[max] < cur) {
+            if(results[max] < cur)
                 max = winnerId[i];
-                oneWinner = true;
-            } else if(results[max] == cur) {
-                oneWinner = false;
-            }
         }
+        boolean oneWinner = true;
+        for(int i=0; i<players.length; i++)
+            if(results[i] == results[max] && i != max) {
+                oneWinner = false;
+                break;
+            }
         if(results[max] == results[playerOffset]) {
             if(oneWinner)
                 gameResultPixmap = Assets.happy;
@@ -197,19 +198,13 @@ public abstract class ClientServerScreen extends AndroidScreen {
     public abstract void setup();
 
     public void update(float deltaTime) {
+
         events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
-            if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
-                Log.d("BBUTT", "pressed");
-                if(backButton.isEnabled()) {
-                    privateBack();
-                    Log.d("BBUTT", "enabled!!");
-                } else {
-                    Log.d("BBUTT", "not enabled!!");
-                }
-            }
-            if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
+            if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP && backButton.isEnabled())
+                privateBack();
+            else if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 if (timedCircularButton.isEnabled()) {
                     shouldAttack = true;
 //  TODO va fanno in server e client screen:
@@ -329,7 +324,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         if (roundNum > ROUNDS) {
             endGame = true;
             backButton.enable(true);
-            Log.d("BBUTT", "attivo" + backButton.isEnabled());
+            androidJoystick.enable(false);
             timedCircularButton.enable(false);
             return;
         }
