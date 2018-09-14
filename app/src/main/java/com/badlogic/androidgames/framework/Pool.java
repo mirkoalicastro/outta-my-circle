@@ -57,11 +57,8 @@ public abstract class Pool<T> {
         }
 
         public void free(T object) {
-            Log.d("POOOOL", freeObjects.size() + "<----");
             if (freeObjects.size() < maxSize)
                 freeObjects.add(object);
         }
-
     }
-
 }

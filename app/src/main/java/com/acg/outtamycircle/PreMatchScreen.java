@@ -1,6 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import com.acg.outtamycircle.network.GameMessage;
@@ -78,6 +77,7 @@ public class PreMatchScreen extends AndroidScreen {
     public void update(float deltaTime) {
         if(tooMuchTime())
             privateBack();
+
         switch (phase) {
             case 0:
                 sendTime();
@@ -109,7 +109,7 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void privateBack() {
-        
+        myGoogleRoom.error();
     }
 
     private boolean tooMuchTime() {

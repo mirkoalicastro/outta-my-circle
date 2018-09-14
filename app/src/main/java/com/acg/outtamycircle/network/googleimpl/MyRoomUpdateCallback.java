@@ -21,7 +21,7 @@ public class MyRoomUpdateCallback extends RoomUpdateCallback {
         Log.d(TAG, "onRoomCreated(" + statusCode + ", " + room + ")");
         if (statusCode != GamesCallbackStatusCodes.OK) {
             Log.e(TAG, "*** Error: onRoomCreated, status " + statusCode);
-            myGoogleRoom.showGameError();
+            myGoogleRoom.error();
         } else {
             myGoogleRoom.updateRoom(room);
             myGoogleRoom.showWaitingRoom(room);
@@ -34,7 +34,7 @@ public class MyRoomUpdateCallback extends RoomUpdateCallback {
         Log.d(TAG, "onRoomConnected(" + statusCode + ", " + room + ")");
         if (statusCode != GamesCallbackStatusCodes.OK) {
             Log.e(TAG, "*** Error: onRoomConnected, status " + statusCode);
-            myGoogleRoom.showGameError();
+            myGoogleRoom.error();
         } else {
             myGoogleRoom.updateRoom(room);
         }
@@ -45,7 +45,7 @@ public class MyRoomUpdateCallback extends RoomUpdateCallback {
         Log.d(TAG, "onJoinedRoom(" + statusCode + ", " + room + ")");
         if (statusCode != GamesCallbackStatusCodes.OK) {
             Log.e(TAG, "*** Error: onRoomConnected, status " + statusCode);
-            myGoogleRoom.showGameError();
+            myGoogleRoom.error();
         } else {
             myGoogleRoom.updateRoom(room);
             myGoogleRoom.showWaitingRoom(room);

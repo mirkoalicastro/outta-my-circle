@@ -5,11 +5,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.acg.outtamycircle.CustomizeGameCharacterScreen;
 import com.acg.outtamycircle.R;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
-import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
@@ -52,7 +51,10 @@ public class MyGoogleRoom {
     private String serverId;
 
     public boolean isServer() {
-        return getPlayerId().equals(serverId);
+        if(getPlayerId() == null)
+            return false;
+        else
+            return getPlayerId().equals(serverId);
     }
 
     public void setServerId(String serverId) {
@@ -62,8 +64,6 @@ public class MyGoogleRoom {
     public String getServerId() {
         return serverId;
     }
-
-    private static String TAG = "GoogleS";
 
     public String getRoomId() {
         return mRoomId;
@@ -130,23 +130,26 @@ public class MyGoogleRoom {
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GoogleRC.RC_WAITING_ROOM) {
             if(resultCode == Activity.RESULT_OK) {
-                Log.d(TAG,"OK");
                 googleAndroidGame.startGame();
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Log.d(TAG,"CANCELLED");
                 realTimeMultiplayerClient.leave(config, getRoomId());
             } else if (resultCode == GamesActivityResultCodes.RESULT_LEFT_ROOM) {
-                Log.d(TAG,"LEFT");
                 realTimeMultiplayerClient.leave(config, getRoomId());
             }
         }
     }
 
-    void showGameError() {
-        Log.d(TAG, "GAME ERROR WTF");
-        new AlertDialog.Builder(googleAndroidGame)
-                .setMessage(googleAndroidGame.getString(R.string.google_error))
-                .setNeutralButton(android.R.string.ok, null).create().show();
+    public void error() {
+        googleAndroidGame.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialog.Builder(googleAndroidGame)
+                        .setMessage(googleAndroidGame.getString(R.string.google_error))
+                        .setNeutralButton(android.R.string.ok, null).create().show();
+                reset();
+                googleAndroidGame.setScreen(new CustomizeGameCharacterScreen(googleAndroidGame));
+            }
+        });
     }
 
     void updateRoom(Room room) {
@@ -158,7 +161,6 @@ public class MyGoogleRoom {
     }
 
     void showWaitingRoom(Room room) {
-        Log.d(TAG, "SHOW WAITING ROOM");
         Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount())
                 .getWaitingRoomIntent(room, MAX_PLAYERS-1)
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
@@ -170,7 +172,7 @@ public class MyGoogleRoom {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showGameError();
+                        error();
                     }
                 });
     }
