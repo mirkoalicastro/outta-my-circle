@@ -13,15 +13,14 @@ import com.google.android.gms.tasks.Task;
 import java.util.Arrays;
 
 public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
-    private static final int MAX_BUFFER_SIZE = 127; //TODO
+    private static final int MAX_BUFFER_SIZE = 127;
     private static final byte ENDING_CHAR = 127;
     private static final int MAX_CAPACITY = 40;
     private static final int INITIAL_CAPACITY = 20;
 
     private MessageReceiver first, second;
 
-    //TODO visibility
-    byte[] buffer = new byte[MAX_BUFFER_SIZE];
+    private byte[] buffer = new byte[MAX_BUFFER_SIZE];
     private int currentBufferSize = 0;
 
     private final MyGoogleRoom myGoogleRoom;
@@ -32,7 +31,6 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
             bufferPool.free(new byte[MAX_BUFFER_SIZE]);
     }
 
-    //TODO change
     public NetworkMessageHandlerImpl setReceivers(MessageReceiver first, MessageReceiver second) {
         this.first = first;
         this.second = second;
@@ -134,12 +132,14 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
     }
 
     @Override
-    public void putInBuffer(GameMessage message) {
-        //TODO se ci sono troppi messaggi? RuntimeException?
+    public boolean putInBuffer(GameMessage message) {
         GameMessage.Type type = message.getType();
+        if(currentBufferSize+type.length>=MAX_BUFFER_SIZE)
+            return false;
         message.putInBuffer(buffer, currentBufferSize);
         currentBufferSize += type.length;
         buffer[currentBufferSize] = ENDING_CHAR;
+        return true;
     }
 
     @Override

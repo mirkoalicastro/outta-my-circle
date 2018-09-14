@@ -91,7 +91,7 @@ public class ServerMessageReceiver implements MessageReceiver {
         else if(type == GameMessage.Type.ATTACK)
             j = 1;
         else
-            throw new RuntimeException(); //TODO????
+            return;
 
         if(messages[player][j]==null) count++;
 

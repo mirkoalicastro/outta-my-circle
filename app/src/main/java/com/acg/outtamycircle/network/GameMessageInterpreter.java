@@ -7,14 +7,19 @@ public interface GameMessageInterpreter {
 
     /*------------ READER ------------*/
 
-    //TODO
+    /**
+     * Returns the type of message.
+     * @param gameMessage
+     * @return
+     */
     GameMessage.Type getType(GameMessage gameMessage);
 
+    /**
+     * Returns the id of the referred object in the message.
+     * @param gameMessage
+     * @return
+     */
     int getObjectId(GameMessage gameMessage);
-
-
-
-    /*------------ WRITER ------------*/
 
     int getInitClientSkinId(GameMessage message);
 
@@ -32,7 +37,8 @@ public interface GameMessageInterpreter {
 
     int getTimeMillis(GameMessage message);
 
-    //TODO
+    /*------------ WRITER ------------*/
+
     void makeInitClientMessage(GameMessage gameMessage, int skinId, int attackId);
 
     void makeCreateMessage(GameMessage gameMessage, int objectId, int posX, int posY, int skinId);

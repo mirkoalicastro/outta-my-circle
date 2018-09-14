@@ -123,7 +123,7 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     @Override
     public void makePowerUpAssign(GameMessage message, int objectId, int powerupId) {
         makeMessage(message, GameMessage.Type.POWERUP_ASSIGN, (byte) objectId);
-        //TODO CONTROLLAAAA
+        //TODO
     }
 
     @Override
@@ -145,31 +145,5 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     @Override
     public void makeStartMessage(GameMessage message){
         makeMessage(message, GameMessage.Type.START);
-    }
-
-    //TODO remove
-    public String toString(GameMessage message){
-        StringBuilder builder = new StringBuilder();
-        switch (message.getType()){
-            case MOVE_SERVER:
-                builder.append("type->")
-                        .append(message.getType().name())
-                        .append(", objectId->")
-                        .append(getObjectId(message))
-                        .append(", posX->")
-                        .append(getPosX(message))
-                        .append(", posY->")
-                        .append(getPosY(message));
-                break;
-            case POWERUP:
-                builder.append("type->")
-                        .append(message.getType().name())
-                        .append(", posX->").append(getPosX(message))
-                        .append(", posY->").append(getPosY(message))
-                        .append(", powerupId").append(getPowerUpId(message));
-                break;
-            default: System.out.println("Che tipo strano : " + message.getType().name());
-        }
-        return builder.toString();
     }
 }

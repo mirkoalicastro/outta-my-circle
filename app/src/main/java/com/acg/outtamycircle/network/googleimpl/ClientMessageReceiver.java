@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ClientMessageReceiver implements MessageReceiver {
     private List<GameMessage> messages;
-    private static final int DEFAULT_CAPACITY = 40; //TODO
+    private static final int DEFAULT_CAPACITY = 40;
 
     @Override
     public int size(){

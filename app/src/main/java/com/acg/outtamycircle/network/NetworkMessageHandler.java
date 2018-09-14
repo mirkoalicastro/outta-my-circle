@@ -36,8 +36,9 @@ public interface NetworkMessageHandler extends OnRealTimeMessageReceivedListener
     /**
      * Puts a message in the buffer.
      * @param message
+     * @return true if the buffer can contain the message, false otherwise.
      */
-    void putInBuffer(GameMessage message);
+    boolean putInBuffer(GameMessage message);
 
     /**
      * Returns all current inbox messages. The method should not be called before all the messages have been read.
