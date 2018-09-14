@@ -204,7 +204,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         for (Input.TouchEvent event : events) {
             if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP && backButton.isEnabled())
                 privateBack();
-            else if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
+            if(endGame)
+                continue;
+            if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 if (timedCircularButton.isEnabled()) {
                     shouldAttack = true;
 //  TODO va fanno in server e client screen:

@@ -118,12 +118,12 @@ public class PreMatchScreen extends AndroidScreen {
 
     private void sendStart() {
         NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
-        GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
-        interpreter.makeStartMessage(message); //TODO make start message
+        GameMessage message = GameMessage.createInstance();
+        interpreter.makeStartMessage(message);
         handler.putInBuffer(message);
         handler.broadcastReliable();
         GameMessage.deleteInstance(message);
-        //TODO devo aspettare?
+
         myGoogleRoom.getNetworkMessageHandler().setReceivers(new ServerMessageReceiver(interpreter, numOpponents+1), new ServerMessageReceiver(interpreter, numOpponents+1));
         androidGame.setScreen(nextScreen);
     }
@@ -137,7 +137,7 @@ public class PreMatchScreen extends AndroidScreen {
         }
         if(start) {
             androidGame.setScreen(nextScreen);
-            myGoogleRoom.getNetworkMessageHandler().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver()); //TODO inutile
+            myGoogleRoom.getNetworkMessageHandler().setReceivers(new ClientMessageReceiver(), new ClientMessageReceiver());
         }
     }
 
@@ -231,7 +231,7 @@ public class PreMatchScreen extends AndroidScreen {
         this.time = (int)time;
 
         NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
-        GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
+        GameMessage message = GameMessage.createInstance();
         interpreter.makeHostOrClientMessage(message, this.time);
         handler.putInBuffer(message);
         handler.broadcastReliable();
@@ -254,7 +254,7 @@ public class PreMatchScreen extends AndroidScreen {
             return;
         repeatSendInit = false;
         GameMessage message = GameMessage.createInstance();
-        interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), (byte) myGoogleRoom.getCurrentIdAttack()); //TODO
+        interpreter.makeInitClientMessage(message, myGoogleRoom.getCurrentIdSkin(), myGoogleRoom.getCurrentIdAttack());
         NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         handler.putInBuffer(message);
         handler.sendReliable(myGoogleRoom.getServerId(), new NetworkMessageHandlerImpl.OnComplete() {
