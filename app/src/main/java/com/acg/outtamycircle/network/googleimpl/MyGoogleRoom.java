@@ -35,7 +35,6 @@ public class MyGoogleRoom {
 
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
-
     private final MyGoogleSignIn myGoogleSignIn;
     private final GoogleAndroidGame googleAndroidGame;
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
@@ -190,15 +189,9 @@ public class MyGoogleRoom {
         this.currentIdSkin = currentIdSkin;
         this.currentIdAttack = currentIdAttack;
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, 0);
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(min_players-1, max_players-1, (long)Math.pow(2,currentIdSkin));
 
         config = RoomConfig.builder(myRoomUpdatedCallback)
-/*                .setOnMessageReceivedListener(new OnRealTimeMessageReceivedListener() {
-                    @Override
-                    public void onRealTimeMessageReceived(@NonNull RealTimeMessage realTimeMessage) {
-                        Log.d("JUAN", "ricevo " + Arrays.toString(realTimeMessage.getMessageData()));
-                    }
-                })*/
                 .setOnMessageReceivedListener(networkMessageHandlerImpl)
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
                 .setAutoMatchCriteria(autoMatchCriteria)
