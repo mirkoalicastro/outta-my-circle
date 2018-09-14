@@ -91,17 +91,17 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case POWERUP: {
-                    int objectId = interpreter.getObjectId(message);
-                    float posX = interpreter.getPosX(message);
-                    float posY = interpreter.getPosY(message);
-                    int powerUpId = interpreter.getPowerUpId(message);
+                    short objectId = (short)interpreter.getObjectId(message);
+                    int x = interpreter.getPosX(message);
+                    int y = interpreter.getPosY(message);
+                    short powerupId = (short)interpreter.getPowerUpId(message);
                     //TODO piazza powerup da qualche parte
+                    status.setPowerup(createPowerup(x, y, powerupId, objectId));
                 }
                 break;
                 case POWERUP_ASSIGN: {
-                    int objectId = interpreter.getObjectId(message);
-                    int powerUpId = interpreter.getPowerUpId(message);
                     //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
+                    status.setPowerup(null);
                 }
                 break;
                 case END: {

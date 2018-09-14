@@ -14,6 +14,7 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
+import com.acg.outtamycircle.utilities.IdGenerator;
 import com.acg.outtamycircle.utilities.PowerupRandomManager;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
@@ -37,6 +38,9 @@ public class ServerScreen extends ClientServerScreen {
 
     private int messagesInBuffer;
 
+    private IdGenerator idGenerator;
+
+
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
         this.attacks = attacks;
@@ -48,7 +52,7 @@ public class ServerScreen extends ClientServerScreen {
         roundNum--;
 
         contactHandler = new ContactHandler();
-        contactHandler.init(status);
+        contactHandler.init(status, interpreter);
 
         world.setContactListener(contactHandler); //TODO
 
@@ -61,11 +65,9 @@ public class ServerScreen extends ClientServerScreen {
         bottomY = arenaY - squareHalfSide;
         threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
 
-        powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
+        powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius), status, startAt);
 
-
-
-        //TODO comunica posizioni etc.
+        idGenerator = IdGenerator.getInstance((short)players.length);
     }
 
     private final float arenaX, arenaY;
@@ -137,7 +139,7 @@ public class ServerScreen extends ClientServerScreen {
 
         updateDrawablesPosition();
         updateCharactersStatus();
-        updatePowerupsStatus();
+        updatePowerupsStatus(deltaTime);
         sendStatus();
     }
 
@@ -236,13 +238,13 @@ public class ServerScreen extends ClientServerScreen {
         super.initPowerupSettings(side);
 
         physicsComponentFactory.resetFactory();
-        physicsComponentFactory.setDensity(0f).setFriction(0f).setRestitution(0f)
+        physicsComponentFactory.setDensity(Float.MIN_VALUE).setFriction(Float.MIN_VALUE).setRestitution(Float.MAX_VALUE)
                 .setType(BodyType.dynamicBody).setShape(new PolygonShape());
     }
 
-    protected Powerup createPowerup(float x, float y, short id){
+    protected Powerup createPowerup(float x, float y, short powerupId, short objectId){
         Powerup powerup = super.createPowerup((int)Converter.physicsToFrame(x),
-                (int)Converter.physicsToFrame(y), id);
+                (int)Converter.physicsToFrame(y), powerupId, objectId);
 
         physicsComponentFactory.setOwner(powerup)
                 .setPosition(x, y);
@@ -287,18 +289,26 @@ public class ServerScreen extends ClientServerScreen {
         messagesInBuffer = 0;
     }
 
-    private void updatePowerupsStatus(){
-        if(powerupRandomManager.randomBoolean()){
-            Powerup powerup = createPowerup(powerupRandomManager.randomX(),
-                    powerupRandomManager.randomY(),
-                    powerupRandomManager.randomPowerup());
+    private void updatePowerupsStatus(float deltaTime){
+        if(powerupRandomManager.randomBoolean(deltaTime)){
+            float x = powerupRandomManager.randomX();
+            float y = powerupRandomManager.randomY();
+            short powerupId = powerupRandomManager.randomPowerup();
+            short objectId = idGenerator.next();
+            status.setPowerup(createPowerup(x, y, powerupId, objectId));
 
-            status.inactives.add(powerup);
+            GameMessage message = GameMessage.createInstance();
+            interpreter.makePowerUpMessage(message, objectId, (int)Converter.physicsToFrame(x),
+                    (int)Converter.physicsToFrame(y), powerupId);
+            messagesInBuffer++;
+            networkMessageHandler.putInBuffer(message);
+            GameMessage.deleteInstance(message);
         }
 
-        for(Powerup pu : status.actives)
-            if(!pu.isEnded())
-                pu.start();
+        for(Powerup powerup : status.actives)
+            if(!powerup.isEnded())
+                powerup.start();
+            //TODO
         status.actives.resetIterator();
     }
 
@@ -317,5 +327,6 @@ public class ServerScreen extends ClientServerScreen {
             status.characters[i].addComponent(comp);
             comp.setOwner(status.characters[i]);
         }
+
     }
 }

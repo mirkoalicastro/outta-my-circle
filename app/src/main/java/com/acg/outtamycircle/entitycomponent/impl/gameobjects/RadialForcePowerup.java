@@ -8,8 +8,8 @@ public class RadialForcePowerup extends Powerup {
     private boolean isEnded = false;
     public static final short id = 0;
 
-    public RadialForcePowerup(GameStatus status) {
-        super(status, id);
+    public RadialForcePowerup(GameStatus status, short objectId) {
+        super(status, objectId);
     }
 
     @Override

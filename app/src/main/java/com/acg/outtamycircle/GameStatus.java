@@ -16,8 +16,9 @@ public class GameStatus {
     final MyList<GameCharacter> living = new MyList<>();
     final MyList<GameCharacter> dying = new MyList<>();
 
+    //TODO lista di powerup e override di equals per objectId
+    Powerup powerup;
     final MyList<Powerup> actives = new MyList<>();
-    final MyList<Powerup> inactives = new MyList<>();
 
     final MyList<AttackComponent> activeAttacks = new MyList<>();
 
@@ -44,7 +45,15 @@ public class GameStatus {
         return actives;
     }
 
-    public MyList<Powerup> getInactivePowerups() {
-        return inactives;
+    public Powerup getPowerup() {
+        return powerup;
+    }
+
+    public GameCharacter[] getCharacters() {
+        return characters;
+    }
+
+    public void setPowerup(Powerup powerup) {
+        this.powerup = powerup;
     }
 }

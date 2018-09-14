@@ -51,7 +51,7 @@ public interface GameMessageInterpreter {
 
     void makePowerUpMessage(GameMessage gameMessage, int objectId, int posX, int posY, int powerupId);
 
-    void makePowerUpAssign(GameMessage gameMessage, int objectId, int powerupId);
+    void makePowerUpAssign(GameMessage gameMessage, int objectId, int powerupId); //TODO cambiare nomi
 
     void makeAttackMessage(GameMessage gameMessage, int objectId, int xDirection, int yDirection);
 

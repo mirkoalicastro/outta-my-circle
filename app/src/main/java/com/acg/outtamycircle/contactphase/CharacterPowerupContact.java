@@ -5,15 +5,22 @@ import android.util.Log;
 import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.Settings;
+import com.acg.outtamycircle.entitycomponent.Component;
+import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
+import com.acg.outtamycircle.network.GameMessage;
+import com.acg.outtamycircle.network.GameMessageInterpreter;
+import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 
 class CharacterPowerupContact extends ContactType{
     private final GameStatus status;
+    private final GameMessageInterpreter interpreter;
 
-    public CharacterPowerupContact(GameStatus status){
+    public CharacterPowerupContact(GameStatus status, GameMessageInterpreter interpreter){
         this.status = status;
+        this.interpreter = interpreter;
     }
 
     @Override
@@ -34,7 +41,16 @@ class CharacterPowerupContact extends ContactType{
 
         powerup.setGameCharacter(character);
 
-        status.getInactivePowerups().remove(powerup);
+        LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)powerup.getComponent(Component.Type.Physics);
+        component.deleteBody();
+
+        Log.d("NULLO", "prova");
+        status.setPowerup(null);
         status.getActivePowerups().add(powerup);
+
+        GameMessage message = GameMessage.createInstance();
+        interpreter.makePowerUpAssign(message, character.getObjectId(), powerup.getObjectId()); //TODO ricccccardo
+
+        GameMessage.deleteInstance(message);
     }
 }

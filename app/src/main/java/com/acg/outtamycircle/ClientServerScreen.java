@@ -115,13 +115,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
         Graphics g = game.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
 
-        drawArena();
-        drawList(status.living);
-        drawList(status.dying);
-        drawList(status.inactives);
-
-        //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.makeComponent(Component.Type.Drawable);
-        //powerupDrawable.draw();
+        drawEntity(status.arena);
+        if(status.powerup != null)
+            drawEntity(status.powerup);
+        drawEntityList(status.living);
+        drawEntityList(status.dying);
 
         for(int i=0; i<ROUNDS; i++) {
             Pixmap winnerSkin;
@@ -219,13 +217,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
         updateDyingRadius();
     }
 
-    private void drawArena(){
-        DrawableComponent arenaDrawable = (DrawableComponent) status.arena.getComponent(Component.Type.Drawable);
-        arenaDrawable.draw();
+    private void drawEntity(Entity e){
+        DrawableComponent component = (DrawableComponent)e.getComponent(Component.Type.Drawable);
+        if(component != null)
+            component.draw();
     }
 
 
-    private void drawList(MyList<? extends Entity> list){
+    private void drawEntityList(MyList<? extends Entity> list){
         DrawableComponent comp;
         for(Entity e : list)
             if((comp = (DrawableComponent)e.getComponent(Component.Type.Drawable)) != null)
@@ -304,16 +303,16 @@ public abstract class ClientServerScreen extends AndroidScreen {
     }
 
 
-    protected Powerup createPowerup(int x, int y, short id){
+    protected Powerup createPowerup(int x, int y, short powerupId, short objectId){
         Powerup powerup = null;
-        switch (id){
+        switch (powerupId){
             case RadialForcePowerup.id:
-                powerup = new RadialForcePowerup(status);
+                powerup = new RadialForcePowerup(status, objectId);
                 break;
         }
 
-        drawableComponentFactory.setPixmap(Assets.skins[id]).setX(x).setY(y).setOwner(powerup);
-        //TODO Assets.powerups[id]
+        drawableComponentFactory.setPixmap(Assets.skins[powerupId]).setX(x).setY(y).setOwner(powerup);
+        //TODO Assets.powerups[powerupId]
 
         powerup.addComponent(drawableComponentFactory.makeComponent());
         return powerup;
@@ -339,5 +338,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
             characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
         status.setCharacters(characters);
         status.setPlayerOne(characters[playerOffset]);
+
+        status.setPowerup(null);
     }
 }
