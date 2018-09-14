@@ -15,14 +15,14 @@ public class SingleTouchHandler implements TouchHandler {
     private int touchX;
     private int touchY;
     private final Pool<TouchEvent> touchEventPool;
-    private List<TouchEvent> touchEvents = new ArrayList<TouchEvent>();
-    private List<TouchEvent> touchEventsBuffer = new ArrayList<TouchEvent>();
+    private List<TouchEvent> touchEvents = new ArrayList<>();
+    private List<TouchEvent> touchEventsBuffer = new ArrayList<>();
     private final float scaleX;
     private final float scaleY;
     private static final int MAXPOOLSIZE = 100;
     
     public SingleTouchHandler(View view, float scaleX, float scaleY) {
-        touchEventPool = new Pool.SimplePool<TouchEvent>(new PoolObjectFactory<TouchEvent>() {
+        touchEventPool = new Pool.SimplePool<>(new PoolObjectFactory<TouchEvent>() {
             @Override
             public TouchEvent createObject() {
                 return new TouchEvent();
@@ -65,10 +65,7 @@ public class SingleTouchHandler implements TouchHandler {
     @Override
     public boolean isTouchDown(int pointer) {
         synchronized(this) {
-            if(pointer == 0)
-                return isTouched;
-            else
-                return false;
+            return pointer == 0 && isTouched;
         }
     }
 

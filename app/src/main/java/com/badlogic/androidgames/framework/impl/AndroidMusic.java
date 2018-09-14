@@ -16,8 +16,6 @@ public class AndroidMusic implements Music, OnCompletionListener {
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(assetDescriptor.getFileDescriptor());
-            //assetDescriptor.getStartOffset(),
-            //assetDescriptor.getLength());
             mediaPlayer.prepare();
             isPrepared = true;
             mediaPlayer.setOnCompletionListener(this);
@@ -65,9 +63,7 @@ public class AndroidMusic implements Music, OnCompletionListener {
                     mediaPlayer.prepare();
                 mediaPlayer.start();
             }
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
     }

@@ -1,9 +1,6 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
-import com.badlogic.androidgames.framework.Animation;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
@@ -11,7 +8,6 @@ import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
-import com.badlogic.androidgames.framework.impl.SpinAnimation;
 
 public class MainMenuScreen extends AndroidScreen {
 

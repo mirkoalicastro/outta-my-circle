@@ -1,17 +1,13 @@
 package com.badlogic.androidgames.framework.impl;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.acg.outtamycircle.Assets;
-import com.acg.outtamycircle.R;
 import com.badlogic.androidgames.framework.Audio;
 import com.badlogic.androidgames.framework.FileIO;
 import com.badlogic.androidgames.framework.Game;

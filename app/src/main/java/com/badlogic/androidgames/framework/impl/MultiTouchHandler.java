@@ -90,10 +90,7 @@ public class MultiTouchHandler implements TouchHandler {
 
     @Override
     public synchronized  boolean isTouchDown(int pointer) {
-        if (pointer < 0 || pointer >= 20)
-            return false;
-        else
-            return isTouching[pointer];
+        return pointer >= 0 && pointer < 20 && isTouching[pointer];
     }
 
     @Override

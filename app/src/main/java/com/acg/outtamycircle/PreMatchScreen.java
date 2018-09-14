@@ -1,7 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandler;
@@ -17,7 +15,6 @@ import com.badlogic.androidgames.framework.impl.SpinAnimation;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +28,7 @@ public class PreMatchScreen extends AndroidScreen {
     private int phase = 0;
     private boolean repeatSendInit = true;
     private boolean repeatBroadcastInit = true;
-    private volatile int countBroadcastInit = 0;
+    private final int[] countBroadcastInit = new int[]{0};
 
     private int time;
 
@@ -162,13 +159,18 @@ public class PreMatchScreen extends AndroidScreen {
         handler.broadcastReliable(new NetworkMessageHandlerImpl.OnComplete(){
             @Override
             public void work(Task<Integer> task) {
-                if(task.isSuccessful()) {
-                    countBroadcastInit++;
-                    if(countBroadcastInit == numOpponents)
-                        nextPhase();
-                } else {
-                    repeatBroadcastInit = true;
+                boolean nextPhase = false;
+                synchronized (countBroadcastInit) {
+                    if (task.isSuccessful()) {
+                        countBroadcastInit[0]++;
+                        if (countBroadcastInit[0] == numOpponents)
+                            nextPhase = true;
+                    } else {
+                        repeatBroadcastInit = true;
+                    }
                 }
+                if (nextPhase)
+                    nextPhase();
             }
         });
         GameMessage.deleteInstance(message);
@@ -186,8 +188,8 @@ public class PreMatchScreen extends AndroidScreen {
                 } else if(message.getType() != GameMessage.Type.CREATE)
                     continue;
                 int offset = interpreter.getObjectId(message);
-                spawnPositions[offset][0] = (int)interpreter.getPosX(message);
-                spawnPositions[offset][1] = (int)interpreter.getPosY(message);
+                spawnPositions[offset][0] = interpreter.getPosX(message);
+                spawnPositions[offset][1] = interpreter.getPosY(message);
                 skins[offset] = interpreter.getSkinId(message);
                 players[offset] = message.getSender();
                 readMessages++;

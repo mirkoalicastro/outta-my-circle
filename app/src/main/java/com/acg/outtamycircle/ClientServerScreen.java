@@ -2,7 +2,6 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 import android.graphics.Shader;
-import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -30,54 +29,40 @@ import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
-    protected static final int ROUNDS = 2;
+    protected static final int RADIUS_CHARACTER = 35;
+    private static final int ROUNDS = 2;
+
+    protected final MyGoogleRoom myGoogleRoom;
+    protected final NetworkMessageHandlerImpl networkMessageHandler;
+    protected final GameMessageInterpreterImpl interpreter;
+    protected final AndroidJoystick androidJoystick;
+    protected final int playerOffset;
+    protected final int frameHeight, frameWidth, arenaRadius;
+    protected final int[] winnerId;
     protected int roundNum = 1;
     protected long startAt;
-
-    protected int radiusCharacter = 35;
-
     protected GameStatus status;
-    protected final int frameHeight, frameWidth, arenaRadius;
     protected boolean isAlive = true;
-    protected final int[] winnerId ;
     protected boolean endGame, endRound;
-
-    protected final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,3000);
-
-    protected final DrawableComponentFactory drawableComponentFactory;
-    protected final NetworkMessageHandlerImpl networkMessageHandler;
-
-    private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124).setPixmap(Assets.back);
-
-    protected List<Input.TouchEvent> events;
-    protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
-        @Override
-        public float getNormX(){
-            return super.getNormX() * 1000;
-        }
-
-        @Override
-        public float getNormY(){
-            return super.getNormY() * 1000;
-        }
-    };
-    protected final MyGoogleRoom myGoogleRoom;
-    protected final String[] players;
-    protected final int[] skins;
-    protected final int[][] spawnPositions;
-    protected final int playerOffset;
     protected boolean shouldAttack;
 
-    protected final GameMessageInterpreterImpl interpreter = new GameMessageInterpreterImpl();
+    private final DrawableComponentFactory drawableComponentFactory;
+    private final TimedCircularButton timedCircularButton;
+    private final Button backButton;
+    private Pixmap gameResultPixmap;
+    private final String[] players;
+    private final int[] skins;
+    private final int[][] spawnPositions;
 
     public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game);
+        this.backButton = new AndroidRectangularButton(game.getGraphics(),66,550,324,124).setPixmap(Assets.back);
         this.backButton.enable(false);
+        this.timedCircularButton = new TimedCircularButton(game.getGraphics(),1080,520,100,3000);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;
         this.skins = skins;
@@ -87,6 +72,18 @@ public abstract class ClientServerScreen extends AndroidScreen {
         this.winnerId = new int[ROUNDS];
         for(int i=0; i<winnerId.length; i++)
             this.winnerId[i] = -1;
+        this.interpreter = new GameMessageInterpreterImpl();
+        androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
+            @Override
+            public float getNormX(){
+                return super.getNormX() * 1000;
+            }
+
+            @Override
+            public float getNormY(){
+                return super.getNormY() * 1000;
+            }
+        };
 
         androidJoystick.setSecondaryColor(Settings.WHITE50ALFA)
                 .setEffect(new RadialGradientEffect(androidJoystick.getX(),androidJoystick.getY(),androidJoystick.getRadius(),
@@ -104,9 +101,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
         frameWidth = game.getGraphics().getWidth();
         arenaRadius = frameHeight/2 - 40;
 
-        setup();
-
         drawableComponentFactory = new DrawableComponentFactory(game.getGraphics());
+
+        setup();
     }
 
     @Override
@@ -176,8 +173,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         }
     }
 
-    private Pixmap gameResultPixmap;
-
     @Override
     public void pause() {
 
@@ -197,7 +192,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     public void update(float deltaTime) {
 
-        events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
+        List<Input.TouchEvent> events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
 
         for (Input.TouchEvent event : events) {
             if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP && backButton.isEnabled())
@@ -333,7 +328,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         status = new GameStatus();
         initArenaSettings();
         status.setArena(createArena());
-        initCharacterSettings(radiusCharacter);
+        initCharacterSettings(RADIUS_CHARACTER);
         GameCharacter[] characters = new GameCharacter[players.length];
         for (int i=0; i<characters.length; i++)
             characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);

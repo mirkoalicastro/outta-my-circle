@@ -1,13 +1,7 @@
 package com.badlogic.androidgames.framework.impl;
 
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Shader;
-
-import com.badlogic.androidgames.framework.Effect;
-import com.badlogic.androidgames.framework.Graphics;
-import com.badlogic.androidgames.framework.Pixmap;
 
 public class RectangularTileAndroidEffect extends TileAndroidEffect {
 

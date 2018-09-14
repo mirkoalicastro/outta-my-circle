@@ -28,8 +28,8 @@ public class GameStatus {
     }
 
     public void setCharacters(GameCharacter... characters){
-        for(int i=0 ; i<characters.length ; i++)
-            living.add(characters[i]);
+        for (GameCharacter character : characters)
+            living.add(character);
         this.characters = characters;
     }
 

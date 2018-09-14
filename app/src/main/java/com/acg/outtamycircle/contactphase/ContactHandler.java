@@ -1,6 +1,5 @@
 package com.acg.outtamycircle.contactphase;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.GameStatus;

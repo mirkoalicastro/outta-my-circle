@@ -1,7 +1,5 @@
 package com.badlogic.androidgames.framework.impl;
 
-import android.util.Log;
-
 import com.badlogic.androidgames.framework.Animation;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;

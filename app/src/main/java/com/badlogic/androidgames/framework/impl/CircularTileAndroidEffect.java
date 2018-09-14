@@ -1,10 +1,7 @@
 package com.badlogic.androidgames.framework.impl;
 
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Shader;
-import android.util.Log;
 
 public class CircularTileAndroidEffect extends TileAndroidEffect {
 

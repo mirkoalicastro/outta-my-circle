@@ -1,16 +1,12 @@
 package com.acg.outtamycircle;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
-import com.acg.outtamycircle.network.googleimpl.MyGoogleSignIn;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
-import com.badlogic.androidgames.framework.impl.AndroidCircularButton;
-import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
@@ -49,8 +45,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     @Override
     public void update(float deltaTime) {
-        boolean rom = false;
-
         boolean goBack = false;
         boolean goForward = false;
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {

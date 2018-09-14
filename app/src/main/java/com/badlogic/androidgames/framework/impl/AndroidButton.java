@@ -85,19 +85,6 @@ public abstract class AndroidButton implements Button {
         return strokeColor;
     }
 
-    public AndroidButton(Graphics graphics, int x, int y, int width, int height, Integer color, Pixmap pixmap, int strokeWidth, Integer strokeColor, Effect effect) {
-        this.graphics = graphics;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.color = color;
-        this.pixmap = pixmap;
-        this.strokeWidth = strokeWidth;
-        this.strokeColor = strokeColor;
-        this.effect = effect;
-    }
-
     @Override
     public boolean isEnabled() {
         return enabled;

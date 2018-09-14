@@ -1,16 +1,14 @@
 package com.badlogic.androidgames.framework.impl;
 
-import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
-import com.badlogic.androidgames.framework.Pixmap;
 
 public class AndroidCircularButton extends AndroidButton {
     protected int radius;
 
     /**
-     * @param x        position of the center of the button
-     * @param y        position of the center of the button
+     * @param x position of the center of the button
+     * @param y position of the center of the button
      */
     public AndroidCircularButton(Graphics graphics, int x, int y, int radius) {
         super(graphics, x, y, radius*2, radius*2);

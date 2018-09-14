@@ -54,9 +54,7 @@ public class KeyboardHandler implements OnKeyListener {
     }
 
     public boolean isKeyPressed(int keyCode) {
-        if (keyCode < 0 || keyCode > 127)
-            return false;
-        return pressedKeys[keyCode];
+        return keyCode >= 0 && keyCode <= 127 && pressedKeys[keyCode];
     }
 
     public List<KeyEvent> getKeyEvents() {

@@ -21,7 +21,7 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
 
     /**
      *
-     * @param androidGame
+     * @param androidGame the android game instance
      * @param delta how much it has to increase the percentage in order to reach the desidered value (Default: 2)
      */
     public AndroidLoadingScreen(AndroidGame androidGame, int delta) {
@@ -54,7 +54,7 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
                 try {
                     animations.wait();
                 } catch (InterruptedException e) {
-
+                    break;
                 }
             }
         }
@@ -67,6 +67,7 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
         @Override
         public void run() {
             while(!Thread.currentThread().isInterrupted()) {
+                android.util.Log.d("FANTASMINO","sono vivo");
                 synchronized (animations) {
                     while(animations.isEmpty()) {
                         try {

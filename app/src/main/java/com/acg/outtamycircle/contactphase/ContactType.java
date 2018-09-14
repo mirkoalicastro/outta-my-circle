@@ -2,8 +2,6 @@ package com.acg.outtamycircle.contactphase;
 
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
-import java.util.Objects;
-
 abstract class ContactType{
 
     public static int myHashCode(Object a, Object b){

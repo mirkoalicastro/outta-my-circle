@@ -1,7 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
@@ -22,8 +20,6 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.World;
-
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class ServerScreen extends ClientServerScreen {
@@ -31,15 +27,16 @@ public class ServerScreen extends ClientServerScreen {
 
     private static final int VELOCITY_ITERATIONS = 8;
     private static final int POSITION_ITERATIONS = 3;
-    protected final int[] attacks;
+    private final int[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory;
-    private final ContactHandler contactHandler;
+    private final ContactHandler contactHandler; //TODO se diventa un campo locale si perde il riferimento?
     private final PowerupRandomManager powerupRandomManager;
+    private final float arenaX, arenaY;
+    private final float rightX, leftX, topY, bottomY;
+    private final float threshold;
 
     private int messagesInBuffer;
-
     private IdGenerator idGenerator;
-
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
@@ -63,16 +60,12 @@ public class ServerScreen extends ClientServerScreen {
         leftX = arenaX - squareHalfSide;
         topY = arenaY + squareHalfSide;
         bottomY = arenaY - squareHalfSide;
-        threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(radiusCharacter*2)/4;
+        threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(RADIUS_CHARACTER*2)/4;
 
         powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius), status, startAt);
 
         idGenerator = IdGenerator.getInstance((short)players.length);
     }
-
-    private final float arenaX, arenaY;
-    private final float rightX, leftX, topY, bottomY;
-    private final float threshold;
 
     @Override
     public void update(float deltaTime) {

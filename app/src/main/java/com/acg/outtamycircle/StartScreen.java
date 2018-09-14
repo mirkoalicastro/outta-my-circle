@@ -1,6 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.app.Activity;
 import android.graphics.Color;
 
 import com.badlogic.androidgames.framework.Graphics;
@@ -10,7 +9,6 @@ import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.AndroidLoadingScreen;
 import com.badlogic.androidgames.framework.impl.CircularTileAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RectangularTileAndroidEffect;
-import com.badlogic.androidgames.framework.impl.SpinAnimation;
 
 public class StartScreen extends AndroidLoadingScreen {
 
