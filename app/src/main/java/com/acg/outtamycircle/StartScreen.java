@@ -54,6 +54,7 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.skins = graphics.newPixmapsFromFolder("skins",PixmapFormat.ARGB8888);
         setProgress(50);
         Assets.attacks = graphics.newPixmapsFromFolder("attacks",PixmapFormat.ARGB8888);
+        Assets.powerups = graphics.newPixmapsFromFolder("powerups",PixmapFormat.ARGB8888);
         setProgress(65);
         Assets.wait = graphics.newPixmap("etc/wait.png", PixmapFormat.ARGB8888);
         Assets.unknownSkin = graphics.newPixmap("etc/unknown.png", PixmapFormat.ARGB8888);

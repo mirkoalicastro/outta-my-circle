@@ -7,6 +7,7 @@ import com.badlogic.androidgames.framework.Pixmap;
 public class Assets {
     public static Pixmap[] skins;
     public static Pixmap[] attacks;
+    public static Pixmap[] powerups;
     public static Pixmap unknownSkin;
     public static Pixmap back;
     public static Pixmap sound;

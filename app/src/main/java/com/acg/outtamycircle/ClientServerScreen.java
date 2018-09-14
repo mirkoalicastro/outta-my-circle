@@ -313,8 +313,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 break;
         }
 
-        drawableComponentFactory.setPixmap(Assets.skins[powerupId]).setX(x).setY(y).setOwner(powerup);
-        //TODO Assets.powerups[powerupId]
+        drawableComponentFactory.setPixmap(Assets.powerups[powerupId]).setX(x).setY(y).setOwner(powerup);
 
         powerup.addComponent(drawableComponentFactory.makeComponent());
         return powerup;
