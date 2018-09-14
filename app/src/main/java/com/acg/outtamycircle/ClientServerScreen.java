@@ -138,6 +138,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
                 calculateGameResultPixmap();
             g.drawPixmap(gameResultPixmap, 515, 235);
             backButton.draw();
+            g.drawText(androidGame.getString(R.string.game_over),60,1000,40,Color.BLACK);
             return;
         } else if(endRound || !isAlive) {
             if (winnerId[roundNum - 1] == playerOffset)
@@ -231,7 +232,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     @Override
     public void back() {
-        
+
 
     }
     private void privateBack() {
