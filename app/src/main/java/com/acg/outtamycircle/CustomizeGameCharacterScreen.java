@@ -100,10 +100,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
-            /*
-            skin 0 = 3 giocatori
-             */
-            quickGameButton.enable(
+            quickGameButton.enable( //TODO num players
                     !((GoogleAndroidGame)androidGame).getMyGoogleRoom().quickGame(2,2,definitiveIdSkin, definitiveIdAttack)
             );
         }

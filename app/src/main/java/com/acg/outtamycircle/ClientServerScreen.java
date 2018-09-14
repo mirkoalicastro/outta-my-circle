@@ -12,24 +12,29 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
+import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.MyList;
+import com.badlogic.androidgames.framework.Button;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
+import com.badlogic.androidgames.framework.impl.AndroidButton;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
+import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 import com.badlogic.androidgames.framework.impl.ComposerAndroidEffect;
 import com.badlogic.androidgames.framework.impl.RadialGradientEffect;
 import com.badlogic.androidgames.framework.impl.TimedCircularButton;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
-    protected static final int ROUNDS = 3;
+    protected static final int ROUNDS = 2;
     protected int roundNum = 1;
     protected long startAt;
 
@@ -46,8 +51,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final DrawableComponentFactory drawableComponentFactory;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
 
-    /*La cattura degli eventi è equivalente in client e server,
-     ma va processata in maniera differente*/
+    private final Button backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124).setPixmap(Assets.back);
+
     protected List<Input.TouchEvent> events;
     protected final AndroidJoystick androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
         @Override
@@ -71,6 +76,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     public ClientServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game);
+        this.backButton.enable(false);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;
         this.skins = skins;
@@ -116,9 +122,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         //DrawableComponent powerupDrawable = (DrawableComponent) status.powerup.makeComponent(Component.Type.Drawable);
         //powerupDrawable.draw();
 
-        androidJoystick.draw();
-        timedCircularButton.draw();
-
         for(int i=0; i<ROUNDS; i++) {
             Pixmap winnerSkin;
             if(winnerId[i] == -1)
@@ -131,14 +134,48 @@ public abstract class ClientServerScreen extends AndroidScreen {
         g.drawText(androidGame.getString(R.string.round) + " " + Math.min(roundNum, ROUNDS) + "/" + ROUNDS, 30,60, 40, Color.BLACK);
 
         if(endGame) {
-            g.drawText("FINE DL GIOCO", 500, 400, 50, Color.BLACK);
+            if(gameResultPixmap == null)
+                calculateGameResultPixmap();
+            g.drawPixmap(gameResultPixmap, 515, 235);
+            backButton.draw();
+            return;
         } else if(endRound || !isAlive) {
             if (winnerId[roundNum - 1] == playerOffset)
                 g.drawPixmap(Assets.happy, 515, 235);
-            else if (!isAlive)
+            else if(!isAlive)
                 g.drawPixmap(Assets.sad, 515, 235);
         }
+
+        androidJoystick.draw();
+        timedCircularButton.draw();
     }
+
+    private void calculateGameResultPixmap() {
+        int[] results = new int[players.length];
+        int max = 0;
+        boolean oneWinner = true;
+        for(int i=0; i<players.length; i++)
+            results[i] = 0;
+        for(int i=0; i<ROUNDS; i++) {
+            int cur = ++results[winnerId[i]];
+            if(results[max] < cur) {
+                max = winnerId[i];
+                oneWinner = true;
+            } else if(results[max] == cur) {
+                oneWinner = false;
+            }
+        }
+        if(results[max] == results[playerOffset]) {
+            if(oneWinner)
+                gameResultPixmap = Assets.happy;
+            else
+                gameResultPixmap = Assets.neutral;
+        } else {
+            gameResultPixmap = Assets.sad;
+        }
+    }
+
+    private Pixmap gameResultPixmap;
 
     @Override
     public void pause() {
@@ -170,6 +207,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
                     timedCircularButton.resetTime();
                 } else if(Settings.soundEnabled)
                     Assets.attackDisabled.play(Settings.volume);
+            } else if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP && backButton.isEnabled()) {
+                privateBack();
             }
         }
 
@@ -192,9 +231,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     @Override
     public void back() {
-        //TODO
-        //Toast.makeText(androidGame,"E mo che si fa?",Toast.LENGTH_SHORT).show();
-        androidGame.setScreen(new MainMenuScreen(androidGame));
+        
+
+    }
+    private void privateBack() {
+        androidGame.setScreen(new CustomizeGameCharacterScreen((GoogleAndroidGame)androidGame));
     }
 
     protected void initCharacterSettings(float r){
@@ -273,11 +314,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
         powerup.addComponent(drawableComponentFactory.makeComponent());
         return powerup;
     }
-    
+
     protected void startRound() {
         roundNum++;
         if (roundNum > ROUNDS) {
             endGame = true;
+            backButton.enable(true);
             timedCircularButton.enable(false);
             return;
         }
