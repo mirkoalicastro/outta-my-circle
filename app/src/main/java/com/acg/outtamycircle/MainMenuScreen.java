@@ -39,7 +39,6 @@ public class MainMenuScreen extends AndroidScreen {
                     if(Settings.soundEnabled) {
                         soundButton.setPixmap(Assets.nosound);
                     } else {
-                        Log.d("AUDIOTEST", "play");
                         Assets.click.play(Settings.volume);
                         soundButton.setPixmap(Assets.sound);
                     }

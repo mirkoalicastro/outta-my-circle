@@ -39,7 +39,6 @@ public class ServerScreen extends ClientServerScreen {
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
-        Log.d("ATTACKS", Arrays.toString(attacks));
         this.attacks = attacks;
 
         world = new World(0, 0);

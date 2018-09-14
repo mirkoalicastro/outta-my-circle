@@ -2,16 +2,17 @@ package com.acg.outtamycircle.entitycomponent.impl.components;
 
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
+import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 
 public final class BoostAttackComponent extends AttackComponent {
-    private static final long DURATION = 25;
+    private static final long DURATION = 30;
     private boolean active;
     private float x, y;
     private long firstCalled;
     private PhysicsComponent comp;
-    private static float FORCE_MULTIPLIER = 7;
+    private static float FORCE_MULTIPLIER = 8;
 
     @Override
     public void start(float x, float y){
@@ -19,7 +20,13 @@ public final class BoostAttackComponent extends AttackComponent {
         this.x = x*FORCE_MULTIPLIER;
         this.y = y*FORCE_MULTIPLIER;
         active = true;
+    }
+
+    @Override
+    public BoostAttackComponent setOwner(Entity owner) {
+        super.setOwner(owner);
         comp = (PhysicsComponent) getOwner().getComponent(Type.Physics);
+        return this;
     }
 
     @Override

@@ -49,7 +49,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
             if(quickGameButton.inBounds(event) && quickGameButton.isEnabled()) {
-                Log.d("GoogleS", "click");
                 goForward = true;
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);

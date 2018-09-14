@@ -142,13 +142,10 @@ public class PreMatchScreen extends AndroidScreen {
     }
 
     private void createMatchScreen() {
-        if(myGoogleRoom.isServer()) {
+        if(myGoogleRoom.isServer())
             nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks, playerOffset);
-            Log.d("IOSOSERVER", "ISTANZIO nextScreen");
-        } else {
+        else
             nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, playerOffset);
-            Log.d("IOSOCLIENT", "ISTANZIO nextScreen");
-        }
         nextPhase();
     }
 
@@ -158,7 +155,6 @@ public class PreMatchScreen extends AndroidScreen {
         repeatBroadcastInit = false;
         NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance();
-        Log.d("HEYHEYHEY", Arrays.toString(skins));
         for(short i=0; i<numOpponents+1; i++) {
             interpreter.makeCreateMessage(message, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
             handler.putInBuffer(message);
@@ -184,19 +180,15 @@ public class PreMatchScreen extends AndroidScreen {
         }
         if(readMessages < numOpponents+1) {
             for(GameMessage message: myGoogleRoom.getNetworkMessageHandler().getMessages()) {
-                Log.d("JUANNINO", message.getType().toString());
                 if(message.getType() == GameMessage.Type.START) {
                     start = true;
                     continue;
-                } else if(message.getType() != GameMessage.Type.CREATE) {
-                    Log.d("ATTENZIONEATT", "devo saltare causa " + message.getType().toString());
+                } else if(message.getType() != GameMessage.Type.CREATE)
                     continue;
-                }
                 int offset = interpreter.getObjectId(message);
                 spawnPositions[offset][0] = (int)interpreter.getPosX(message);
                 spawnPositions[offset][1] = (int)interpreter.getPosY(message);
                 skins[offset] = interpreter.getSkinId(message);
-                Log.d("HEYHEYHEY", "ho ricevuto " + offset + " = " + skins[offset]);
                 players[offset] = message.getSender();
                 readMessages++;
             }
@@ -292,13 +284,8 @@ public class PreMatchScreen extends AndroidScreen {
                 readMessages++;
             }
         }
-        if(readMessages >= numOpponents) {
-            if (myGoogleRoom.getPlayerId().equals(myGoogleRoom.getServerId()))
-                Log.d("MAMMAMIA", "sono server");
-            else
-                Log.d("MAMMAMIA", "sono client");
+        if(readMessages >= numOpponents)
             nextPhase();
-        }
     }
 
     @Override

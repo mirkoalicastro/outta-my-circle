@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        applicationId "com.acg.outtamycircle2"
+        applicationId "com.acg.outtamycircle"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1

@@ -47,7 +47,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final int[] winnerId ;
     protected boolean endGame, endRound;
 
-    protected final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,2000);
+    protected final TimedCircularButton timedCircularButton = new TimedCircularButton(androidGame.getGraphics(),1080,520,100,3000);
 
     protected final DrawableComponentFactory drawableComponentFactory;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
