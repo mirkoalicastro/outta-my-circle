@@ -84,10 +84,6 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
         if(currentBufferSize < MAX_BUFFER_SIZE)
             toSend[currentBufferSize] = ENDING_CHAR;
         String roomId = myGoogleRoom.getRoomId();
-        Log.d("MACHENESACC", "realtime " + Boolean.toString(myGoogleRoom.getRealTimeMultiplayerClient() != null));
-        Log.d("MACHENESACC", "toSend " + Boolean.toString(toSend != null));
-        Log.d("MACHENESACC", "roomId " + Boolean.toString(roomId != null));
-        Log.d("MACHENESACC", "player " + Boolean.toString(player != null));
         myGoogleRoom.getRealTimeMultiplayerClient()
                 .sendUnreliableMessage(toSend, roomId, player)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -1,6 +1,7 @@
 package com.acg.outtamycircle;
 
 import com.acg.outtamycircle.contactphase.ContactHandler;
+import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
@@ -29,6 +30,8 @@ public class ServerScreen extends ClientServerScreen {
     private final PhysicsComponentFactory physicsComponentFactory;
     private final ContactHandler contactHandler;
     private final PowerupRandomManager powerupRandomManager;
+
+    private int messagesInBuffer;
 
     private void startRound() { //TODO porta sopra
         if(startAt > System.currentTimeMillis())
@@ -100,6 +103,18 @@ public class ServerScreen extends ClientServerScreen {
             return;
         }
 
+        Iterator<AttackComponent> attackIterator = status.activeAttacks.iterator();
+        while(attackIterator.hasNext()){
+            AttackComponent attackComponent = attackIterator.next();
+            if(attackComponent.isActive())
+                attackComponent.attack();
+            else {
+                attackComponent.stop();
+                attackIterator.remove();
+            }
+        }
+        status.activeAttacks.resetIterator();
+
         for (GameMessage message : networkMessageHandler.getMessages()) {
             GameCharacter gameCharacter;
             switch (interpreter.getType(message)){
@@ -109,6 +124,12 @@ public class ServerScreen extends ClientServerScreen {
                     comp.applyForce(interpreter.getPosX(message), interpreter.getPosY(message));
                     break;
                 case ATTACK:
+                    gameCharacter = status.characters[interpreter.getObjectId(message)];
+                    AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
+                    attackComponent.start(interpreter.getPosX(message), interpreter.getPosY(message));
+                    networkMessageHandler.putInBuffer(message);
+                    messagesInBuffer++;
+                    status.activeAttacks.add(attackComponent);
                     break;
             }
         }
@@ -121,7 +142,6 @@ public class ServerScreen extends ClientServerScreen {
         updateDrawablesPosition();
         updateCharactersStatus();
         updatePowerupsStatus();
-
         sendStatus();
     }
 
@@ -235,8 +255,6 @@ public class ServerScreen extends ClientServerScreen {
         return powerup;
     }
 
-    private long startAt;
-
     private void sendStatus(){
         DrawableComponent shape;
         GameMessage message = GameMessage.createInstance();
@@ -251,17 +269,26 @@ public class ServerScreen extends ClientServerScreen {
             return;
         }
 
+
+        /* Reliable Messages */
+
+        if(messagesInBuffer>0)
+            networkMessageHandler.broadcastReliable();
+
+        /* Unreliable Messages */
+
         for(GameCharacter ch : status.living){
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
             interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
             networkMessageHandler.putInBuffer(message);
         }
-
         status.living.resetIterator();
 
         GameMessage.deleteInstance(message);
 
         networkMessageHandler.broadcastUnreliable();
+
+        messagesInBuffer = 0;
     }
 
     private void updatePowerupsStatus(){

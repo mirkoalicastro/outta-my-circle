@@ -1,5 +1,6 @@
 package com.acg.outtamycircle;
 
+import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
@@ -17,7 +18,9 @@ public class GameStatus {
 
     final MyList<Powerup> actives = new MyList<>();
     final MyList<Powerup> inactives = new MyList<>();
-    private int activePowerupsNumber;
+
+    final MyList<AttackComponent> activeAttacks = new MyList<>();
+
 
     void setArena(Entity arena){
         this.arena = arena;
@@ -36,8 +39,6 @@ public class GameStatus {
     public MyList<GameCharacter> getLiving(){
         return living;
     }
-
-    public int getActivePowerupsNumber(){ return activePowerupsNumber; }
 
     public MyList<Powerup> getActivePowerups() {
         return actives;

@@ -1,7 +1,7 @@
 package com.acg.outtamycircle.entitycomponent;
 
 public abstract class Component {
-    public enum Type {Physics, Drawable, Controllable}
+    public enum Type {Physics, Drawable, Controllable, Attack}
     protected Entity owner;
     public abstract Type type();
 
