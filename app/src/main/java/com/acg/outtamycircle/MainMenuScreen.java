@@ -3,6 +3,7 @@ package com.acg.outtamycircle;
 import android.util.Log;
 
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
+import com.badlogic.androidgames.framework.Animation;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input.TouchEvent;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
@@ -16,19 +17,16 @@ public class MainMenuScreen extends AndroidScreen {
 
     private final AndroidButton startButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
     private final AndroidButton soundButton = new AndroidCircularButton(androidGame.getGraphics(), 1050, 146,86);
-    private final SpinAnimation spinAnimation = new SpinAnimation(androidGame.getGraphics(), 10, 250);
     private boolean unchanged;
 
     public MainMenuScreen(AndroidGame game) {
         super(game);
         Settings.loadSettings(androidGame);
         startButton.setPixmap(Assets.start);
-        if(Settings.soundEnabled)
+        if (Settings.soundEnabled)
             soundButton.setPixmap(Assets.sound);
         else
             soundButton.setPixmap(Assets.nosound);
-
-        spinAnimation.setX(100).setY(100).setPixmap(Assets.wait);
     }
 
     @Override
@@ -54,6 +52,7 @@ public class MainMenuScreen extends AndroidScreen {
                 }
             }
         }
+        unchanged = false;
         if(goCustomizeScreen)
             androidGame.setScreen(new CustomizeGameCharacterScreen((GoogleAndroidGame)androidGame));
     }
@@ -68,7 +67,6 @@ public class MainMenuScreen extends AndroidScreen {
 
         startButton.draw();
         soundButton.draw();
-        spinAnimation.draw();
 
         unchanged = true;
     }

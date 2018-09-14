@@ -10,8 +10,11 @@ import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.ClientMessageReceiver;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.ServerMessageReceiver;
+import com.badlogic.androidgames.framework.Animation;
+import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.SpinAnimation;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -22,6 +25,7 @@ import java.util.Map;
 
 public class PreMatchScreen extends AndroidScreen {
 
+    private static final long MAX_TIME = 10000;
     private final Map<String, Short> orderedPlayers = new HashMap<>();
 
     private int readMessages = 0;
@@ -44,6 +48,8 @@ public class PreMatchScreen extends AndroidScreen {
     private ClientServerScreen nextScreen;
     private boolean start;
     private int playerOffset;
+    private final Animation loadingAnimation;
+    private final long startAt;
 
     public PreMatchScreen(AndroidGame androidGame, MyGoogleRoom myGoogleRoom) {
         super(androidGame);
@@ -60,11 +66,18 @@ public class PreMatchScreen extends AndroidScreen {
                 playerOffset = orderedPlayers.size();
             orderedPlayers.put(s, (short) orderedPlayers.size());
         }
-        androidGame.getGraphics().clear(Color.BLACK);
+        Graphics graphics = game.getGraphics();
+        loadingAnimation = new SpinAnimation(graphics, 15, 50)
+                .setX(graphics.getWidth()/2 - Assets.wait.getWidth()/2)
+                .setY(graphics.getHeight()/2 - Assets.wait.getHeight()/2)
+                .setPixmap(Assets.wait);
+        startAt = System.currentTimeMillis();
     }
 
     @Override
     public void update(float deltaTime) {
+        if(tooMuchTime())
+            privateBack();
         switch (phase) {
             case 0:
                 sendTime();
@@ -95,9 +108,15 @@ public class PreMatchScreen extends AndroidScreen {
         }
     }
 
+    private void privateBack() {
+        
+    }
+
+    private boolean tooMuchTime() {
+        return System.currentTimeMillis() - startAt > MAX_TIME;
+    }
+
     private void sendStart() {
-        if(nextScreen == null)
-            return;
         NetworkMessageHandler handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance(); //TODO ogni volta new?
         interpreter.makeStartMessage(message); //TODO make start message
@@ -284,8 +303,10 @@ public class PreMatchScreen extends AndroidScreen {
 
     @Override
     public void present(float deltaTime) {
-        androidGame.getGraphics().clear(Color.BLACK);
-        androidGame.getGraphics().drawText("ASHPETTO " + "phase: "+phase+" readMessages: "+readMessages /*Math.random()*/,100,100,30,0xFFCA1111);
+        Graphics graphics = androidGame.getGraphics();
+        graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
+        graphics.drawText("phase: "+phase+" readMessages: "+readMessages,100,100,30,0xFFCA1111);
+        loadingAnimation.draw();
     }
 
     /**

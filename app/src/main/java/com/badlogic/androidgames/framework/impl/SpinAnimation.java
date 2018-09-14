@@ -1,5 +1,7 @@
 package com.badlogic.androidgames.framework.impl;
 
+import android.util.Log;
+
 import com.badlogic.androidgames.framework.Animation;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
@@ -36,7 +38,7 @@ public class SpinAnimation implements Animation {
         if(pixmap != null) {
             int currentFrame = (int)((System.currentTimeMillis() / delta) % numFrames);
             float degrees = (360/numFrames)*currentFrame;
-         //   graphics.drawPixmap(pixmap, x, y, degrees);
+            graphics.drawPixmap(pixmap, x, y, degrees);
         }
     }
 }
