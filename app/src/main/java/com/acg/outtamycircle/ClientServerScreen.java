@@ -273,4 +273,24 @@ public abstract class ClientServerScreen extends AndroidScreen {
         powerup.addComponent(drawableComponentFactory.makeComponent());
         return powerup;
     }
+    
+    protected void startRound() {
+        roundNum++;
+        if (roundNum > ROUNDS) {
+            endGame = true;
+            timedCircularButton.enable(false);
+            return;
+        }
+        isAlive = true;
+        endRound = false;
+        status = new GameStatus();
+        initArenaSettings();
+        status.setArena(createArena());
+        initCharacterSettings(radiusCharacter);
+        GameCharacter[] characters = new GameCharacter[players.length];
+        for (int i=0; i<characters.length; i++)
+            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
+        status.setCharacters(characters);
+        status.setPlayerOne(characters[playerOffset]);
+    }
 }

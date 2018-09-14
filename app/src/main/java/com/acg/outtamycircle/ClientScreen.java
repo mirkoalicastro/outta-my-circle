@@ -17,27 +17,6 @@ public class ClientScreen extends ClientServerScreen {
         roundNum--;
     }
 
-    private void startRound() { //TODO porta sopra
-        if (startAt > System.currentTimeMillis())
-            return;
-        roundNum++;
-        if (roundNum > ROUNDS) {
-            endGame = true;
-            timedCircularButton.enable(false);
-            return;
-        }
-        isAlive = true;
-        endRound = false;
-        status = new GameStatus();
-        initArenaSettings();
-        status.setArena(createArena());
-        initCharacterSettings(radiusCharacter);
-        GameCharacter[] characters = new GameCharacter[players.length];
-        for (int i=0; i<characters.length; i++)
-            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
-        status.setCharacters(characters);
-    }
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -133,6 +112,13 @@ public class ClientScreen extends ClientServerScreen {
                 break;
             }
         }
+    }
+
+    @Override
+    protected void startRound(){
+        if (startAt > System.currentTimeMillis())
+            return;
+        super.startRound();
     }
 
 }

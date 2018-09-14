@@ -33,31 +33,6 @@ public class ServerScreen extends ClientServerScreen {
 
     private int messagesInBuffer;
 
-    private void startRound() { //TODO porta sopra
-        if(startAt > System.currentTimeMillis())
-            return;
-        if(status != null)
-            for(GameCharacter gameCharacter: status.living)
-                ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
-        roundNum++;
-        if(roundNum > ROUNDS) {
-            endGame = true;
-            return;
-        }
-        isAlive = true;
-        endRound = false;
-        status = new GameStatus();
-        initArenaSettings();
-        status.setArena(createArena());
-        initCharacterSettings(radiusCharacter);
-        GameCharacter[] characters = new GameCharacter[players.length];
-        for (int i = 0; i < characters.length; i++)
-            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
-        status.setCharacters(characters);
-
-        status.setPlayerOne(characters[playerOffset]);
-    }
-
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
         this.attacks = attacks;
@@ -304,5 +279,15 @@ public class ServerScreen extends ClientServerScreen {
             if(!pu.isEnded())
                 pu.start();
         status.actives.resetIterator();
+    }
+
+    @Override
+    protected void startRound() {
+        if (startAt > System.currentTimeMillis())
+            return;
+        if(status != null)
+            for(GameCharacter gameCharacter: status.living)
+                ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
+        super.startRound();
     }
 }
