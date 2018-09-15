@@ -21,7 +21,7 @@ public class HelpScreen extends AndroidScreen {
     public void update(float deltaTime) {
         boolean goMainMenuScreen = false;
         for(Input.TouchEvent event: androidGame.getInput().getTouchEvents()) {
-            if(backButton.inBounds(event)) {
+            if(backButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
                 goMainMenuScreen = true;
