@@ -37,6 +37,6 @@ public class ContactHandler extends ContactListener{
         CharacterPowerupContact cp = new CharacterPowerupContact(status, interpreter);
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
-        map.put(ContactType.myHashCode(GameCharacter.class,Powerup.class), cp);
+        map.put(ContactType.myHashCode(GameCharacter.class,Powerup.class), cp); //TODO ultima classe
     }
 }
