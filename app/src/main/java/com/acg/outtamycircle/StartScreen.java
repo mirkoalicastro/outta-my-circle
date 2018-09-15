@@ -7,8 +7,8 @@ import com.badlogic.androidgames.framework.Graphics.PixmapFormat;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidPixmap;
 import com.badlogic.androidgames.framework.impl.AndroidLoadingScreen;
-import com.badlogic.androidgames.framework.impl.CircularTileAndroidEffect;
-import com.badlogic.androidgames.framework.impl.RectangularTileAndroidEffect;
+import com.badlogic.androidgames.framework.impl.CircularAndroidTileEffect;
+import com.badlogic.androidgames.framework.impl.RectangularAndroidTileEffect;
 
 public class StartScreen extends AndroidLoadingScreen {
 
@@ -34,12 +34,12 @@ public class StartScreen extends AndroidLoadingScreen {
     public void doJob() {
         Graphics graphics = androidGame.getGraphics();
         Assets.background = graphics.newPixmap("tiles/bgtile.png", PixmapFormat.ARGB8888);
-        Assets.backgroundTile = new RectangularTileAndroidEffect((AndroidPixmap)Assets.background);
+        Assets.backgroundTile = new RectangularAndroidTileEffect((AndroidPixmap)Assets.background);
         Assets.loading = graphics.newPixmap("etc/loading.png", PixmapFormat.ARGB8888);
         graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
         setProgress(15);
         Assets.arena = graphics.newPixmap("tiles/arenatile.png", PixmapFormat.ARGB8888);
-        Assets.arenaTile = new CircularTileAndroidEffect((AndroidPixmap)Assets.arena);
+        Assets.arenaTile = new CircularAndroidTileEffect((AndroidPixmap)Assets.arena);
         setProgress(30);
         Assets.help = graphics.newPixmap("buttons/help.png", PixmapFormat.ARGB8888);
         Assets.start = graphics.newPixmap("buttons/start.png", PixmapFormat.ARGB8888);
