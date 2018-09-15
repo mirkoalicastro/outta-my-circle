@@ -1,12 +1,12 @@
 package com.acg.outtamycircle.network.googleimpl;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.acg.outtamycircle.MainMenuScreen;
 import com.acg.outtamycircle.R;
+import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,24 +23,24 @@ import com.google.android.gms.tasks.Task;
 public class MyGoogleSignIn {
     private static final GoogleSignInOptions OPTIONS = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient client;
-    private final Activity activity;
+    private final AndroidGame androidGame;
     private String playerId;
 
     public String getPlayerId() {
         return playerId;
     }
 
-    public MyGoogleSignIn(Activity activity) {
-        this.activity = activity;
-        this.client = GoogleSignIn.getClient(activity, OPTIONS);
+    public MyGoogleSignIn(AndroidGame androidGame) {
+        this.androidGame = androidGame;
+        this.client = GoogleSignIn.getClient(androidGame, OPTIONS);
     }
 
     public boolean isSignedIn() {
-        return GoogleSignIn.getLastSignedInAccount(activity) != null;
+        return GoogleSignIn.getLastSignedInAccount(androidGame) != null;
     }
 
     public GoogleSignInAccount getAccount() {
-        return GoogleSignIn.getLastSignedInAccount(activity);
+        return GoogleSignIn.getLastSignedInAccount(androidGame);
     }
 
     public void signOut() {
@@ -49,7 +49,7 @@ public class MyGoogleSignIn {
 
     private void onConnected(GoogleSignInAccount account) {
 
-        PlayersClient playersClient = Games.getPlayersClient(activity, account);
+        PlayersClient playersClient = Games.getPlayersClient(androidGame, account);
         playersClient.getCurrentPlayer()
                 .addOnSuccessListener(new OnSuccessListener<Player>() {
                     @Override
@@ -63,18 +63,17 @@ public class MyGoogleSignIn {
                         playerId = null;
                     }
                 });
-
     }
 
     private void onDisconnected() {
         signOut();
     }
 
-    public void signIn() { //onresume
+    public void signIn() {
         client.silentSignIn().addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
             @Override
             public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-                if (!task.isSuccessful())
+                if (!task.isSuccessful() || !isSignedIn())
                     explicitSignIn();
                 else
                     onConnected(task.getResult());
@@ -83,19 +82,25 @@ public class MyGoogleSignIn {
     }
     private void explicitSignIn() {
         Intent signInIntent = client.getSignInIntent();
-        activity.startActivityForResult(signInIntent, GoogleRC.RC_SIGN_IN);
+        androidGame.startActivityForResult(signInIntent, GoogleRC.RC_SIGN_IN);
     }
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GoogleRC.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 onConnected(task.getResult(ApiException.class));
-            } catch (ApiException apiException) {
+            } catch (final ApiException apiException) {
                 onDisconnected();
-                new AlertDialog.Builder(activity)
-                        .setMessage(activity.getString(R.string.google_error_signin) + " (" + apiException.getStatusCode() + ")")
-                        .setNeutralButton(android.R.string.ok, null)
-                        .show();
+                androidGame.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new AlertDialog.Builder(androidGame)
+                                .setMessage(androidGame.getString(R.string.google_error_signin) + " (" + apiException.getStatusCode() + ")")
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
+                        androidGame.setScreen(new MainMenuScreen(androidGame));
+                    }
+                });
             }
         }
     }

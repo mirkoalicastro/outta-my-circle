@@ -13,6 +13,7 @@ import com.badlogic.androidgames.framework.impl.AndroidScreen;
 public class CustomizeGameCharacterScreen extends AndroidScreen {
     private byte currentIdSkin = 0;
     private byte currentIdAttack = 0;
+    private boolean showingGoogle;
 
     private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
     private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
@@ -23,7 +24,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
 
     private final MyGoogleRoom myGoogleRoom;
-    private final MyGoogleRoom.Resetter myResetter = new MyGoogleRoom.Resetter() {
+    private final MyGoogleRoom.ResetCallback myResetCallback = new MyGoogleRoom.ResetCallback() {
         @Override
         public void reset() {
             enableButtons(true);
@@ -40,7 +41,6 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
         myGoogleRoom = googleAndroidGame.getMyGoogleRoom();
-        googleAndroidGame.getMyGoogleSignIn().signIn();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
             enableButtons( //TODO num players
-                    !myGoogleRoom.quickGame(myResetter,2, 2, definitiveIdSkin, definitiveIdAttack)
+                    !myGoogleRoom.quickGame(myResetCallback,2, 4, definitiveIdSkin, definitiveIdAttack)
             );
         }
     }
@@ -110,6 +110,7 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private void enableButtons(boolean enable) {
         quickGameButton.enable(enable);
         backButton.enable(enable);
+        showingGoogle = !enable;
     }
 
     @Override
@@ -158,6 +159,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
 
     @Override
     public void back() {
+        if(showingGoogle)
+            return;
         if(Settings.soundEnabled)
             Assets.click.play(Settings.volume);
         androidGame.setScreen(new MainMenuScreen(androidGame));

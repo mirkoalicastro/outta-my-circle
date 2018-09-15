@@ -294,7 +294,6 @@ public class PreMatchScreen extends AndroidScreen {
     public void present(float deltaTime) {
         Graphics graphics = androidGame.getGraphics();
         graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
-        graphics.drawText("phase: "+phase+" readMessages: "+readMessages,100,100,30,0xFFCA1111);
         loadingAnimation.draw();
     }
 

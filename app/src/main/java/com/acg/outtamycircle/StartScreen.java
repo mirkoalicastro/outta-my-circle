@@ -41,6 +41,7 @@ public class StartScreen extends AndroidLoadingScreen {
         Assets.arena = graphics.newPixmap("tiles/arenatile.png", PixmapFormat.ARGB8888);
         Assets.arenaTile = new CircularTileAndroidEffect((AndroidPixmap)Assets.arena);
         setProgress(30);
+        Assets.help = graphics.newPixmap("buttons/help.png", PixmapFormat.ARGB8888);
         Assets.start = graphics.newPixmap("buttons/start.png", PixmapFormat.ARGB8888);
         Assets.back = graphics.newPixmap("buttons/back.png", PixmapFormat.ARGB8888);
         Assets.quickGame = graphics.newPixmap("buttons/quickgame.png", PixmapFormat.ARGB8888);

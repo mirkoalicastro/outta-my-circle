@@ -67,7 +67,6 @@ public abstract class AndroidLoadingScreen extends OneJobScreen {
         @Override
         public void run() {
             while(!Thread.currentThread().isInterrupted()) {
-                android.util.Log.d("FANTASMINO","sono vivo");
                 synchronized (animations) {
                     while(animations.isEmpty()) {
                         try {

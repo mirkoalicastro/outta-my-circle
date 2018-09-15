@@ -5,12 +5,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.acg.outtamycircle.CustomizeGameCharacterScreen;
+import com.acg.outtamycircle.MainMenuScreen;
 import com.acg.outtamycircle.R;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
-import com.badlogic.androidgames.framework.Screen;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.RealTimeMultiplayerClient;
@@ -35,7 +33,7 @@ public class MyGoogleRoom {
     private byte currentIdSkin;
     private byte currentIdAttack;
 
-    private Resetter resetter;
+    private ResetCallback resetCallback;
     private static final int MIN_PLAYERS = 2;
     private static final int MAX_PLAYERS = 4;
     private final MyGoogleSignIn myGoogleSignIn;
@@ -86,7 +84,6 @@ public class MyGoogleRoom {
     private volatile boolean locked = false;
 
     void leave() {
-        Log.d("GOOGLES", "leave");
         locked = true;
         if(mRoomId != null && realTimeMultiplayerClient != null) {
             realTimeMultiplayerClient.leave(config, mRoomId)
@@ -121,8 +118,8 @@ public class MyGoogleRoom {
         mParticipantIds = null;
         networkMessageHandlerImpl.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
         locked = false;
-        if(resetter != null)
-            resetter.reset();
+        if(resetCallback != null)
+            resetCallback.reset();
     }
 
     public MyGoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
@@ -152,7 +149,7 @@ public class MyGoogleRoom {
                         .setMessage(googleAndroidGame.getString(R.string.google_error))
                         .setNeutralButton(android.R.string.ok, null).create().show();
                 reset();
-                googleAndroidGame.setScreen(new CustomizeGameCharacterScreen(googleAndroidGame));
+                googleAndroidGame.setScreen(new MainMenuScreen(googleAndroidGame));
             }
         });
     }
@@ -182,18 +179,20 @@ public class MyGoogleRoom {
                 });
     }
 
-    public boolean quickGame(Resetter resetter, int min_players, int max_players, byte currentIdSkin, byte currentIdAttack) {
-        if(locked)
-            return false;
-        if(!myGoogleSignIn.isSignedIn())
-            throw new IllegalStateException("first login bitch"); //TODO non eccezione
+    public boolean quickGame(ResetCallback resetCallback, int min_players, int max_players, byte currentIdSkin, byte currentIdAttack) {
         if(min_players < MIN_PLAYERS)
             throw new IllegalArgumentException("Min players must be at least " + MIN_PLAYERS);
         if(max_players > MAX_PLAYERS)
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
-        this.resetter = null;
+        if(locked)
+            return false;
+        if(!myGoogleSignIn.isSignedIn()) {
+            myGoogleSignIn.signIn();
+            return false;
+        }
+        this.resetCallback = null;
         reset();
-        this.resetter = resetter;
+        this.resetCallback = resetCallback;
         this.currentIdSkin = currentIdSkin;
         this.currentIdAttack = currentIdAttack;
         realTimeMultiplayerClient = Games.getRealTimeMultiplayerClient(googleAndroidGame, myGoogleSignIn.getAccount());
@@ -220,8 +219,7 @@ public class MyGoogleRoom {
         this.room = room;
     }
 
-    public interface Resetter {
+    public interface ResetCallback {
         void reset();
     }
-
 }

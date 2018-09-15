@@ -12,6 +12,7 @@ public class Assets {
     public static Pixmap back;
     public static Pixmap sound;
     public static Pixmap nosound;
+    public static Pixmap help;
     public static Pixmap start;
     public static Pixmap quickGame;
     public static Pixmap sad;

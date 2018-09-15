@@ -2,22 +2,14 @@ package com.acg.outtamycircle.network.googleimpl;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.acg.outtamycircle.PreMatchScreen;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 
 public abstract class GoogleAndroidGame extends AndroidGame {
 
-    public static final String TAG = "PEPPE";
-
-    private PreMatchScreen getClientServerScreen(MyGoogleRoom myGoogleRoom) {
-        return new PreMatchScreen(this,myGoogleRoom);
-    }
-
     public void startGame() {
-        PreMatchScreen clientServerScreen = getClientServerScreen(myGoogleRoom);
-        setScreen(clientServerScreen);
+        this.setScreen(new PreMatchScreen(this,myGoogleRoom));
     }
 
     private MyGoogleSignIn myGoogleSignIn;
@@ -36,6 +28,7 @@ public abstract class GoogleAndroidGame extends AndroidGame {
         super.onCreate(savedInstanceState);
         myGoogleSignIn = new MyGoogleSignIn(this);
         myGoogleRoom = new MyGoogleRoom(this,myGoogleSignIn);
+        myGoogleSignIn.signIn();
     }
 
     @Override
