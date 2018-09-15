@@ -6,7 +6,7 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 
 public class RadialForcePowerup extends Powerup {
     private boolean isEnded = false;
-    public static final short id = 0;
+    public static final short ID = 0;
 
     public RadialForcePowerup(GameStatus status, short objectId) {
         super(status, objectId);
@@ -19,7 +19,7 @@ public class RadialForcePowerup extends Powerup {
         float forceX, forceY;
 
         for(GameCharacter ch : status.getLiving()){
-            if(ch.equals(character))
+            if(ch.getObjectId() == character.getObjectId())
                 continue;
             component = (PhysicsComponent)ch.getComponent(Component.Type.Physics);
             forceX = component.getX() - x;

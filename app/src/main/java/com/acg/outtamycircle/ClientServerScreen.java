@@ -296,7 +296,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected Powerup createPowerup(int x, int y, short powerupId, short objectId){
         Powerup powerup = null;
         switch (powerupId){
-            case RadialForcePowerup.id:
+            case RadialForcePowerup.ID:
                 powerup = new RadialForcePowerup(status, objectId);
                 break;
         }
