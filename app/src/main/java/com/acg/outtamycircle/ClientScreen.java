@@ -1,5 +1,7 @@
 package com.acg.outtamycircle;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
@@ -10,6 +12,8 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import java.util.Iterator;
 
 public class ClientScreen extends ClientServerScreen {
+    private boolean playCollision;
+
     public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
 
@@ -33,11 +37,28 @@ public class ClientScreen extends ClientServerScreen {
             send();
 
         receive();
+
+        if(playCollision) {
+            Log.d("COLLISIONE", "si");
+            playCollision = false;
+            if(Settings.soundEnabled)
+                Assets.gameCharacterCollision.play(Settings.volume);
+        }
     }
 
-    @Override
-    public void setup(){
-
+    private void updatePlayCollision(int objectId, int posX, int posY) {
+        for(GameCharacter gameCharacter: status.living) {
+            if (gameCharacter.getObjectId() != objectId) {
+                DrawableComponent tmp = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
+                int deltaX = (posX - tmp.getX()) * (posX - tmp.getX());
+                int deltaY = (posY - tmp.getY()) * (posY - tmp.getY());
+                if(Math.sqrt(deltaX + deltaY) <= RADIUS_CHARACTER*2) {
+                    playCollision = true;
+                    break;
+                }
+            }
+        }
+        status.living.resetIterator();
     }
 
     private void send() {
@@ -56,15 +77,20 @@ public class ClientScreen extends ClientServerScreen {
     }
 
     private void receive() {
+        playCollision = false;
         for (GameMessage message : networkMessageHandler.getMessages()) {
             switch (interpreter.getType(message)){
                 case MOVE_SERVER: {
                     int objectId = interpreter.getObjectId(message);
-                    float posX = interpreter.getPosX(message);
-                    float posY = interpreter.getPosY(message);
+                    int posX = interpreter.getPosX(message);
+                    int posY = interpreter.getPosY(message);
                     float rotation = interpreter.getRotation(message);
                     DrawableComponent comp = (DrawableComponent) status.characters[objectId].getComponent(Component.Type.Drawable);
-                    comp.setX((int)posX).setY((int)posY);
+                    if(comp.getX() != posX || comp.getY() != posY) {
+                        comp.setX(posX).setY(posY);
+                        if(!playCollision)
+                            updatePlayCollision(objectId, posX, posY);
+                    }
                 }
                 break;
                 case ATTACK: {

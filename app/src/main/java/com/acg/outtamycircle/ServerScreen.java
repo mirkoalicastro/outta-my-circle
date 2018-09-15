@@ -40,6 +40,7 @@ public class ServerScreen extends ClientServerScreen {
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
+        Converter.setScale(frameWidth, frameHeight);
         this.attacks = attacks;
 
         world = new World(0, 0);
@@ -136,11 +137,6 @@ public class ServerScreen extends ClientServerScreen {
         updateCharactersStatus();
         updatePowerupsStatus(deltaTime);
         sendStatus();
-    }
-
-    @Override
-    public void setup(){
-        Converter.setScale(frameWidth, frameHeight);
     }
 
     private void updateCharactersStatus(){

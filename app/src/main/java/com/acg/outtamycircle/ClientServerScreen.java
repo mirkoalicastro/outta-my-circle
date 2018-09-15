@@ -102,8 +102,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         arenaRadius = frameHeight/2 - 40;
 
         drawableComponentFactory = new DrawableComponentFactory(game.getGraphics());
-
-        setup();
     }
 
     @Override
@@ -188,8 +186,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     }
 
-    public abstract void setup();
-
     public void update(float deltaTime) {
 
         List<Input.TouchEvent> events = androidJoystick.processAndRelease(game.getInput().getTouchEvents());
@@ -202,9 +198,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
             if (timedCircularButton.inBounds(event) && event.type == Input.TouchEvent.TOUCH_UP) {
                 if (timedCircularButton.isEnabled()) {
                     shouldAttack = true;
-//  TODO va fanno in server e client screen:
-//                  if(Settings.soundEnabled)
-  //                      Assets.attackEnabled.play(Settings.volume);
                     timedCircularButton.resetTime();
                 } else if(Settings.soundEnabled)
                     Assets.attackDisabled.play(Settings.volume);
