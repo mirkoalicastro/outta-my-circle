@@ -5,6 +5,7 @@ import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.utilities.MyList;
+import com.google.fpl.liquidfun.World;
 
 public class GameStatus {
     //TODO private final a TUTTO!?!?!?
@@ -15,6 +16,10 @@ public class GameStatus {
 
     final MyList<GameCharacter> living = new MyList<>();
     final MyList<GameCharacter> dying = new MyList<>();
+
+    World world;
+
+    final MyList<Powerup> toActivate = new MyList<>();
 
     //TODO lista di powerup e override di equals per objectId
     Powerup powerup;
@@ -51,6 +56,14 @@ public class GameStatus {
 
     public GameCharacter[] getCharacters() {
         return characters;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
+    public MyList<Powerup> getToActivate(){
+        return toActivate;
     }
 
     public void setPowerup(Powerup powerup) {

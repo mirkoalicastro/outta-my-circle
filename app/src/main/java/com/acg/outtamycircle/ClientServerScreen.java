@@ -10,6 +10,7 @@ import com.acg.outtamycircle.entitycomponent.impl.factories.DrawableComponentFac
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerUp;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
@@ -106,7 +107,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     @Override
     public void present(float deltaTime) {
-        //TODO
         Graphics g = game.getGraphics();
         g.drawEffect(Assets.backgroundTile, 0,0, g.getWidth(), g.getHeight());
 
@@ -296,9 +296,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected Powerup createPowerup(int x, int y, short powerupId, short objectId){
         Powerup powerup = null;
         switch (powerupId){
+            case WeightPowerUp.ID:
+                powerup = new WeightPowerUp(status, objectId);
+                break;
             case RadialForcePowerup.ID:
                 powerup = new RadialForcePowerup(status, objectId);
                 break;
+            default:
+                return null;
         }
 
         drawableComponentFactory.setPixmap(Assets.powerups[powerupId]).setX(x).setY(y).setOwner(powerup);

@@ -1,11 +1,14 @@
 package com.acg.outtamycircle.contactphase;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerUp;
 import com.acg.outtamycircle.network.GameMessageInterpreter;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
@@ -37,6 +40,6 @@ public class ContactHandler extends ContactListener{
         CharacterPowerupContact cp = new CharacterPowerupContact(status, interpreter);
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
-        map.put(ContactType.myHashCode(GameCharacter.class,Powerup.class), cp); //TODO ultima classe
+        map.put(ContactType.myHashCode(GameCharacter.class,WeightPowerUp.class), cp); //TODO ultima classe
     }
 }

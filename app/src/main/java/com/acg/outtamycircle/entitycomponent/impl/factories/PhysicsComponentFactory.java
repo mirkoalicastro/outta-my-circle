@@ -106,10 +106,13 @@ public class PhysicsComponentFactory {
         body.setSleepingAllowed(sleepingAllowed);
         body.setUserData(component.getOwner());
 
-        if(shape == null)
+        if(shape == null) {
             throw new IllegalStateException("Set the shape first");
-        if(owner == null)
+        }
+        if(owner == null) {
             throw new IllegalStateException("Set the owner first");
+        }
+
         shape.setRadius(radius);
         fixDef.setShape(shape);
 

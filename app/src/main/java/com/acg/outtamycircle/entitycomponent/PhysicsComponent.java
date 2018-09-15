@@ -10,4 +10,8 @@ public abstract class PhysicsComponent extends Component {
     public abstract float getX();
 
     public abstract float getY();
+
+    public abstract float getWidth();
+
+    public abstract float getHeight();
 }

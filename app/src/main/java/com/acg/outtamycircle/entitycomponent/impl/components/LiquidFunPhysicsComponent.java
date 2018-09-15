@@ -53,10 +53,21 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
         return this;
     }
 
-    public float getWidth(){ return width; }
-    public float getHeight(){ return height; }
+    @Override
+    public float getWidth(){
+        return width;
+    }
+
+    @Override
+    public float getHeight(){
+        return height;
+    }
 
     public void deleteBody(){
         body.getWorld().destroyBody(body);
+    }
+
+    public Body getBody() {
+        return body;
     }
 }

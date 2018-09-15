@@ -1,11 +1,11 @@
-package com.acg.outtamycircle.entitycomponent.impl.components;
+package com.acg.outtamycircle.entitycomponent.impl.gameobjects;
 
 import android.util.Log;
 
 import com.acg.outtamycircle.GameStatus;
-import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
-import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.Entity;
+import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyType;
@@ -14,88 +14,90 @@ import com.google.fpl.liquidfun.Shape;
 import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 
-public class WeightAttackComponent extends AttackComponent {
+public class WeightPowerUp extends Powerup {
     private static final long DURATION = 2000;
     private static final float DENSITY_MULTIPLIER = 4f;
     private static final float VELOCITY_MULTIPLIER = 0.65f;
     private static final float BASE_DENSITY = 1f;
+    public static final short ID = 0 ;
 
     private PhysicsComponentFactory factory;
     private World world;
     private static final Shape SHAPE = new CircleShape();
-    private float x, y, radius;
     private long firstCalled;
-    private boolean active;
+    private boolean ended;
+
+    public WeightPowerUp(GameStatus status, short id) {
+        super(status, id);
+        world = status.getWorld();
+        factory = new PhysicsComponentFactory(world);
+
+        factory = new PhysicsComponentFactory(world);
+        factory.setAwake(true).setShape(SHAPE).setBullet(true)
+                .setFriction(1f).setDensity(1f).setRestitution(1f)
+                .setType(BodyType.dynamicBody).setSleepingAllowed(true);
+    }
 
     @Override
-    public void start(GameStatus status, float x, float y) {
-        LiquidFunPhysicsComponent lastComponent = (LiquidFunPhysicsComponent) owner.getComponent(Type.Physics);
-        Body body= lastComponent.body;
+    public void start() {
+        LiquidFunPhysicsComponent lastComponent = (LiquidFunPhysicsComponent) character.getComponent(Component.Type.Physics);
+        Body body= lastComponent.getBody();
         Vec2 linearVelocity = body.getLinearVelocity();
-        active = true;
-        if(factory==null) {
-            this.world = status.getWorld();
-            factory = new PhysicsComponentFactory(world);
-            factory.setAwake(body.isAwake()).setShape(SHAPE).setBullet(body.isBullet())
-                    .setFriction(1f).setDensity(1f).setRestitution(1f)
-                    .setType(BodyType.dynamicBody).setSleepingAllowed(body.isSleepingAllowed());
-        }
+        float radius = lastComponent.getHeight()/2f;
 
-        radius = lastComponent.getHeight()/2f;
-        this.x = lastComponent.getX();
-        this.y = lastComponent.getY();
-
-        factory.setPosition(this.x, this.y);
+        factory.setPosition(lastComponent.getX(), lastComponent.getY());
         factory.setRadius(radius);
-        factory.setOwner(owner);
+        factory.setOwner(character);
 
         // create new
         factory.setDensity(BASE_DENSITY * DENSITY_MULTIPLIER);
+        factory.setWidth(radius*2).setHeight(radius*2);
+
         LiquidFunPhysicsComponent physicsComponent = (LiquidFunPhysicsComponent) factory.makeComponent();
-        Body tmpBody = physicsComponent.body;
+        Body tmpBody = physicsComponent.getBody();
 
         linearVelocity.setX(linearVelocity.getX()*VELOCITY_MULTIPLIER);
         linearVelocity.setY(linearVelocity.getY()*VELOCITY_MULTIPLIER);
         tmpBody.setLinearVelocity(linearVelocity);
 
+        // update owner
+        character.addComponent(physicsComponent);
+        physicsComponent.setOwner(character);
+
         // delete old
         lastComponent.deleteBody();
-
-        // update owner
-        owner.addComponent(physicsComponent);
-        physicsComponent.setOwner(owner);
         //TODO drawable?
 
         firstCalled = System.currentTimeMillis();
     }
 
     @Override
-    public void attack() {
+    public void work(){
         if(System.currentTimeMillis()-firstCalled >= DURATION)
-            active = false;
-    }
-
-    @Override
-    public boolean isActive() {
-        return active;
+            ended = true;
     }
 
     @Override
     public void stop() {
-        LiquidFunPhysicsComponent tmpComponent = (LiquidFunPhysicsComponent) owner.getComponent(Type.Physics);
-        Body tmpBody = tmpComponent.body;
+        LiquidFunPhysicsComponent tmpComponent = (LiquidFunPhysicsComponent) character.getComponent(Component.Type.Physics);
+        Body tmpBody = tmpComponent.getBody();
         Vec2 linearVelocity = tmpBody.getLinearVelocity();
 
         factory.setDensity(BASE_DENSITY);
         factory.setPosition(tmpBody.getPositionX(), tmpBody.getPositionY());
-
+        factory.setOwner(character);
         LiquidFunPhysicsComponent physicsComponent = (LiquidFunPhysicsComponent) factory.makeComponent();
-        Body newBody = physicsComponent.body;
+        Body newBody = physicsComponent.getBody();
         newBody.setLinearVelocity(linearVelocity);
 
-        owner.addComponent(physicsComponent);
-        physicsComponent.setOwner(owner);
+        character.addComponent(physicsComponent);
+        physicsComponent.setOwner(character);
 
         tmpComponent.deleteBody();
+    }
+
+    @Override
+    public boolean isEnded() {
+        return ended;
     }
 }

@@ -34,6 +34,7 @@ public class ServerScreen extends ClientServerScreen {
     private final float arenaX, arenaY;
     private final float rightX, leftX, topY, bottomY;
     private final float threshold;
+    private final PhysicsComponentFactory powerupPhysicsFactory;
 
     private int messagesInBuffer;
     private IdGenerator idGenerator;
@@ -45,13 +46,17 @@ public class ServerScreen extends ClientServerScreen {
 
         world = new World(0, 0);
         physicsComponentFactory = new PhysicsComponentFactory(world);
+        powerupPhysicsFactory = new PhysicsComponentFactory(world);
+        powerupPhysicsFactory.setShape(new CircleShape()).setHeight(Converter.frameToPhysics(RADIUS_CHARACTER)/2f)
+                .setWidth(Converter.frameToPhysics(RADIUS_CHARACTER)/2f).setRadius(Converter.frameToPhysics(RADIUS_CHARACTER))
+                .setBullet(true).setAwake(true).setSleepingAllowed(true).setType(BodyType.dynamicBody)
+                .setDensity(0.00000001f).setRestitution(0.00000001f).setFriction(0.00000001f); //TODO try to reduce
 
         startRound();
         roundNum--;
 
         contactHandler = new ContactHandler();
         contactHandler.init(status, interpreter);
-
         world.setContactListener(contactHandler); //TODO
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
@@ -105,7 +110,7 @@ public class ServerScreen extends ClientServerScreen {
                         Assets.attackEnabled.play(Settings.volume);
                     gameCharacter = status.characters[interpreter.getObjectId(message)];
                     AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
-                    attackComponent.start(world, interpreter.getPosX(message), interpreter.getPosY(message));
+                    attackComponent.start(status, interpreter.getPosX(message), interpreter.getPosY(message));
                     networkMessageHandler.putInBuffer(message);
                     messagesInBuffer++;
                     status.activeAttacks.add(attackComponent);
@@ -118,7 +123,7 @@ public class ServerScreen extends ClientServerScreen {
             AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
             float x = androidJoystick.getNormX();
             float y = androidJoystick.getNormY();
-            attackComponent.start(world, x, y);
+            attackComponent.start(status, x, y);
             GameMessage message = GameMessage.createInstance();
             interpreter.makeAttackMessage(message, playerOffset, (int) x, (int) y);
             networkMessageHandler.putInBuffer(message);
@@ -224,22 +229,13 @@ public class ServerScreen extends ClientServerScreen {
         component.deleteBody();
     }
 
-    @Override
-    protected void initPowerupSettings(int side){
-        super.initPowerupSettings(side);
-
-        physicsComponentFactory.resetFactory();
-        physicsComponentFactory.setDensity(Float.MIN_VALUE).setFriction(Float.MIN_VALUE).setRestitution(Float.MAX_VALUE)
-                .setType(BodyType.dynamicBody).setShape(new PolygonShape());
-    }
-
     protected Powerup createPowerup(float x, float y, short powerupId, short objectId){
         Powerup powerup = super.createPowerup((int)Converter.physicsToFrame(x),
                 (int)Converter.physicsToFrame(y), powerupId, objectId);
 
-        physicsComponentFactory.setOwner(powerup)
+        powerupPhysicsFactory.setOwner(powerup)
                 .setPosition(x, y);
-        powerup.addComponent(physicsComponentFactory.makeComponent());
+        powerup.addComponent(powerupPhysicsFactory.makeComponent());
 
         return powerup;
     }
@@ -268,7 +264,7 @@ public class ServerScreen extends ClientServerScreen {
 
         for(GameCharacter ch : status.living){
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
-            interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO getX(): int, rotation
+            interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO rotation
             networkMessageHandler.putInBuffer(message);
         }
         status.living.resetIterator();
@@ -298,11 +294,31 @@ public class ServerScreen extends ClientServerScreen {
             GameMessage.deleteInstance(message);
         }
 
-        for(Powerup powerup : status.actives)
-            if(!powerup.isEnded())
-                powerup.start();
-            //TODO
+
+        Iterator<Powerup> powerupIterator = status.actives.iterator();
+        while(powerupIterator.hasNext()) {
+            Powerup powerup = powerupIterator.next();
+            if (!powerup.isEnded()) {
+                powerup.work();
+            }
+            else {
+                powerup.stop();
+                powerupIterator.remove();
+            }
+        }
         status.actives.resetIterator();
+
+
+        if(status.toActivate.size()>0){
+            Iterator<Powerup> toActivateIterator = status.toActivate.iterator();
+            while(toActivateIterator.hasNext()){
+                Powerup powerup = toActivateIterator.next();
+                powerup.start();
+                status.actives.add(powerup);
+                toActivateIterator.remove();
+            }
+            status.toActivate.resetIterator();
+        }
     }
 
     @Override
@@ -313,6 +329,8 @@ public class ServerScreen extends ClientServerScreen {
             for(GameCharacter gameCharacter: status.living)
                 ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
         super.startRound();
+
+        status.world = world;
 
         AttackFactory attackFactory = new AttackFactory();
         for(int i=0 ; i<attacks.length ; i++) {

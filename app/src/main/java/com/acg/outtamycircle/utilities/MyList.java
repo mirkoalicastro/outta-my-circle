@@ -100,4 +100,13 @@ public class MyList<T> implements Iterable<T> {
         }
     }
 
+    public void clear(){
+        Iterator<T> iterator = iterator();
+        while(iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
+        resetIterator();
+    }
+
 }

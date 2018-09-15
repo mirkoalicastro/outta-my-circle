@@ -1,5 +1,6 @@
 package com.acg.outtamycircle.entitycomponent.impl.components;
 
+import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.Entity;
@@ -16,7 +17,7 @@ public final class BoostAttackComponent extends AttackComponent {
     private static float FORCE_MULTIPLIER = 8;
 
     @Override
-    public void start(World world, float x, float y){
+    public void start(GameStatus status, float x, float y){
         firstCalled = System.currentTimeMillis();
         this.x = x*FORCE_MULTIPLIER;
         this.y = y*FORCE_MULTIPLIER;

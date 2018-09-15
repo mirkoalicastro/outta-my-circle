@@ -13,6 +13,8 @@ public abstract class Powerup extends GameObject{
 
     public abstract void start();
 
+    public abstract void work();
+
     public abstract void stop();
 
     public abstract boolean isEnded();

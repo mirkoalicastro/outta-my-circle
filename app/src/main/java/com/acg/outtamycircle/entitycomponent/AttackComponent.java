@@ -1,5 +1,6 @@
 package com.acg.outtamycircle.entitycomponent;
 
+import com.acg.outtamycircle.GameStatus;
 import com.google.fpl.liquidfun.World;
 
 public abstract class AttackComponent extends Component {
@@ -10,7 +11,7 @@ public abstract class AttackComponent extends Component {
      * @param x x-axis component of the direction of the player's push.
      * @param y x-axis component of the direction of the player's push.
      */
-    public abstract void start(World world, float x, float y);
+    public abstract void start(GameStatus status, float x, float y);
 
     /**
      * Execute the attack.

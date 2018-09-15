@@ -16,4 +16,7 @@ public class Entity {
     public Component getComponent(Component.Type type) {
         return components.get(type);
     }
+    public void removeComponent(Component.Type type){
+        components.remove(type);
+    }
 }

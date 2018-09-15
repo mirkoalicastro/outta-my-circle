@@ -42,11 +42,17 @@ class CharacterPowerupContact extends ContactType{
         powerup.setGameCharacter(character);
 
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)powerup.getComponent(Component.Type.Physics);
+        component.getBody().setAwake(false);
+        component.getBody().setActive(false);
         component.deleteBody();
+        powerup.removeComponent(Component.Type.Physics);
 
         Log.d("NULLO", "prova");
         status.setPowerup(null);
-        status.getActivePowerups().add(powerup);
+
+        // world can't be changed during collision handling
+        status.getToActivate().add(powerup);
+
 
         GameMessage message = GameMessage.createInstance();
         interpreter.makePowerUpAssign(message, character.getObjectId(), powerup.getObjectId()); //TODO ricccccardo

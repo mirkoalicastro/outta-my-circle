@@ -10,7 +10,7 @@ public class PowerupRandomManager {
     private final short powerupsNumber;
 
     private final MyList<Powerup> actives;
-    private final double THRESHOLD = 0.3;
+    private final double THRESHOLD = 0.5;
 
     private double idleTime = 1.; //1 sec.
     private final double startTime;
@@ -34,6 +34,7 @@ public class PowerupRandomManager {
     }
 
     public boolean randomBoolean(float deltaTime){
+
         idleTime -= deltaTime;
         if(idleTime > 0 || status.getPowerup() != null)
             return false;
