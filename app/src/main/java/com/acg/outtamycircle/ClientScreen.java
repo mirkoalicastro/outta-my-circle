@@ -39,7 +39,6 @@ public class ClientScreen extends ClientServerScreen {
         receive();
 
         if(playCollision) {
-            Log.d("COLLISIONE", "si");
             playCollision = false;
             if(Settings.soundEnabled)
                 Assets.gameCharacterCollision.play(Settings.volume);
