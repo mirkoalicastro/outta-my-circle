@@ -100,6 +100,8 @@ public class ServerScreen extends ClientServerScreen {
                     comp.applyForce(interpreter.getPosX(message), interpreter.getPosY(message));
                     break;
                 case ATTACK:
+                    if(Settings.soundEnabled)
+                        Assets.attackEnabled.play(Settings.volume);
                     gameCharacter = status.characters[interpreter.getObjectId(message)];
                     AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
                     attackComponent.start(interpreter.getPosX(message), interpreter.getPosY(message));
@@ -288,6 +290,8 @@ public class ServerScreen extends ClientServerScreen {
             float y = powerupRandomManager.randomY();
             short powerupId = powerupRandomManager.randomPowerup();
             short objectId = idGenerator.next();
+            if(Settings.soundEnabled)
+                Assets.newPowerup.play(Settings.volume);
             status.setPowerup(createPowerup(x, y, powerupId, objectId));
 
             GameMessage message = GameMessage.createInstance();

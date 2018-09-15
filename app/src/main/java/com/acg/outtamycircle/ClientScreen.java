@@ -95,15 +95,20 @@ public class ClientScreen extends ClientServerScreen {
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
                     short powerupId = (short)interpreter.getPowerUpId(message);
+                    if(Settings.soundEnabled)
+                        Assets.newPowerup.play(Settings.volume);
                     //TODO piazza powerup da qualche parte
                     status.setPowerup(createPowerup(x, y, powerupId, objectId));
                 }
                 break;
                 case POWERUP_ASSIGN: {
+                    if(Settings.soundEnabled)
+                        Assets.powerupCollision.play(Settings.volume);
                     //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
                     status.setPowerup(null);
                 }
                 break;
+                //TODO messaggio collisione per audio
                 case END: {
                     startAt = System.currentTimeMillis()+5000;
                     winnerId[roundNum-1] = interpreter.getObjectId(message);
