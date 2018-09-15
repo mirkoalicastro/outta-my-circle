@@ -128,7 +128,9 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case POWERUP_ASSIGN: {
-                    if(Settings.soundEnabled)
+                    int objectId = interpreter.getObjectId(message);
+                    int powerupId = interpreter.getPowerUpId(message);
+                    if(Settings.soundEnabled && objectId == playerOffset)
                         Assets.powerupCollision.play(Settings.volume);
                     //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
                     status.setPowerup(null);
