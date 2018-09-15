@@ -27,8 +27,11 @@ public abstract class GoogleAndroidGame extends AndroidGame {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myGoogleSignIn = new MyGoogleSignIn(this);
-        myGoogleRoom = new MyGoogleRoom(this,myGoogleSignIn);
         myGoogleSignIn.signIn();
+    }
+
+    public void setMyGoogleRoom(MyGoogleRoom myGoogleRoom) {
+        this.myGoogleRoom = myGoogleRoom;
     }
 
     @Override
@@ -37,7 +40,8 @@ public abstract class GoogleAndroidGame extends AndroidGame {
         if(requestCode == GoogleRC.RC_SIGN_IN) {
             myGoogleSignIn.handleActivityResult(requestCode, resultCode, data);
         } else if(requestCode == GoogleRC.RC_WAITING_ROOM) {
-            myGoogleRoom.handleActivityResult(requestCode, resultCode, data);
+            if(myGoogleRoom != null)
+                myGoogleRoom.handleActivityResult(requestCode, resultCode, data);
         }
     }
 }

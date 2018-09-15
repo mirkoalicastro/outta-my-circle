@@ -40,7 +40,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         rightAttack.setPixmap(Assets.rightArrow);
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
-        myGoogleRoom = googleAndroidGame.getMyGoogleRoom();
+        myGoogleRoom = new MyGoogleRoom(googleAndroidGame, googleAndroidGame.getMyGoogleSignIn());
+        googleAndroidGame.setMyGoogleRoom(myGoogleRoom);
     }
 
     @Override
