@@ -41,8 +41,6 @@ public class MyGoogleRoom {
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
     private final NetworkMessageHandlerImpl networkMessageHandlerImpl = new NetworkMessageHandlerImpl(this);
-    private final MessageReceiver defaultFirstReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
-    private final MessageReceiver defaultSecondReceiver = new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS);
 
     private Room room;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
@@ -116,10 +114,13 @@ public class MyGoogleRoom {
         mMyId = null;
         mParticipants = null;
         mParticipantIds = null;
-        networkMessageHandlerImpl.setReceivers(defaultFirstReceiver, defaultSecondReceiver);
+        networkMessageHandlerImpl.setReceivers(new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS), new ClientMessageReceiver(MyGoogleRoom.MAX_PLAYERS));
+        serverId = null;
         locked = false;
-        if(resetCallback != null)
+        if(resetCallback != null) {
             resetCallback.reset();
+            resetCallback = null;
+        }
     }
 
     public MyGoogleRoom(GoogleAndroidGame googleAndroidGame, MyGoogleSignIn myGoogleSignIn) {
