@@ -105,7 +105,7 @@ public class ServerScreen extends ClientServerScreen {
                         Assets.attackEnabled.play(Settings.volume);
                     gameCharacter = status.characters[interpreter.getObjectId(message)];
                     AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
-                    attackComponent.start(interpreter.getPosX(message), interpreter.getPosY(message));
+                    attackComponent.start(world, interpreter.getPosX(message), interpreter.getPosY(message));
                     networkMessageHandler.putInBuffer(message);
                     messagesInBuffer++;
                     status.activeAttacks.add(attackComponent);
@@ -118,7 +118,7 @@ public class ServerScreen extends ClientServerScreen {
             AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
             float x = androidJoystick.getNormX();
             float y = androidJoystick.getNormY();
-            attackComponent.start(x, y);
+            attackComponent.start(world, x, y);
             GameMessage message = GameMessage.createInstance();
             interpreter.makeAttackMessage(message, playerOffset, (int) x, (int) y);
             networkMessageHandler.putInBuffer(message);

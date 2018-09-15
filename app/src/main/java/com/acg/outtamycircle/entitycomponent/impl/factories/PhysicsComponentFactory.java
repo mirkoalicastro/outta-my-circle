@@ -1,5 +1,7 @@
 package com.acg.outtamycircle.entitycomponent.impl.factories;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
@@ -105,7 +107,9 @@ public class PhysicsComponentFactory {
         body.setUserData(component.getOwner());
 
         if(shape == null)
-            throw new NullPointerException("Create a shape before");
+            throw new IllegalStateException("Set the shape first");
+        if(owner == null)
+            throw new IllegalStateException("Set the owner first");
         shape.setRadius(radius);
         fixDef.setShape(shape);
 
@@ -114,7 +118,9 @@ public class PhysicsComponentFactory {
         body.setBullet(bullet);
         body.setAwake(awake);
 
-        return component.setBody(body);
+        component.setBody(body);
+
+        return component;
     }
 
     public void resetFactory(){

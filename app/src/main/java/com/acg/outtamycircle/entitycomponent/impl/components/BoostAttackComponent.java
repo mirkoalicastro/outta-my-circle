@@ -5,6 +5,7 @@ import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.google.fpl.liquidfun.World;
 
 public final class BoostAttackComponent extends AttackComponent {
     private static final long DURATION = 30;
@@ -15,7 +16,7 @@ public final class BoostAttackComponent extends AttackComponent {
     private static float FORCE_MULTIPLIER = 8;
 
     @Override
-    public void start(float x, float y){
+    public void start(World world, float x, float y){
         firstCalled = System.currentTimeMillis();
         this.x = x*FORCE_MULTIPLIER;
         this.y = y*FORCE_MULTIPLIER;
