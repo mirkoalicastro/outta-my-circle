@@ -8,4 +8,12 @@
     <string name="google_error">Please check your internet connection</string>
     <string name="round">Round</string>
     <string name="game_over">GAME OVER!</string>
+    <string name="help_first_line">Outta My Circle features several rounds in which the goal is to defeat</string>
+    <string name="help_second_line">opponents by knocking them out from the arena. The last player standing</string>
+    <string name="help_third_line"> wins the round. At the end of all the rounds, each player can win, lose</string>
+    <string name="help_fourth_line">or draw. When you select a skin, you will not play with other players</string>
+    <string name="help_fifth_line">with the same skin. You can also select an attack which can help you </string>
+    <string name="help_sixth_line">to defeat your opponents; after attacking, you have to wait a little bit</string>
+    <string name="help_seventh_line">before you can attack again. That\'s all. Ah, remember: Outta My Circle!</string>
+    <string name="help_eighth_line">Alicastro M., Cuomo D., Grieco R.</string>
 </resources>
