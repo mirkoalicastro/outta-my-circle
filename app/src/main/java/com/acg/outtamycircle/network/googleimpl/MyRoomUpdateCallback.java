@@ -8,7 +8,6 @@ import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateCallback;
 
 public class MyRoomUpdateCallback extends RoomUpdateCallback {
-    private static final String TAG = "GoogleS";
     private final MyGoogleRoom myGoogleRoom;
 
     public MyRoomUpdateCallback(MyGoogleRoom MyGoogleRoom) {
