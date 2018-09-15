@@ -120,7 +120,7 @@ public class ClientScreen extends ClientServerScreen {
                     short objectId = (short)interpreter.getObjectId(message);
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
-                    short powerupId = (short)interpreter.getPowerUpId(message);
+                    short powerupId = (short)interpreter.getPowerupId(message);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);
                     //TODO piazza powerup da qualche parte
@@ -129,7 +129,7 @@ public class ClientScreen extends ClientServerScreen {
                 break;
                 case POWERUP_ASSIGN: {
                     int objectId = interpreter.getObjectId(message);
-                    int powerupId = interpreter.getPowerUpId(message);
+                    int powerupId = interpreter.getPowerupId(message);
                     if(Settings.soundEnabled && objectId == playerOffset)
                         Assets.powerupCollision.play(Settings.volume);
                     //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio

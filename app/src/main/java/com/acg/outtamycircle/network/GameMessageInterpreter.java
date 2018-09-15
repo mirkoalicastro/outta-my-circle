@@ -33,7 +33,7 @@ public interface GameMessageInterpreter {
 
     float getRotation(GameMessage message);
 
-    int getPowerUpId(GameMessage message);
+    int getPowerupId(GameMessage message);
 
     int getTimeMillis(GameMessage message);
 

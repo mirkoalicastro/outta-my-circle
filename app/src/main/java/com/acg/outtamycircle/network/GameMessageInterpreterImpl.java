@@ -64,7 +64,7 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public int getPowerUpId(GameMessage message){
+    public int getPowerupId(GameMessage message){
         return message.getByteAt(POWER_UP_IDX);
     }
 
