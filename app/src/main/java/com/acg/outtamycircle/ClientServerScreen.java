@@ -62,7 +62,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         super(game);
         this.backButton = new AndroidRectangularButton(game.getGraphics(),66,550,324,124).setPixmap(Assets.back);
         this.backButton.enable(false);
-        this.timedCircularButton = new TimedCircularButton(game.getGraphics(),1080,520,100,3000);
+        this.timedCircularButton = new TimedCircularButton(game.getGraphics(),1280,720,100,3000);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;
         this.skins = skins;
@@ -73,7 +73,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         for(int i=0; i<winnerId.length; i++)
             this.winnerId[i] = -1;
         this.interpreter = new GameMessageInterpreterImpl();
-        androidJoystick = new AndroidJoystick(androidGame.getGraphics(),200,520,100){
+        androidJoystick = new AndroidJoystick(androidGame.getGraphics(),400,720,100){
             @Override
             public float getNormX(){
                 return super.getNormX() * 1000;

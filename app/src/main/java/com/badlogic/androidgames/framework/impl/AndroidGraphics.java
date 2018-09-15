@@ -38,7 +38,7 @@ public class AndroidGraphics implements Graphics {
 
     @Override
     public Pixmap[] newPixmapsFromFolder(String path, PixmapFormat format) {
-        Pixmap[] ret = null;
+        Pixmap[] ret;
         try {
             String[] files = assets.list(path);
             if(files.length == 0)
@@ -79,7 +79,7 @@ public class AndroidGraphics implements Graphics {
                 try {
                     in.close();
                 } catch (IOException e) {
-
+                    // nothing
                 }
             }
         }
