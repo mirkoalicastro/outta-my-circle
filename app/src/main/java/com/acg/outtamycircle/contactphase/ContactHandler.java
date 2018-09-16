@@ -32,12 +32,12 @@ public class ContactHandler extends ContactListener{
             contactType.handle(a, b);
     }
 
-    public void init(GameStatus status, GameMessageInterpreter interpreter) {
+    public void init(GameStatus status) {
         map = new SparseArray<>();
 
         CharactersContact cc = new CharactersContact();
 
-        CharacterPowerupContact cp = new CharacterPowerupContact(status, interpreter);
+        CharacterPowerupContact cp = new CharacterPowerupContact(status);
 
         map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
         map.put(ContactType.myHashCode(GameCharacter.class,WeightPowerUp.class), cp); //TODO ultima classe

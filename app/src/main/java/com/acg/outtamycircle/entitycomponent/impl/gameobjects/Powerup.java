@@ -11,6 +11,8 @@ public abstract class Powerup extends GameObject{
         this.status = status;
     }
 
+    public abstract byte getCode();
+
     public abstract void start();
 
     public abstract void work();
@@ -22,5 +24,9 @@ public abstract class Powerup extends GameObject{
     public Powerup setGameCharacter(GameCharacter character){
         this.character = character;
         return this;
+    }
+
+    public GameCharacter getCharacter(){
+        return character;
     }
 }

@@ -15,7 +15,7 @@ import com.google.fpl.liquidfun.Vec2;
 import com.google.fpl.liquidfun.World;
 
 public class WeightPowerUp extends Powerup {
-    private static final long DURATION = 2000;
+    private static final long DURATION = 4000;
     private static final float DENSITY_MULTIPLIER = 4f;
     private static final float VELOCITY_MULTIPLIER = 0.65f;
     private static final float BASE_DENSITY = 1f;
@@ -26,6 +26,11 @@ public class WeightPowerUp extends Powerup {
     private static final Shape SHAPE = new CircleShape();
     private long firstCalled;
     private boolean ended;
+
+    @Override
+    public byte getCode(){
+        return 0;
+    }
 
     public WeightPowerUp(GameStatus status, short id) {
         super(status, id);

@@ -35,6 +35,8 @@ public interface GameMessageInterpreter {
 
     int getPowerupId(GameMessage message);
 
+    int getPowerupType(GameMessage message);
+
     int getTimeMillis(GameMessage message);
 
     /*------------ WRITER ------------*/
@@ -49,9 +51,9 @@ public interface GameMessageInterpreter {
 
     void makeMoveClientMessage(GameMessage gameMessage, int objectId, int posX, int posY);
 
-    void makePowerUpMessage(GameMessage gameMessage, int objectId, int posX, int posY, int powerupId);
+    void makePowerupMessage(GameMessage gameMessage, int objectId, int posX, int posY, int powerupType);
 
-    void makePowerUpAssign(GameMessage gameMessage, int objectId, int powerupId); //TODO cambiare nomi
+    void makePowerupAssign(GameMessage gameMessage, int objectId, int powerupId, int powerupType);
 
     void makeAttackMessage(GameMessage gameMessage, int objectId, int xDirection, int yDirection);
 

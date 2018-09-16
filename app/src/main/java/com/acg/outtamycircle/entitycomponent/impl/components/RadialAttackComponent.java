@@ -10,8 +10,8 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
 public final class RadialAttackComponent extends AttackComponent {
-    private static final float MAX_FORCE = 4500;
-    private static final float MIN_FORCE = 1500;
+    private static final float MAX_FORCE = 7500;
+    private static final float MIN_FORCE = 3000;
     private static final float DELTA_FORCE = MAX_FORCE-MIN_FORCE;
 
     @Override
@@ -23,7 +23,7 @@ public final class RadialAttackComponent extends AttackComponent {
 
         float forceX, forceY;
 
-        final float maxDistance = component.getHeight()*2f;
+        final float maxDistance = component.getHeight()*2.5f;
 
         for(GameCharacter ch : status.getLiving()){
             if(ch.getObjectId() == myId) continue;
