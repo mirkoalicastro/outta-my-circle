@@ -35,7 +35,7 @@ import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
     protected static final int RADIUS_CHARACTER = 35;
-    private static final int ROUNDS = 2;
+    private static final int ROUNDS = 3;
 
     protected final MyGoogleRoom myGoogleRoom;
     protected final NetworkMessageHandlerImpl networkMessageHandler;

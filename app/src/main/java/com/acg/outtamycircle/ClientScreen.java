@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 public class ClientScreen extends ClientServerScreen {
     private boolean playCollision;
+    private int toleranceCollision = 4;
 
     public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
@@ -51,7 +52,7 @@ public class ClientScreen extends ClientServerScreen {
                 DrawableComponent tmp = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
                 int deltaX = (posX - tmp.getX()) * (posX - tmp.getX());
                 int deltaY = (posY - tmp.getY()) * (posY - tmp.getY());
-                if(Math.sqrt(deltaX + deltaY) <= RADIUS_CHARACTER*2) {
+                if(Math.sqrt(deltaX + deltaY) <= (RADIUS_CHARACTER*2 + toleranceCollision)) {
                     playCollision = true;
                     break;
                 }
@@ -94,14 +95,11 @@ public class ClientScreen extends ClientServerScreen {
                 break;
                 case ATTACK: {
                     int objectId = interpreter.getObjectId(message);
-                    if(objectId != playerOffset && Settings.soundEnabled) {
+                    if(objectId != playerOffset && Settings.soundEnabled)
                         Assets.attackEnabled.play(Settings.volume);
-                        //TODO devo far succedere altro?
-                    }
                 }
                 break;
                 case DESTROY: {
-                    //TODO controlla che funziona
                     int objectId = interpreter.getObjectId(message);
                     if(objectId == playerOffset)
                         isAlive = false;
@@ -122,7 +120,6 @@ public class ClientScreen extends ClientServerScreen {
                     short powerupId = (short)interpreter.getPowerupId(message);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);
-                    //TODO piazza powerup da qualche parte
                     status.setPowerup(createPowerup(x, y, powerupId, objectId));
                 }
                 break;
@@ -131,11 +128,9 @@ public class ClientScreen extends ClientServerScreen {
                     int powerupId = interpreter.getPowerupId(message);
                     if(Settings.soundEnabled && objectId == playerOffset)
                         Assets.powerupCollision.play(Settings.volume);
-                    //TODO devo gestirlo? e se sì, devo rimuoverlo anche?!  => altro messaggio
                     status.setPowerup(null);
                 }
                 break;
-                //TODO messaggio collisione per audio
                 case END: {
                     startAt = System.currentTimeMillis()+5000;
                     winnerId[roundNum-1] = interpreter.getObjectId(message);
