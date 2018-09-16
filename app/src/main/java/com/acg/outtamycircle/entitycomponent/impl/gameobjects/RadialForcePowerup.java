@@ -13,6 +13,11 @@ public class RadialForcePowerup extends Powerup {
     }
 
     @Override
+    public byte getCode(){
+        return 1;
+    }
+
+    @Override
     public void start() {
         PhysicsComponent component = (PhysicsComponent)character.getComponent(Component.Type.Physics);
         float x = component.getX(), y = component.getY();

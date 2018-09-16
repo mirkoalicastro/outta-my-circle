@@ -16,11 +16,9 @@ import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 
 class CharacterPowerupContact extends ContactType{
     private final GameStatus status;
-    private final GameMessageInterpreter interpreter;
 
-    public CharacterPowerupContact(GameStatus status, GameMessageInterpreter interpreter){
+    public CharacterPowerupContact(GameStatus status){
         this.status = status;
-        this.interpreter = interpreter;
     }
 
     @Override
@@ -53,10 +51,5 @@ class CharacterPowerupContact extends ContactType{
         // world can't be changed during collision handling
         status.getToActivate().add(powerup);
 
-
-        GameMessage message = GameMessage.createInstance();
-        interpreter.makePowerUpAssign(message, character.getObjectId(), powerup.getObjectId()); //TODO ricccccardo
-
-        GameMessage.deleteInstance(message);
     }
 }

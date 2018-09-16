@@ -56,7 +56,7 @@ public class ServerScreen extends ClientServerScreen {
         roundNum--;
 
         contactHandler = new ContactHandler();
-        contactHandler.init(status, interpreter);
+        contactHandler.init(status);
         world.setContactListener(contactHandler); //TODO
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
@@ -287,7 +287,7 @@ public class ServerScreen extends ClientServerScreen {
             status.setPowerup(createPowerup(x, y, powerupId, objectId));
 
             GameMessage message = GameMessage.createInstance();
-            interpreter.makePowerUpMessage(message, objectId, (int)Converter.physicsToFrame(x),
+            interpreter.makePowerupMessage(message, objectId, (int)Converter.physicsToFrame(x),
                     (int)Converter.physicsToFrame(y), powerupId);
             messagesInBuffer++;
             networkMessageHandler.putInBuffer(message);
@@ -313,6 +313,13 @@ public class ServerScreen extends ClientServerScreen {
             Iterator<Powerup> toActivateIterator = status.toActivate.iterator();
             while(toActivateIterator.hasNext()){
                 Powerup powerup = toActivateIterator.next();
+
+                GameMessage message = GameMessage.createInstance();
+                interpreter.makePowerupAssign(message, powerup.getCharacter().getObjectId(), powerup.getObjectId(), powerup.getCode());
+                networkMessageHandler.putInBuffer(message);
+                messagesInBuffer++;
+                GameMessage.deleteInstance(message);
+
                 powerup.start();
                 status.actives.add(powerup);
                 toActivateIterator.remove();

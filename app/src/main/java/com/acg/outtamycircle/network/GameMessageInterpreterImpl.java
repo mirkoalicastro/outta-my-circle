@@ -18,7 +18,11 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     private static final int ROTATION_IDX = 7;
 
     // POWERUP
-    private static final int POWER_UP_IDX = 7;
+    private static final int POWERUP_TYPE_IDX = 7;
+
+    // POWERUP_ASSIGN
+    private static final int ASSIGN_POWERUP_ID_IDX = 3;
+    private static final int ASSIGN_POWERUP_TYPE_IDX = 5;
 
     // HOST_OR_CLIENT
     private static final int HOST_OR_CLIENT_IDX = 1;
@@ -65,7 +69,19 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
 
     @Override
     public int getPowerupId(GameMessage message){
-        return message.getByteAt(POWER_UP_IDX);
+        if(getType(message)== GameMessage.Type.POWERUP)
+            return getObjectId(message);
+        else
+            return message.getShortAt(ASSIGN_POWERUP_ID_IDX);
+
+    }
+
+    @Override
+    public int getPowerupType(GameMessage message){
+        if(getType(message)==GameMessage.Type.POWERUP)
+            return message.getByteAt(POWERUP_TYPE_IDX);
+        else
+            return message.getByteAt(ASSIGN_POWERUP_TYPE_IDX);
     }
 
     @Override
@@ -115,15 +131,15 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public void makePowerUpMessage(GameMessage message, int objectId, int posX, int posY, int powerupId) {
+    public void makePowerupMessage(GameMessage message, int objectId, int posX, int posY, int powerupType) {
         makeMessage(message, GameMessage.Type.POWERUP, objectId);
-        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY).putByte(POWER_UP_IDX, (byte) powerupId);
+        message.putShort(POS_X_IDX, (short) posX).putShort(POS_Y_IDX, (short) posY).putByte(POWERUP_TYPE_IDX, (byte) powerupType);
     }
 
     @Override
-    public void makePowerUpAssign(GameMessage message, int objectId, int powerupId) {
-        makeMessage(message, GameMessage.Type.POWERUP_ASSIGN, (byte) objectId);
-        //TODO
+    public void makePowerupAssign(GameMessage message, int objectId, int powerupId, int powerupType) {
+        makeMessage(message, GameMessage.Type.POWERUP_ASSIGN, objectId);
+        message.putShort(ASSIGN_POWERUP_ID_IDX, (short) powerupId).putByte(ASSIGN_POWERUP_TYPE_IDX, (byte) powerupType);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class GameMessage {
         MOVE_SERVER((byte)11),
         MOVE_CLIENT((byte)7),
         POWERUP((byte)8),
-        POWERUP_ASSIGN((byte)4), //TODO
+        POWERUP_ASSIGN((byte)6),
         ATTACK((byte)7),
         START((byte)1),
         END((byte)3),

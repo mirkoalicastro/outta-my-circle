@@ -1,5 +1,7 @@
 package com.acg.outtamycircle.utilities;
 
+import android.util.Log;
+
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 
@@ -34,7 +36,7 @@ public class PowerupRandomManager {
     private double idleTime = 1.; //1 sec.
     private final double startTime;
 
-    private static final double WEIGHT_RANDOM = 0.7, WEIGHT_ELAPSED_TIME = 0.15, WEIGHT_ACTIVE_POWERUPS = 0.15;
+    private static final double WEIGHT_RANDOM = 0.4, WEIGHT_ELAPSED_TIME = 0.4, WEIGHT_ACTIVE_POWERUPS = 0.2;
 
     public PowerupRandomManager(float arenaX, float arenaY, float arenaRadius, GameStatus status, long startTime){
         radius = arenaRadius;
@@ -58,8 +60,10 @@ public class PowerupRandomManager {
             return false;
 
         double p1 = Math.random() * WEIGHT_RANDOM;
-        double p2 = (1 - 1/(actives.size()+1)) * WEIGHT_ACTIVE_POWERUPS;
+        double p2 = (1/(actives.size()+1)) * WEIGHT_ACTIVE_POWERUPS;
         double p3 = (1 - 1/(System.currentTimeMillis() - startTime)) * WEIGHT_ELAPSED_TIME;
+
+        Log.d("POWERUP", String.format("P1:%f | P2:%f | P3:%f", p1, p2, p3));
 
         boolean result = (p1 + p2 + p3 > THRESHOLD);
 
