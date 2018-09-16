@@ -9,7 +9,7 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
-public class RadialAttackComponent extends AttackComponent {
+public final class RadialAttackComponent extends AttackComponent {
     private static final float MAX_FORCE = 4500;
     private static final float MIN_FORCE = 1500;
     private static final float DELTA_FORCE = MAX_FORCE-MIN_FORCE;
