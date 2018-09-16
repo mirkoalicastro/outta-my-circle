@@ -11,8 +11,7 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
 public final class RadialAttackComponent extends AttackComponent {
     private static final float MAX_FORCE = 7500;
-    private static final float MIN_FORCE = 3000;
-    private static final float DELTA_FORCE = MAX_FORCE-MIN_FORCE;
+    private static final float DELTA_FORCE = 4500;
 
     @Override
     public void start(GameStatus status, float x, float y) {
@@ -21,48 +20,25 @@ public final class RadialAttackComponent extends AttackComponent {
         float myX = component.getX();
         float myY = component.getY();
 
-        float forceX, forceY;
 
         final float maxDistance = component.getHeight()*2.5f;
+        float diameter = component.getHeight();
 
         for(GameCharacter ch : status.getLiving()){
             if(ch.getObjectId() == myId) continue;
             component = (PhysicsComponent)ch.getComponent(Component.Type.Physics);
             float distanceX = component.getX()-myX;
             float distanceY = component.getY()-myY;
-            int signX, signY;
 
-            if(distanceX>=0) {
-                signX = 1;
-            }
-            else {
-                distanceX = -distanceX;
-                signX = -1;
-            }
-
-            if(distanceY>=0) {
-                signY = 1;
-            }
-            else {
-                distanceY = -distanceY;
-                signY = -1;
-            }
-
-            if(distanceX>maxDistance || distanceY>maxDistance)
+            float distance = (float) Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+            if(distance>maxDistance)
                 continue;
+            float totalForce = MAX_FORCE - DELTA_FORCE*((distance-diameter)/(maxDistance-diameter));
 
-            /*if(distanceX<=diameter)
-                forceX = MAX_FORCE * signX;
-            else*/
-                forceX = signX * (MAX_FORCE - DELTA_FORCE*(distanceX/maxDistance));
+            float forceX = totalForce * (distanceX/distance); //cosine
+            float forceY = totalForce * (distanceY/distance); //sine
 
-
-            /*if(distanceY<=diameter)
-                forceY = MAX_FORCE * signY;
-            else*/
-                forceY = signY * (MAX_FORCE - DELTA_FORCE*(distanceY/maxDistance));
-
-            Log.d("ATTACKS", String.format("My position (%f,%f)\ndeltaX (%f,%f)\nforce (%f, %f)", myX,myY, distanceX, distanceY, forceX, forceY));
+            //Log.d("ATTACKS", String.format("My position (%f,%f)\ndeltaX (%f,%f)\nforce (%f, %f)", myX,myY, distanceX, distanceY, forceX, forceY));
 
             component.applyForce(forceX, forceY);
         }
