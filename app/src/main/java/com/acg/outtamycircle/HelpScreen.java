@@ -9,9 +9,13 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class HelpScreen extends AndroidScreen {
     private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124);
-
+    private boolean unchanged = false;
     public HelpScreen(AndroidGame androidGame) {
         super(androidGame);
         backButton.setPixmap(Assets.back);
@@ -32,19 +36,44 @@ public class HelpScreen extends AndroidScreen {
             androidGame.setScreen(new MainMenuScreen(androidGame));
     }
 
+    /**
+     * @param longString string which must be splitted in more lines
+     * @param maxLength max length of each line
+     * @return the list of lines
+     */
+    private List<String> splitIntoLines(String longString, int maxLength) {
+        longString = longString.trim().replaceAll(" +", " ");
+        List<String> ret = new ArrayList<>();
+        StringTokenizer tokenizer = new StringTokenizer(longString, " ");
+        StringBuilder builder = new StringBuilder(maxLength);
+        while(tokenizer.hasMoreTokens()) {
+            String word = tokenizer.nextToken();
+            if(builder.length() + word.length() <= maxLength)
+                builder.append(word + " ");
+            else {
+                ret.add(builder.toString().trim());
+                builder.setLength(0);
+                builder.append(word + " ");
+            }
+        }
+        if(builder.length() > 0)
+            ret.add(builder.toString());
+        return ret;
+    }
+
     @Override
     public void present(float deltaTime) {
+        if(unchanged)
+            return;
+        unchanged = true;
         Graphics graphics = androidGame.getGraphics();
+        List<String> lines = splitIntoLines(androidGame.getString(R.string.help), 73);
         graphics.drawEffect(Assets.backgroundTile, 0,0,graphics.getWidth(),graphics.getHeight());
-        graphics.drawText(androidGame.getString(R.string.help_first_line),66, 66, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_second_line),66, 66+45, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_third_line),66, 66+45*2, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_fourth_line),66, 66+45*3, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_fifth_line),66, 66+45*4, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_sixth_line),66, 66+45*5, 35, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.help_seventh_line),66, 66+45*6, 35, Color.BLACK);
-        //blank line
-        graphics.drawText(androidGame.getString(R.string.help_eighth_line),66, 66+45*8, 35, Color.BLACK);
+        int i = 0;
+        for(String line: lines)
+            graphics.drawText(line,66, 66+45*i++, 35, Color.BLACK);
+        // blank line
+        graphics.drawText(androidGame.getString(R.string.authors),66, 66+45*++i, 35, Color.BLACK);
         backButton.draw();
     }
 
