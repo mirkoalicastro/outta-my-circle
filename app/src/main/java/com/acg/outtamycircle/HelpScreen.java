@@ -37,6 +37,7 @@ public class HelpScreen extends AndroidScreen {
     }
 
     /**
+     * Split a string into a list of lines according to the max length of each line
      * @param longString string which must be splitted in more lines
      * @param maxLength max length of each line
      * @return the list of lines

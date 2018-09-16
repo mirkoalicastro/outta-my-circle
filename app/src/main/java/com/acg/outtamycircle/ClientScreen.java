@@ -114,18 +114,19 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case POWERUP: {
-                    short objectId = (short)interpreter.getObjectId(message);
+                    short powerupId = (short)interpreter.getPowerupId(message);
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
-                    short powerupId = (short)interpreter.getPowerupId(message);
+                    short powerupType = (short)interpreter.getPowerupType(message);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);
-                    status.setPowerup(createPowerup(x, y, powerupId, objectId));
+                    status.setPowerup(createPowerup(x, y, powerupType, powerupId));
                 }
                 break;
                 case POWERUP_ASSIGN: {
                     int objectId = interpreter.getObjectId(message);
                     int powerupId = interpreter.getPowerupId(message);
+                    int powerupType = interpreter.getPowerupType(message);
                     if(Settings.soundEnabled && objectId == playerOffset)
                         Assets.powerupCollision.play(Settings.volume);
                     status.setPowerup(null);
