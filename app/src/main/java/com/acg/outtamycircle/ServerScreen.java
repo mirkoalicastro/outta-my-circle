@@ -29,14 +29,14 @@ public class ServerScreen extends ClientServerScreen {
     private static final int POSITION_ITERATIONS = 3;
     private final int[] attacks;
     private final PhysicsComponentFactory physicsComponentFactory;
-    private final ContactHandler contactHandler; //TODO se diventa un campo locale si perde il riferimento?
+    private final PhysicsComponentFactory powerupPhysicsFactory;
+    private final ContactHandler contactHandler; //keep the reference so that the object isn't deallocated and LiquidFun can work
     private final PowerupRandomManager powerupRandomManager;
     private final float arenaX, arenaY;
     private final float rightX, leftX, topY, bottomY;
     private final float threshold;
-    private final PhysicsComponentFactory powerupPhysicsFactory;
 
-    private int messagesInBuffer;
+    private int messagesInBuffer; //counter for reliable messages buffer
     private IdGenerator idGenerator;
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
@@ -50,14 +50,14 @@ public class ServerScreen extends ClientServerScreen {
         powerupPhysicsFactory.setShape(new CircleShape()).setHeight(Converter.frameToPhysics(RADIUS_CHARACTER)/2f)
                 .setWidth(Converter.frameToPhysics(RADIUS_CHARACTER)/2f).setRadius(Converter.frameToPhysics(RADIUS_CHARACTER))
                 .setBullet(true).setAwake(true).setSleepingAllowed(true).setType(BodyType.dynamicBody)
-                .setDensity(0.00000001f).setRestitution(0.00000001f).setFriction(0.00000001f); //TODO try to reduce
+                .setDensity(0.000000001f).setRestitution(0.000000001f).setFriction(0.000000001f); //very small values supported by LiquidFun (NO Float.MIN_VALUE)
 
         startRound();
         roundNum--;
 
         contactHandler = new ContactHandler();
         contactHandler.init(status);
-        world.setContactListener(contactHandler); //TODO
+        world.setContactListener(contactHandler);
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
         arenaX = Converter.frameToPhysics(frameWidth/2);
@@ -85,6 +85,7 @@ public class ServerScreen extends ClientServerScreen {
             return;
         }
 
+        // attack handling
         Iterator<AttackComponent> attackIterator = status.activeAttacks.iterator();
         while(attackIterator.hasNext()){
             AttackComponent attackComponent = attackIterator.next();
@@ -97,6 +98,7 @@ public class ServerScreen extends ClientServerScreen {
         }
         status.activeAttacks.resetIterator();
 
+        // read inbox
         for (GameMessage message : networkMessageHandler.getMessages()) {
             GameCharacter gameCharacter;
             switch (interpreter.getType(message)){
@@ -118,6 +120,7 @@ public class ServerScreen extends ClientServerScreen {
             }
         }
 
+        // get server player input
         if(shouldAttack){
             GameCharacter gameCharacter = status.characters[playerOffset];
             AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
@@ -132,15 +135,18 @@ public class ServerScreen extends ClientServerScreen {
             status.activeAttacks.add(attackComponent);
             shouldAttack = false;
         }
-
         LiquidFunPhysicsComponent comp = (LiquidFunPhysicsComponent)status.playerOne.getComponent(Component.Type.Physics);
         comp.applyForce(androidJoystick.getNormX(), androidJoystick.getNormY());
 
+        // update world
         world.step(deltaTime, VELOCITY_ITERATIONS, POSITION_ITERATIONS, 0);
 
+        // update game status
         updateDrawablesPosition();
         updateCharactersStatus();
         updatePowerupsStatus(deltaTime);
+
+        // notify the client
         sendStatus();
     }
 
@@ -277,6 +283,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     private void updatePowerupsStatus(float deltaTime){
+        // generation
         if(powerupRandomManager.randomBoolean(deltaTime)){
             float x = powerupRandomManager.randomX();
             float y = powerupRandomManager.randomY();
@@ -294,7 +301,7 @@ public class ServerScreen extends ClientServerScreen {
             GameMessage.deleteInstance(message);
         }
 
-
+        // working
         Iterator<Powerup> powerupIterator = status.actives.iterator();
         while(powerupIterator.hasNext()) {
             Powerup powerup = powerupIterator.next();
@@ -308,7 +315,7 @@ public class ServerScreen extends ClientServerScreen {
         }
         status.actives.resetIterator();
 
-
+        // assignment to player
         if(status.toActivate.size()>0){
             Iterator<Powerup> toActivateIterator = status.toActivate.iterator();
             while(toActivateIterator.hasNext()){
