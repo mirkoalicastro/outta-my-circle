@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
+import com.badlogic.androidgames.framework.impl.NumberPickerButton;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
@@ -15,10 +16,13 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private byte currentIdAttack = 0;
     private boolean showingGoogle;
 
-    private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),490-74,200,74,80);
-    private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),490-74,400,74,80);
-    private final AndroidButton rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),790,200,74,80);
-    private final AndroidButton rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),790,400,74,80);
+    private final AndroidButton leftSkin = new AndroidRectangularButton(androidGame.getGraphics(),140-74,200,74,80);
+    private final AndroidButton leftAttack = new AndroidRectangularButton(androidGame.getGraphics(),140-74,400,74,80);
+    private final AndroidButton rightSkin = new AndroidRectangularButton(androidGame.getGraphics(),440,200,74,80);
+    private final AndroidButton rightAttack = new AndroidRectangularButton(androidGame.getGraphics(),440,400,74,80);
+
+    private final NumberPickerButton minPlayersPickerButton = new NumberPickerButton(androidGame.getGraphics(), 240+558, 204, 2,8);
+    private final NumberPickerButton maxPlayersPickerButton = new NumberPickerButton(androidGame.getGraphics(), 240+558, 404, 2,8);
 
     private final AndroidButton backButton = new AndroidRectangularButton(androidGame.getGraphics(),66,550,324,124);
     private final AndroidButton quickGameButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
@@ -40,6 +44,10 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         rightAttack.setPixmap(Assets.rightArrow);
         backButton.setPixmap(Assets.back);
         quickGameButton.setPixmap(Assets.quickGame);
+        minPlayersPickerButton.setMinusPixmap(Assets.leftArrow);
+        minPlayersPickerButton.setPlusPixmap(Assets.rightArrow);
+        maxPlayersPickerButton.setMinusPixmap(Assets.leftArrow);
+        maxPlayersPickerButton.setPlusPixmap(Assets.rightArrow);
         myGoogleRoom = new MyGoogleRoom(googleAndroidGame, googleAndroidGame.getMyGoogleSignIn());
         googleAndroidGame.setMyGoogleRoom(myGoogleRoom);
     }
@@ -51,7 +59,21 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         for (Input.TouchEvent event : androidGame.getInput().getTouchEvents()) {
             if(event.type != Input.TouchEvent.TOUCH_UP)
                 continue;
-            if(quickGameButton.inBounds(event) && quickGameButton.isEnabled()) {
+            if (minPlayersPickerButton.inBounds(event) && minPlayersPickerButton.isEnabled()) {
+                if (minPlayersPickerButton.update(event)) {
+                    if (Settings.soundEnabled)
+                        Assets.click.play(Settings.volume);
+                    maxPlayersPickerButton.setMin(minPlayersPickerButton.getValue());
+                    unchanged = false;
+                }
+            } else if (maxPlayersPickerButton.inBounds(event) && maxPlayersPickerButton.isEnabled()) {
+                if (maxPlayersPickerButton.update(event)) {
+                    if (Settings.soundEnabled)
+                        Assets.click.play(Settings.volume);
+                    minPlayersPickerButton.setMax(maxPlayersPickerButton.getValue());
+                    unchanged = false;
+                }
+            } else if(quickGameButton.inBounds(event) && quickGameButton.isEnabled()) {
                 goForward = true;
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
@@ -61,28 +83,28 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 if(Settings.soundEnabled)
                     Assets.click.play(Settings.volume);
                 break;
-            } else if(rightSkin.inBounds(event)) {
+            } else if(rightSkin.inBounds(event) && rightSkin.isEnabled()) {
                 if(currentIdSkin < Assets.skins.length) {
                     currentIdSkin++;
                     unchanged = false;
                     if(Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
                 }
-            } else if(leftSkin.inBounds(event)) {
+            } else if(leftSkin.inBounds(event) && leftSkin.isEnabled()) {
                 if(currentIdSkin > 0) {
                     currentIdSkin--;
                     unchanged = false;
                     if(Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
                 }
-            } else if (rightAttack.inBounds(event)) {
+            } else if (rightAttack.inBounds(event) && rightAttack.isEnabled()) {
                 if(currentIdAttack < Assets.attacks.length) {
                     currentIdAttack++;
                     unchanged = false;
                     if(Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
                 }
-            } else if(leftAttack.inBounds(event)) {
+            } else if(leftAttack.inBounds(event) && leftAttack.isEnabled()) {
                 if(currentIdAttack > 0) {
                     currentIdAttack--;
                     unchanged = false;
@@ -102,8 +124,8 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 definitiveIdSkin = (byte) (Math.random() * Assets.skins.length);
             if(definitiveIdAttack == Assets.attacks.length)
                 definitiveIdAttack = (byte) (Math.random() * Assets.attacks.length);
-            enableButtons( //TODO num players
-                    !myGoogleRoom.quickGame(myResetCallback,2, 4, definitiveIdSkin, definitiveIdAttack)
+            enableButtons(
+                    !myGoogleRoom.quickGame(myResetCallback,minPlayersPickerButton.getValue(), maxPlayersPickerButton.getValue(), definitiveIdSkin, definitiveIdAttack)
             );
         }
     }
@@ -111,6 +133,12 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
     private void enableButtons(boolean enable) {
         quickGameButton.enable(enable);
         backButton.enable(enable);
+        minPlayersPickerButton.enable(enable);
+        maxPlayersPickerButton.enable(enable);
+        leftAttack.enable(enable);
+        rightAttack.enable(enable);
+        leftSkin.enable(enable);
+        rightSkin.enable(enable);
         showingGoogle = !enable;
     }
 
@@ -121,22 +149,26 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
         final Graphics graphics = androidGame.getGraphics();
         unchanged = true;
         graphics.drawEffect(Assets.backgroundTile, 0,0, graphics.getWidth(), graphics.getHeight());
+        maxPlayersPickerButton.draw();
+        minPlayersPickerButton.draw();
         quickGameButton.draw();
         backButton.draw();
-        graphics.drawText(androidGame.getString(R.string.select_player),520,150,40, Color.BLACK);
-        graphics.drawText(androidGame.getString(R.string.select_attack),500,350,40, Color.BLACK);
+        graphics.drawText(androidGame.getString(R.string.select_player),170,150,40, Color.BLACK);
+        graphics.drawText(androidGame.getString(R.string.select_attack),150,350,40, Color.BLACK);
+        graphics.drawText(androidGame.getString(R.string.select_min_players),170+732,150,40, Color.BLACK);
+        graphics.drawText(androidGame.getString(R.string.select_max_players),165+732,350,40, Color.BLACK);
         if(currentIdSkin == Assets.skins.length)
-            graphics.drawPixmap(Assets.random, 590, 190);
+            graphics.drawPixmap(Assets.random, 240, 190);
         else
-            graphics.drawPixmap(Assets.skins[currentIdSkin], 590, 190);
+            graphics.drawPixmap(Assets.skins[currentIdSkin], 240, 190);
         if(currentIdSkin != Assets.skins.length)
             rightSkin.draw();
         if(currentIdSkin != 0)
             leftSkin.draw();
         if(currentIdAttack == Assets.attacks.length)
-            graphics.drawPixmap(Assets.random, 590, 390);
+            graphics.drawPixmap(Assets.random, 240, 390);
         else
-            graphics.drawPixmap(Assets.attacks[currentIdAttack], 590, 390);
+            graphics.drawPixmap(Assets.attacks[currentIdAttack], 240, 390);
         if(currentIdAttack != Assets.attacks.length)
             rightAttack.draw();
         if(currentIdAttack != 0)

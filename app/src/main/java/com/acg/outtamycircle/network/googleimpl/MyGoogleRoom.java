@@ -36,7 +36,7 @@ public class MyGoogleRoom {
 
     private ResetCallback resetCallback;
     private static final int MIN_PLAYERS = 2;
-    private static final int MAX_PLAYERS = 4;
+    private static final int MAX_PLAYERS = 8;
     private final MyGoogleSignIn myGoogleSignIn;
     private final GoogleAndroidGame googleAndroidGame;
     private final RoomUpdateCallback myRoomUpdatedCallback = new MyRoomUpdateCallback(this);
@@ -186,6 +186,8 @@ public class MyGoogleRoom {
             throw new IllegalArgumentException("Min players must be at least " + MIN_PLAYERS);
         if(max_players > MAX_PLAYERS)
             throw new IllegalArgumentException("Max players must be at most " + MAX_PLAYERS);
+        if(min_players > max_players)
+            throw new IllegalArgumentException("Min players must be at least the number of max players");
         if(locked)
             return false;
         if(!myGoogleSignIn.isSignedIn()) {
