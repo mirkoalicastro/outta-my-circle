@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 public class MyGoogleSignIn {
+    public static final int RC_SIGN_IN = 9_001;
     private static final GoogleSignInOptions OPTIONS = GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN;
     private GoogleSignInClient client;
     private final AndroidGame androidGame;
@@ -82,10 +83,10 @@ public class MyGoogleSignIn {
     }
     private void explicitSignIn() {
         Intent signInIntent = client.getSignInIntent();
-        androidGame.startActivityForResult(signInIntent, GoogleRC.RC_SIGN_IN);
+        androidGame.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == GoogleRC.RC_SIGN_IN) {
+        if(requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 onConnected(task.getResult(ApiException.class));
