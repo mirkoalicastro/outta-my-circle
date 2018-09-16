@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 
 public class MyGoogleRoom {
+    public static final int RC_WAITING_ROOM = 9_002;
 
     private ArrayList<Participant> mParticipants;
     private ArrayList<String> mParticipantIds;
@@ -131,7 +132,7 @@ public class MyGoogleRoom {
     }
 
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == GoogleRC.RC_WAITING_ROOM) {
+        if (requestCode == RC_WAITING_ROOM) {
             if(resultCode == Activity.RESULT_OK) {
                 googleAndroidGame.startGame();
             } else if (resultCode == Activity.RESULT_CANCELED) {
@@ -169,7 +170,7 @@ public class MyGoogleRoom {
                 .addOnSuccessListener(new OnSuccessListener<Intent>() {
                     @Override
                     public void onSuccess(Intent intent) {
-                        googleAndroidGame.startActivityForResult(intent, GoogleRC.RC_WAITING_ROOM);
+                        googleAndroidGame.startActivityForResult(intent, RC_WAITING_ROOM);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

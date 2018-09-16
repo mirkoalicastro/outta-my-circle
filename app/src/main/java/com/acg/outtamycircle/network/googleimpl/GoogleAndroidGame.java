@@ -37,9 +37,9 @@ public abstract class GoogleAndroidGame extends AndroidGame {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GoogleRC.RC_SIGN_IN) {
+        if(requestCode == MyGoogleSignIn.RC_SIGN_IN) {
             myGoogleSignIn.handleActivityResult(requestCode, resultCode, data);
-        } else if(requestCode == GoogleRC.RC_WAITING_ROOM) {
+        } else if(requestCode == MyGoogleRoom.RC_WAITING_ROOM) {
             if(myGoogleRoom != null)
                 myGoogleRoom.handleActivityResult(requestCode, resultCode, data);
         }
