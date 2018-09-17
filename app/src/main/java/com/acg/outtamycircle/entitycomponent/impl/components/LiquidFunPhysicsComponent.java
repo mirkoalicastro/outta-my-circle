@@ -8,7 +8,6 @@ import com.google.fpl.liquidfun.Vec2;
  * Generalizzazione delle componenti fisiche di liquid fun
  */
 
-//TODO generalizzare i metodi e rendere la classe interna al factory
 public class LiquidFunPhysicsComponent extends PhysicsComponent{
     protected Body body;
     private final Vec2 v = new Vec2();

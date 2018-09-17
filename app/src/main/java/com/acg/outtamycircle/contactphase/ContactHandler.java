@@ -1,15 +1,12 @@
 package com.acg.outtamycircle.contactphase;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerUp;
-import com.acg.outtamycircle.network.GameMessageInterpreter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerup;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Contact;
 import com.google.fpl.liquidfun.ContactListener;
@@ -26,7 +23,7 @@ public class ContactHandler extends ContactListener{
         Body ba = fa.getBody(), bb = fb.getBody();
         GameObject a = (GameObject)ba.getUserData(), b = (GameObject)bb.getUserData();
 
-        ContactType contactType = map.get(ContactType.myHashCode(a.getClass(), b.getClass()));
+        ContactType contactType = map.get(myHashCode(a.getClass(), b.getClass()));
 
         if (contactType != null)
             contactType.handle(a, b);
@@ -39,7 +36,12 @@ public class ContactHandler extends ContactListener{
 
         CharacterPowerupContact cp = new CharacterPowerupContact(status);
 
-        map.put(ContactType.myHashCode(GameCharacter.class,GameCharacter.class), cc);
-        map.put(ContactType.myHashCode(GameCharacter.class,WeightPowerUp.class), cp); //TODO ultima classe
+        map.put(myHashCode(GameCharacter.class,GameCharacter.class), cc);
+        map.put(myHashCode(GameCharacter.class,WeightPowerup.class), cp);
+        map.put(myHashCode(GameCharacter.class,RadialForcePowerup.class), cp);
+    }
+
+    private static int myHashCode(Object a, Object b){
+        return a.hashCode() ^ b.hashCode();
     }
 }

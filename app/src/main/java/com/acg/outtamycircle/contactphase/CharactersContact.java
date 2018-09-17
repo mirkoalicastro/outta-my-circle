@@ -4,7 +4,7 @@ import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.Settings;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
-public class CharactersContact extends ContactType{
+public class CharactersContact implements ContactType{
     @Override
     public void handle(GameObject a, GameObject b){
         if(Settings.soundEnabled)

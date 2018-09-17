@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.contactphase;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.Settings;
@@ -10,11 +8,8 @@ import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsCom
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
-import com.acg.outtamycircle.network.GameMessage;
-import com.acg.outtamycircle.network.GameMessageInterpreter;
-import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 
-class CharacterPowerupContact extends ContactType{
+class CharacterPowerupContact implements ContactType{
     private final GameStatus status;
 
     public CharacterPowerupContact(GameStatus status){
@@ -26,13 +21,12 @@ class CharacterPowerupContact extends ContactType{
         if(Settings.soundEnabled)
             Assets.powerupCollision.play(Settings.volume);
 
-        Powerup powerup = null;
-        GameCharacter character = null;
+        Powerup powerup;
+        GameCharacter character;
         if(a.getType() == GameObject.Type.POWERUP) {
             powerup = (Powerup)a;
             character = (GameCharacter)b;
-        }
-        else{
+        } else{
             powerup = (Powerup)b;
             character = (GameCharacter)a;
         }
@@ -45,11 +39,10 @@ class CharacterPowerupContact extends ContactType{
         component.deleteBody();
         powerup.removeComponent(Component.Type.Physics);
 
-        Log.d("NULLO", "prova");
         status.setPowerup(null);
 
         // world can't be changed during collision handling
-        status.getToActivate().add(powerup);
+        status.getPowerupsToActivate().add(powerup);
 
     }
 }
