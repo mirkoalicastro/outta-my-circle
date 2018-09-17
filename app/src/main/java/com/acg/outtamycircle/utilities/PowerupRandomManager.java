@@ -33,7 +33,7 @@ public class PowerupRandomManager {
     private final MyList<Powerup> actives;
     private final double THRESHOLD = 0.65;
 
-    private double idleTime = 1.; //1 sec.
+    private double idleTime = 1f; //1 sec.
     private final double startTime;
 
     private static final double WEIGHT_RANDOM = 0.4, WEIGHT_ELAPSED_TIME = 0.4, WEIGHT_ACTIVE_POWERUPS = 0.2;
@@ -53,6 +53,8 @@ public class PowerupRandomManager {
     }
 
     public boolean randomBoolean(float deltaTime){
+
+        Log.d("POWERUP", "delta " + deltaTime + " ; idle " + idleTime);
 
         idleTime -= deltaTime;
 

@@ -12,7 +12,7 @@ public class MyList<T> implements Iterable<T> {
     private final MyIterator iterator = new MyIterator();
     private Node<T> head = null;
     private int count = 0;
-    private final static int POOL_SIZE = 100; //TODO how much?
+    private final static int POOL_SIZE = 30;
 
     private static Pool<Node> pool = new Pool.SimplePool<>(new Pool.PoolObjectFactory<Node>() {
         @Override
@@ -22,8 +22,7 @@ public class MyList<T> implements Iterable<T> {
     }, POOL_SIZE);
 
     static{
-        //TODO pool size?
-        for(int i=0; i<POOL_SIZE ; i++)
+        for(int i=0; i<POOL_SIZE/2; i++)
             pool.free(new Node());
     }
 
@@ -55,7 +54,7 @@ public class MyList<T> implements Iterable<T> {
         }
         head = node;
         count++;
-        resetIterator(); //TODO
+        resetIterator();
     }
 
     public boolean remove(T el){
@@ -64,7 +63,7 @@ public class MyList<T> implements Iterable<T> {
             T curr = iterator.next();
             if(curr.equals(el)) {
                 iterator.remove();
-                resetIterator(); //TODO
+                resetIterator();
                 return true;
             }
         }
