@@ -33,10 +33,12 @@ public class AndroidJoystick extends AndroidCircularButton implements Joystick {
             if (event.pointer == pointer) {
                 xPad = event.x - x;
                 yPad = event.y - y;
-                int tmpx = Math.abs((int)(radius*Math.cos(Math.atan2(yPad, xPad))));
-                int tmpy = Math.abs((int)(radius*Math.sin(Math.atan2(yPad, xPad))));
-                xPad = Math.max(Math.min(tmpx, xPad), tmpx*-1);
-                yPad = Math.max(Math.min(tmpy, yPad), tmpy*-1);
+                float distance = (float) Math.sqrt( xPad*xPad + yPad*yPad );
+                float cos = xPad / distance;
+                float sin = yPad / distance;
+                distance = Math.min(distance, radius);
+                xPad = (int) (cos*distance);
+                yPad = (int) (sin*distance);
                 buffer.add(event);
             }
         }
