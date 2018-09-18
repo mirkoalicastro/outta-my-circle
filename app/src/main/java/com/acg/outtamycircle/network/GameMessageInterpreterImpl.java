@@ -1,11 +1,14 @@
 package com.acg.outtamycircle.network;
 
-public class GameMessageInterpreterImpl implements GameMessageInterpreter{
+public class GameMessageInterpreterImpl implements GameMessageInterpreter {
     // SHARED
     private static final int MESSAGE_TYPE_IDX = 0;
     private static final int OBJECT_ID_IDX = 1;
     private static final int POS_X_IDX = 3;
     private static final int POS_Y_IDX = 5;
+
+    // DESTROY
+    private static final int ROUND_IDX = 3;
 
     // INIT
     private static final int INIT_SKIN_ID_IDX = 1;
@@ -45,6 +48,11 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     @Override
     public int getInitClientAttackId(GameMessage message){
         return message.getByteAt(ATTACK_ID_IDX);
+    }
+
+    @Override
+    public int getRound(GameMessage message) {
+        return message.getByteAt(ROUND_IDX);
     }
 
     @Override
@@ -114,8 +122,9 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     }
 
     @Override
-    public void makeDestroyMessage(GameMessage message, int objectId) {
+    public void makeDestroyMessage(GameMessage message, int objectId, int round) {
         makeMessage(message, GameMessage.Type.DESTROY, objectId);
+        message.putByte(POS_X_IDX, (byte) round);
     }
 
     @Override

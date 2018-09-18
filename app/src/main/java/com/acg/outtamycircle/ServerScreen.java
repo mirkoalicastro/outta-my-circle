@@ -96,8 +96,10 @@ public class ServerScreen extends ClientServerScreen {
         }
         status.activeAttacks.resetIterator();
 
+        boolean receivedAtLeastOne = false;
         // read inbox
         for (GameMessage message : networkMessageHandler.getMessages()) {
+            receivedAtLeastOne = true;
             GameCharacter gameCharacter;
             switch (interpreter.getType(message)){
                 case MOVE_CLIENT:
@@ -108,12 +110,21 @@ public class ServerScreen extends ClientServerScreen {
                 case ATTACK:
                     if(Settings.soundEnabled)
                         Assets.attackEnabled.play(Settings.volume);
-                    gameCharacter = status.characters[interpreter.getObjectId(message)];
-                    AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
-                    attackComponent.start(status, interpreter.getPosX(message), interpreter.getPosY(message));
-                    networkMessageHandler.putInBuffer(message);
-                    messagesInBuffer++;
-                    status.activeAttacks.add(attackComponent);
+                    gameCharacter = null;
+                    int objId = interpreter.getObjectId(message);
+                    for(GameCharacter character: status.living) {
+                        if(character.getObjectId() == objId) {
+                            gameCharacter = character;
+                            break;
+                        }
+                    }
+                    if(gameCharacter != null) {
+                        AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
+                        attackComponent.start(status, interpreter.getPosX(message), interpreter.getPosY(message));
+                        networkMessageHandler.putInBuffer(message);
+                        messagesInBuffer++;
+                        status.activeAttacks.add(attackComponent);
+                    }
                     break;
             }
         }
@@ -148,6 +159,9 @@ public class ServerScreen extends ClientServerScreen {
 
         // notify the client
         sendStatus();
+
+        if(receivedAtLeastOne)
+            updateLastTimeReceived();
     }
 
     private void updateCharactersStatus(){
@@ -166,7 +180,7 @@ public class ServerScreen extends ClientServerScreen {
                 status.dying.add(character);
                 if(message == null)
                     message = GameMessage.createInstance();
-                interpreter.makeDestroyMessage(message, character.getObjectId());
+                interpreter.makeDestroyMessage(message, character.getObjectId(), roundNum);
                 networkMessageHandler.putInBuffer(message);
                 GameMessage.deleteInstance(message);
                 iterator.remove();
@@ -345,6 +359,7 @@ public class ServerScreen extends ClientServerScreen {
 
     @Override
     protected void startRound() {
+        updateLastTimeReceived();
         if (startAt > System.currentTimeMillis())
             return;
         if(status != null)

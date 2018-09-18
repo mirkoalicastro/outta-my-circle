@@ -34,8 +34,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public abstract class ClientServerScreen extends AndroidScreen {
-    protected static final int RADIUS_CHARACTER = 35;
+    protected static final int RADIUS_CHARACTER = 40;
     private static final int ROUNDS = 3;
+
+    private long lastTimeReceived;
+    private static final long TOLERANCE_IDLE_TIME = 5000;
 
     protected final MyGoogleRoom myGoogleRoom;
     protected final NetworkMessageHandlerImpl networkMessageHandler;
@@ -204,6 +207,9 @@ public abstract class ClientServerScreen extends AndroidScreen {
             }
         }
 
+        if(!endGame)
+            updateConnectionFailure();
+
         updateDyingRadius();
     }
 
@@ -238,12 +244,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         drawableComponentFactory.resetFactory();
         drawableComponentFactory.setHeight((int)(r*2)).setWidth((int)(r*2))
                 .setShape(DrawableComponentFactory.DrawableShape.CIRCLE);
-    }
-
-    protected void initPowerupSettings(int side){
-        drawableComponentFactory.resetFactory();
-        drawableComponentFactory.setShape(DrawableComponentFactory.DrawableShape.RECTANGLE)
-                .setHeight(side).setWidth(side).setStroke(6,Color.BLACK);
     }
 
     protected void initArenaSettings(){
@@ -294,7 +294,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
         status.dying.resetIterator();
     }
 
-
     protected Powerup createPowerup(int x, int y, int powerupId, int objectId){
         Powerup powerup = null;
         switch (powerupId){
@@ -315,10 +314,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected void startRound() {
         roundNum++;
         if (roundNum > ROUNDS) {
-            endGame = true;
-            backButton.enable(true);
-            androidJoystick.enable(false);
-            timedCircularButton.enable(false);
+            endGame();
             return;
         }
         isAlive = true;
@@ -334,5 +330,21 @@ public abstract class ClientServerScreen extends AndroidScreen {
         status.setPlayerOne(characters[playerOffset]);
 
         status.setPowerup(null);
+    }
+
+    protected void updateLastTimeReceived() {
+        lastTimeReceived = System.currentTimeMillis();
+    }
+
+    private void updateConnectionFailure() {
+        if(lastTimeReceived+TOLERANCE_IDLE_TIME < System.currentTimeMillis())
+            myGoogleRoom.error();
+    }
+
+    private void endGame() {
+        endGame = true;
+        backButton.enable(true);
+        androidJoystick.enable(false);
+        timedCircularButton.enable(false);
     }
 }

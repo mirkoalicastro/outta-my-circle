@@ -30,7 +30,7 @@ public class GameStatus {
         this.arena = arena;
     }
 
-    public void setCharacters(GameCharacter... characters){
+    public void setCharacters(GameCharacter[] characters){
         for (GameCharacter character : characters)
             living.add(character);
         this.characters = characters;

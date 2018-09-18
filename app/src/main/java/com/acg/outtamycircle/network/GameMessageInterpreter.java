@@ -39,13 +39,15 @@ public interface GameMessageInterpreter {
 
     int getTimeMillis(GameMessage message);
 
-    /*------------ WRITER ------------*/
+    int getRound(GameMessage message);
+
+        /*------------ WRITER ------------*/
 
     void makeInitClientMessage(GameMessage gameMessage, int skinId, int attackId);
 
     void makeCreateMessage(GameMessage gameMessage, int objectId, int posX, int posY, int skinId);
 
-    void makeDestroyMessage(GameMessage gameMessage, int objectId);
+    void makeDestroyMessage(GameMessage gameMessage, int objectId, int round);
 
     void makeMoveServerMessage(GameMessage gameMessage, int objectId, int posX, int posY, float rotation);
 

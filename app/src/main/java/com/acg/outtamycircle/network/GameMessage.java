@@ -76,7 +76,7 @@ public class GameMessage {
         //TODO type description
         INIT_CLIENT((byte)3),
         CREATE((byte)8),
-        DESTROY((byte)3),
+        DESTROY((byte)4),
         MOVE_SERVER((byte)11),
         MOVE_CLIENT((byte)7),
         POWERUP((byte)8),

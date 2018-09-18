@@ -12,9 +12,6 @@ import com.badlogic.androidgames.framework.impl.AndroidGame;
 import java.util.Iterator;
 
 public class ClientScreen extends ClientServerScreen {
-    private boolean playCollision;
-    private int toleranceCollision = 4;
-
     public ClientScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
 
@@ -38,29 +35,6 @@ public class ClientScreen extends ClientServerScreen {
             send();
 
         receive();
-
-        if(playCollision) {
-            playCollision = false;
-            if(Settings.soundEnabled)
-                Assets.gameCharacterCollision.play(Settings.volume);
-        }
-    }
-
-    private void updatePlayCollision(int objectId, int posX, int posY) {
-        if(true)
-            return;
-        for(GameCharacter gameCharacter: status.living) {
-            if (gameCharacter.getObjectId() != objectId) {
-                DrawableComponent tmp = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
-                int deltaX = (posX - tmp.getX()) * (posX - tmp.getX());
-                int deltaY = (posY - tmp.getY()) * (posY - tmp.getY());
-                if(Math.sqrt(deltaX + deltaY) <= (RADIUS_CHARACTER*2 + toleranceCollision)) {
-                    playCollision = true;
-                    break;
-                }
-            }
-        }
-        status.living.resetIterator();
     }
 
     private void send() {
@@ -71,7 +45,7 @@ public class ClientScreen extends ClientServerScreen {
             if(Settings.soundEnabled)
                 Assets.attackEnabled.play(Settings.volume);
             shouldAttack = false;
-            interpreter.makeAttackMessage(message, playerOffset, (int)androidJoystick.getNormX(),(int) androidJoystick.getNormY());
+            interpreter.makeAttackMessage(message, playerOffset, (int) androidJoystick.getNormX(),(int) androidJoystick.getNormY());
             networkMessageHandler.putInBuffer(message);
         }
         networkMessageHandler.sendUnreliable(myGoogleRoom.getServerId());
@@ -79,8 +53,10 @@ public class ClientScreen extends ClientServerScreen {
     }
 
     private void receive() {
-        playCollision = false;
+        boolean playCollision = false;
+        boolean receivedAtLeastOne = false;
         for (GameMessage message : networkMessageHandler.getMessages()) {
+            receivedAtLeastOne = true;
             switch (interpreter.getType(message)){
                 case MOVE_SERVER: {
                     int objectId = interpreter.getObjectId(message);
@@ -88,11 +64,7 @@ public class ClientScreen extends ClientServerScreen {
                     int posY = interpreter.getPosY(message);
                     float rotation = interpreter.getRotation(message);
                     DrawableComponent comp = (DrawableComponent) status.characters[objectId].getComponent(Component.Type.Drawable);
-                    if(comp.getX() != posX || comp.getY() != posY) {
-                        comp.setX(posX).setY(posY);
-                        if(!playCollision)
-                            updatePlayCollision(objectId, posX, posY);
-                    }
+                    comp.setX(posX).setY(posY);
                 }
                 break;
                 case ATTACK: {
@@ -102,6 +74,9 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case DESTROY: {
+                    Log.d("AGLIA", "Ricevo destroy con " + interpreter.getRound(message) + "," + interpreter.getObjectId(message) + " e io sono " + playerOffset);
+                    if(interpreter.getRound(message) != roundNum)
+                        continue; // just skip old message
                     int objectId = interpreter.getObjectId(message);
                     if(objectId == playerOffset)
                         isAlive = false;
@@ -113,6 +88,7 @@ public class ClientScreen extends ClientServerScreen {
                             status.dying.add(curr);
                         }
                     }
+                    status.living.resetIterator();
                 }
                 break;
                 case POWERUP: {
@@ -120,7 +96,6 @@ public class ClientScreen extends ClientServerScreen {
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
                     int powerupType = interpreter.getPowerupType(message);
-                    Log.d("POWERUP", "client powerup " + x + ", " + y + ", " + powerupType + ", " + powerupId);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);
                     status.setPowerup(createPowerup(x, y, powerupType, powerupId));
@@ -143,16 +118,25 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case COLLISION: {
-                    if(Settings.soundEnabled)
-                        Assets.gameCharacterCollision.play(Settings.volume);
+                    playCollision = true;
                 }
                 break;
             }
         }
+
+        if(playCollision) {
+            playCollision = false;
+            if(Settings.soundEnabled)
+                Assets.gameCharacterCollision.play(Settings.volume);
+        }
+
+        if(receivedAtLeastOne)
+            updateLastTimeReceived();
     }
 
     @Override
     protected void startRound(){
+        updateLastTimeReceived();
         if (startAt > System.currentTimeMillis())
             return;
         super.startRound();
