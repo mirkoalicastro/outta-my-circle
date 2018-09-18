@@ -65,13 +65,13 @@ public class ClientScreen extends ClientServerScreen {
 
     private void send() {
         GameMessage message = GameMessage.createInstance();
-        interpreter.makeMoveClientMessage(message, (short)playerOffset, (short) androidJoystick.getNormX(), (short) androidJoystick.getNormY());
+        interpreter.makeMoveClientMessage(message, playerOffset, (int) androidJoystick.getNormX(), (int) androidJoystick.getNormY());
         networkMessageHandler.putInBuffer(message);
         if(shouldAttack) {
             if(Settings.soundEnabled)
                 Assets.attackEnabled.play(Settings.volume);
             shouldAttack = false;
-            interpreter.makeAttackMessage(message, (short)playerOffset, (int)androidJoystick.getNormX(),(int) androidJoystick.getNormY());
+            interpreter.makeAttackMessage(message, playerOffset, (int)androidJoystick.getNormX(),(int) androidJoystick.getNormY());
             networkMessageHandler.putInBuffer(message);
         }
         networkMessageHandler.sendUnreliable(myGoogleRoom.getServerId());
@@ -116,10 +116,10 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case POWERUP: {
-                    short powerupId = (short)interpreter.getPowerupId(message);
+                    int powerupId = interpreter.getPowerupId(message);
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
-                    short powerupType = (short)interpreter.getPowerupType(message);
+                    int powerupType = interpreter.getPowerupType(message);
                     Log.d("POWERUP", "client powerup " + x + ", " + y + ", " + powerupType + ", " + powerupId);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);

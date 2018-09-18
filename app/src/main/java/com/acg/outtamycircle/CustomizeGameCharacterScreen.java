@@ -63,14 +63,16 @@ public class CustomizeGameCharacterScreen extends AndroidScreen {
                 if (minPlayersPickerButton.update(event)) {
                     if (Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
-                    maxPlayersPickerButton.setMin(minPlayersPickerButton.getValue());
+                    if(maxPlayersPickerButton.getValue() < minPlayersPickerButton.getValue())
+                        maxPlayersPickerButton.setValue(minPlayersPickerButton.getValue());
                     unchanged = false;
                 }
             } else if (maxPlayersPickerButton.inBounds(event) && maxPlayersPickerButton.isEnabled()) {
                 if (maxPlayersPickerButton.update(event)) {
                     if (Settings.soundEnabled)
                         Assets.click.play(Settings.volume);
-                    minPlayersPickerButton.setMax(maxPlayersPickerButton.getValue());
+                    if(minPlayersPickerButton.getValue() > maxPlayersPickerButton.getValue())
+                        minPlayersPickerButton.setValue(maxPlayersPickerButton.getValue());
                     unchanged = false;
                 }
             } else if(quickGameButton.inBounds(event) && quickGameButton.isEnabled()) {

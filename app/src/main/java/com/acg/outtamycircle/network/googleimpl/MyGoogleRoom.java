@@ -207,7 +207,9 @@ public class MyGoogleRoom {
                 .setRoomStatusUpdateCallback(myRoomStatusUpdatedCallback)
                 .setAutoMatchCriteria(autoMatchCriteria)
                 .build();
+
         realTimeMultiplayerClient.create(config);
+
         return true;
     }
 

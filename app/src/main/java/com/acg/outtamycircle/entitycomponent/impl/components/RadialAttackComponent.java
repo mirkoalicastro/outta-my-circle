@@ -13,7 +13,7 @@ public final class RadialAttackComponent extends AttackComponent {
 
     @Override
     public void start(GameStatus status, float x, float y) {
-        short myId = ((GameObject) owner).getObjectId();
+        int myId = ((GameObject) owner).getObjectId();
         PhysicsComponent component = (PhysicsComponent) owner.getComponent(Type.Physics);
         float myX = component.getX();
         float myY = component.getY();

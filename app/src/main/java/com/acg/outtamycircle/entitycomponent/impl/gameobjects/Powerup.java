@@ -5,8 +5,18 @@ import com.acg.outtamycircle.GameStatus;
 public abstract class Powerup extends GameObject{
     protected final GameStatus status;
     protected GameCharacter character;
+    protected boolean assigned;
 
-    public Powerup(GameStatus status, short id){
+    public boolean getAssigned() {
+        return assigned;
+    }
+
+    public Powerup setAssigned(boolean assigned) {
+        this.assigned = assigned;
+        return this;
+    }
+
+    public Powerup(GameStatus status, int id){
         super(id, Type.POWERUP);
         this.status = status;
     }

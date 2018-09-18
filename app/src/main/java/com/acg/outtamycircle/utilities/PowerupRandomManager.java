@@ -91,5 +91,5 @@ public class PowerupRandomManager {
         return  arenaY+(sine[current]*distance);
     }
 
-    public short randomPowerup(){ return (short)(Math.random() * powerupsNumber); }
+    public int randomPowerup(){ return (int)(Math.random() * powerupsNumber); }
 }

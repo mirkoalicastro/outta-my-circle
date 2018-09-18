@@ -270,7 +270,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         return arena;
     }
 
-    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, short id){
+    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, int id){
         GameCharacter gc = new GameCharacter(id);
 
         drawableComponentFactory.setPixmap(pixmap).setX(x).setY(y).setOwner(gc);
@@ -290,13 +290,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
             if(diam <= 0)
                 iterator.remove();
-
         }
         status.dying.resetIterator();
     }
 
 
-    protected Powerup createPowerup(int x, int y, short powerupId, short objectId){
+    protected Powerup createPowerup(int x, int y, int powerupId, int objectId){
         Powerup powerup = null;
         switch (powerupId){
             case WeightPowerup.ID:
@@ -305,9 +304,6 @@ public abstract class ClientServerScreen extends AndroidScreen {
             case RadialForcePowerup.ID:
                 powerup = new RadialForcePowerup(status, objectId);
                 break;
-            default:
-                Log.d("POWERUP", "ritorno null");
-                return null;
         }
 
         drawableComponentFactory.setPixmap(Assets.powerups[powerupId]).setX(x).setY(y).setOwner(powerup);
@@ -333,7 +329,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         initCharacterSettings(RADIUS_CHARACTER);
         GameCharacter[] characters = new GameCharacter[players.length];
         for (int i=0; i<characters.length; i++)
-            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], (short)i);
+            characters[i] = createCharacter(spawnPositions[i][0], spawnPositions[i][1], Assets.skins[skins[i]], i);
         status.setCharacters(characters);
         status.setPlayerOne(characters[playerOffset]);
 

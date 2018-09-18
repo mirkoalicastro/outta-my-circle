@@ -16,10 +16,10 @@ import com.google.fpl.liquidfun.World;
 
 public class WeightPowerup extends Powerup {
     private static final long DURATION = 4000;
-    private static final float DENSITY_MULTIPLIER = 3f;
-    private static final float VELOCITY_MULTIPLIER = 0.65f;
+    private static final float DENSITY_MULTIPLIER = 2.5f;
+    private static final float VELOCITY_MULTIPLIER = 0.8f;
     private static final float BASE_DENSITY = 1f;
-    public static final short ID = 0 ;
+    public static final int ID = 0 ;
 
     private PhysicsComponentFactory factory;
     private static final Shape SHAPE = new CircleShape();
@@ -31,7 +31,7 @@ public class WeightPowerup extends Powerup {
         return 0;
     }
 
-    public WeightPowerup(GameStatus status, short id) {
+    public WeightPowerup(GameStatus status, int id) {
         super(status, id);
         factory = new PhysicsComponentFactory(status.getWorld());
 

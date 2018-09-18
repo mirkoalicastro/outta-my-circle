@@ -14,7 +14,7 @@ public class NumberPickerButton extends AndroidRectangularButton {
     private int min, max, steps;
     private int x, y;
     private int fontColor = Color.BLACK;
-    private int cur;
+    private int value;
     private final AndroidButton minusButton, plusButton;
     private boolean enabled = true;
 
@@ -22,16 +22,16 @@ public class NumberPickerButton extends AndroidRectangularButton {
         if(min > max)
             throw new IllegalArgumentException("Min cannot be greater than max");
         this.min = min;
-        if(this.cur < min)
-            this.cur = min;
+        if(this.value < min)
+            this.value = min;
         return this;
     }
     public NumberPickerButton setMax(int max) {
         if(max < min)
             throw new IllegalArgumentException("Max cannot be lower than min");
         this.max = max;
-        if(this.cur > max)
-            this.cur = max;
+        if(this.value > max)
+            this.value = max;
         return this;
     }
     public NumberPickerButton setSteps(int steps) {
@@ -126,11 +126,11 @@ public class NumberPickerButton extends AndroidRectangularButton {
     @Override
     public void draw() {
         super.draw();
-        if(cur-steps >= min)
+        if(value -steps >= min)
             minusButton.draw();
-        if(cur+steps <= max)
+        if(value +steps <= max)
             plusButton.draw();
-        graphics.drawText(String.valueOf(cur),x+100+FONT_SIZE,y+66,FONT_SIZE,fontColor);
+        graphics.drawText(String.valueOf(value),x+100+FONT_SIZE,y+66,FONT_SIZE,fontColor);
     }
 
     /**
@@ -139,13 +139,13 @@ public class NumberPickerButton extends AndroidRectangularButton {
      */
     public boolean update(Input.TouchEvent event) {
         if (minusButton.inBounds(event)) {
-            if(cur-steps >= min) {
-                cur -= steps;
+            if(value -steps >= min) {
+                value -= steps;
                 return true;
             }
         } else if (plusButton.inBounds(event)) {
-            if (cur + steps <= max) {
-                cur += steps;
+            if (value + steps <= max) {
+                value += steps;
                 return true;
             }
         }
@@ -153,6 +153,17 @@ public class NumberPickerButton extends AndroidRectangularButton {
     }
 
     public int getValue() {
-        return cur;
+        return value;
+    }
+
+    public NumberPickerButton setValue(int value) {
+        if(value < min)
+            throw new IllegalArgumentException("The value cannot be lower than min");
+        if(value > max)
+            throw new IllegalArgumentException("The value cannot be greater than max");
+        if((value-min)%steps != 0)
+            throw new IllegalArgumentException("The value cannot be selected using steps of " + steps);
+        this.value = value;
+        return this;
     }
 }

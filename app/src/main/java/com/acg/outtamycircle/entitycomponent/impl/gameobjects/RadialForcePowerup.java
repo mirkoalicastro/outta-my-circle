@@ -6,9 +6,9 @@ import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 
 public class RadialForcePowerup extends Powerup {
     private boolean isEnded = false;
-    public static final short ID = 1;
+    public static final int ID = 1;
 
-    public RadialForcePowerup(GameStatus status, short objectId) {
+    public RadialForcePowerup(GameStatus status, int objectId) {
         super(status, objectId);
     }
 

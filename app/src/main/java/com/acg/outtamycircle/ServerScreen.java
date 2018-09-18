@@ -65,7 +65,7 @@ public class ServerScreen extends ClientServerScreen {
 
         powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
 
-        idGenerator = IdGenerator.getInstance((short)players.length);
+        idGenerator = IdGenerator.getInstance(players.length);
 
         startRound();
         roundNum--;
@@ -155,7 +155,7 @@ public class ServerScreen extends ClientServerScreen {
         GameMessage message = null;
         while(iterator.hasNext()) {
             GameCharacter character = iterator.next();
-            short charId = character.getObjectId();
+            int charId = character.getObjectId();
             if(status.living.size()==1) {
                 winnerId[roundNum-1] = charId;
                 break;
@@ -207,7 +207,7 @@ public class ServerScreen extends ClientServerScreen {
     }
 
     @Override
-    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, short id){
+    protected GameCharacter createCharacter(int x, int y, Pixmap pixmap, int id){
         GameCharacter gc = super.createCharacter(x, y, pixmap, id);
 
         physicsComponentFactory.setPosition(Converter.frameToPhysics(x), Converter.frameToPhysics(y)).setOwner(gc);
@@ -235,7 +235,8 @@ public class ServerScreen extends ClientServerScreen {
         component.deleteBody();
     }
 
-    protected Powerup createPowerup(float x, float y, short powerupId, short objectId){
+    @Override
+    protected Powerup createPowerup(int x, int y, int powerupId, int objectId){
         Powerup powerup = super.createPowerup((int)Converter.physicsToFrame(x),
                 (int)Converter.physicsToFrame(y), powerupId, objectId);
 
@@ -251,7 +252,7 @@ public class ServerScreen extends ClientServerScreen {
         GameMessage message = GameMessage.createInstance();
 
         if(winnerId[roundNum-1] != -1) {
-            interpreter.makeEndMessage(message, (short)winnerId[roundNum-1]);
+            interpreter.makeEndMessage(message, winnerId[roundNum-1]);
             networkMessageHandler.putInBuffer(message);
             networkMessageHandler.broadcastReliable();
             GameMessage.deleteInstance(message);
@@ -291,10 +292,10 @@ public class ServerScreen extends ClientServerScreen {
     private void updatePowerupsStatus(float deltaTime){
         // generation
         if(powerupRandomManager.randomBoolean(deltaTime)){
-            float x = powerupRandomManager.randomX();
-            float y = powerupRandomManager.randomY();
-            short powerupId = powerupRandomManager.randomPowerup();
-            short objectId = idGenerator.next();
+            int x = (int)powerupRandomManager.randomX();
+            int y = (int)powerupRandomManager.randomY();
+            int powerupId = powerupRandomManager.randomPowerup();
+            int objectId = idGenerator.next();
             if(Settings.soundEnabled)
                 Assets.newPowerup.play(Settings.volume);
             status.setPowerup(createPowerup(x, y, powerupId, objectId));

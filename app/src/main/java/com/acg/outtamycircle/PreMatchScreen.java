@@ -24,7 +24,7 @@ import java.util.Map;
 public class PreMatchScreen extends AndroidScreen {
 
     private static final long MAX_TIME = 10000;
-    private final Map<String, Short> orderedPlayers = new HashMap<>();
+    private final Map<String, Integer> orderedPlayers = new HashMap<>();
 
     private int readMessages = 0;
     private int phase = 0;
@@ -62,7 +62,7 @@ public class PreMatchScreen extends AndroidScreen {
         for(String s: ids) {
             if(s.equals(myGoogleRoom.getPlayerId()))
                 playerOffset = orderedPlayers.size();
-            orderedPlayers.put(s, (short) orderedPlayers.size());
+            orderedPlayers.put(s, orderedPlayers.size());
         }
         Graphics graphics = game.getGraphics();
         loadingAnimation = new SpinAnimation(graphics, 15, 50)
@@ -155,7 +155,7 @@ public class PreMatchScreen extends AndroidScreen {
         repeatBroadcastInit = false;
         NetworkMessageHandlerImpl handler = myGoogleRoom.getNetworkMessageHandler();
         GameMessage message = GameMessage.createInstance();
-        for(short i=0; i<numOpponents+1; i++) {
+        for(int i=0; i<numOpponents+1; i++) {
             interpreter.makeCreateMessage(message, i, spawnPositions[i][0], spawnPositions[i][1], skins[i]);
             handler.putInBuffer(message);
         }

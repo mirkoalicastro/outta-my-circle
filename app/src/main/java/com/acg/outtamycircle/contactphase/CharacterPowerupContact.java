@@ -18,9 +18,6 @@ class CharacterPowerupContact extends ContactType {
 
     @Override
     public void handle(GameObject a, GameObject b) {
-        if(Settings.soundEnabled)
-            Assets.powerupCollision.play(Settings.volume);
-
         Powerup powerup = null;
         GameCharacter character = null;
         if(a.getType() == GameObject.Type.POWERUP) {
@@ -31,6 +28,14 @@ class CharacterPowerupContact extends ContactType {
             powerup = (Powerup)b;
             character = (GameCharacter)a;
         }
+
+        if(powerup.getAssigned())
+            return;
+
+        powerup.setAssigned(true);
+
+        if(Settings.soundEnabled)
+            Assets.powerupCollision.play(Settings.volume);
 
         powerup.setGameCharacter(character);
 
