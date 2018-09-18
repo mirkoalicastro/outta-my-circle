@@ -1,7 +1,6 @@
 package com.acg.outtamycircle.entitycomponent;
 
 import com.acg.outtamycircle.GameStatus;
-import com.google.fpl.liquidfun.World;
 
 public abstract class AttackComponent extends Component {
 

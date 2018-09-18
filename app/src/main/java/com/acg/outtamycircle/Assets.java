@@ -1,8 +1,8 @@
 package com.acg.outtamycircle;
 
 import com.badlogic.androidgames.framework.Effect;
-import com.badlogic.androidgames.framework.Sound;
 import com.badlogic.androidgames.framework.Pixmap;
+import com.badlogic.androidgames.framework.Sound;
 
 public class Assets {
     public static Pixmap[] skins;

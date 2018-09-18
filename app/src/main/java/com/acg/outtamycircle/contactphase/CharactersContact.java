@@ -1,7 +1,6 @@
 package com.acg.outtamycircle.contactphase;
 
 import com.acg.outtamycircle.Assets;
-import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.Settings;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 

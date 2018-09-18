@@ -2,11 +2,8 @@ package com.acg.outtamycircle.entitycomponent.impl.components;
 
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
-import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
-import com.google.fpl.liquidfun.World;
 
 public final class BoostAttackComponent extends AttackComponent {
     private static final long DURATION = 30;

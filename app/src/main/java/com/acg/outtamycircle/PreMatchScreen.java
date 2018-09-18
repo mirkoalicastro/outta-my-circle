@@ -1,7 +1,5 @@
 package com.acg.outtamycircle;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandler;

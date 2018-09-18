@@ -1,11 +1,8 @@
 package com.acg.outtamycircle.network.googleimpl;
 
-import android.support.annotation.NonNull;
-
 import com.acg.outtamycircle.network.GameMessage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ClientMessageReceiver implements MessageReceiver {

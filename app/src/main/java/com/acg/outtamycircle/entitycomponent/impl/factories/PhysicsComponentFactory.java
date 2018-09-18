@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.entitycomponent.impl.factories;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;

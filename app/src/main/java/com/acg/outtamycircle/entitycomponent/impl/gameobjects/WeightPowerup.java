@@ -1,10 +1,7 @@
 package com.acg.outtamycircle.entitycomponent.impl.gameobjects;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.Component;
-import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.google.fpl.liquidfun.Body;
@@ -12,7 +9,6 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.Shape;
 import com.google.fpl.liquidfun.Vec2;
-import com.google.fpl.liquidfun.World;
 
 public class WeightPowerup extends Powerup {
     private static final long DURATION = 4000;

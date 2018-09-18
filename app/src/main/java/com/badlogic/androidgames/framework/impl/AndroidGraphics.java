@@ -1,9 +1,5 @@
 package com.badlogic.androidgames.framework.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -18,6 +14,10 @@ import android.graphics.RectF;
 import com.badlogic.androidgames.framework.Effect;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Pixmap;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 public class AndroidGraphics implements Graphics {
     private final AssetManager assets;

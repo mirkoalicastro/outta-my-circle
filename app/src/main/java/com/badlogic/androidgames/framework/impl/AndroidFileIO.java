@@ -1,16 +1,16 @@
 package com.badlogic.androidgames.framework.impl;
 
+import android.content.res.AssetManager;
+import android.os.Environment;
+
+import com.badlogic.androidgames.framework.FileIO;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import android.content.res.AssetManager;
-import android.os.Environment;
-
-import com.badlogic.androidgames.framework.FileIO;
 
 public class AndroidFileIO implements FileIO {
     private final AssetManager assets;

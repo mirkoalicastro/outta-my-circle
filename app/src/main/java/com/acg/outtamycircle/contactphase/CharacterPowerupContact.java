@@ -1,18 +1,12 @@
 package com.acg.outtamycircle.contactphase;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.Assets;
-import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.Settings;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
-import com.acg.outtamycircle.network.GameMessage;
-import com.acg.outtamycircle.network.GameMessageInterpreter;
-import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 
 class CharacterPowerupContact extends ContactType {
 

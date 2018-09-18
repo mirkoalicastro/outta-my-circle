@@ -1,7 +1,6 @@
 package com.acg.outtamycircle.network.googleimpl;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.GameMessageInterpreter;

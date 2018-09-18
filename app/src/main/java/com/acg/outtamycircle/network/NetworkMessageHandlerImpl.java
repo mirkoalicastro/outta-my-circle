@@ -1,16 +1,13 @@
 package com.acg.outtamycircle.network;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.network.googleimpl.MessageReceiver;
+import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.badlogic.androidgames.framework.Pool;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import java.util.Arrays;
 
 public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
     private static final int MAX_BUFFER_SIZE = 127;

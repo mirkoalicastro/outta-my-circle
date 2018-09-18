@@ -1,18 +1,17 @@
 package com.badlogic.androidgames.framework.impl;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.util.Log;
 
 import com.badlogic.androidgames.framework.Audio;
 import com.badlogic.androidgames.framework.Music;
 import com.badlogic.androidgames.framework.Sound;
+
+import java.io.IOException;
 
 public class AndroidAudio implements Audio {
     private final AssetManager assets;

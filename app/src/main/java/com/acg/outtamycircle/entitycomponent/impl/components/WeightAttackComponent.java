@@ -1,11 +1,7 @@
 package com.acg.outtamycircle.entitycomponent.impl.components;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
-import com.acg.outtamycircle.entitycomponent.Component;
-import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.BodyType;

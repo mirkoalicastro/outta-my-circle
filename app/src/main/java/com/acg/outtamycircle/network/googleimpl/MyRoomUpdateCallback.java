@@ -1,7 +1,6 @@
 package com.acg.outtamycircle.network.googleimpl;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.games.GamesCallbackStatusCodes;
 import com.google.android.gms.games.multiplayer.realtime.Room;

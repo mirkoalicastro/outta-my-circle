@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.entitycomponent.impl.factories;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.BoostAttackComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.RadialAttackComponent;

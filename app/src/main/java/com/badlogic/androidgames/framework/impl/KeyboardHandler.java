@@ -1,14 +1,14 @@
 package com.badlogic.androidgames.framework.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.view.View;
 import android.view.View.OnKeyListener;
 
 import com.badlogic.androidgames.framework.Input.KeyEvent;
 import com.badlogic.androidgames.framework.Pool;
 import com.badlogic.androidgames.framework.Pool.PoolObjectFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KeyboardHandler implements OnKeyListener {
     private final boolean[] pressedKeys = new boolean[128];

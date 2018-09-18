@@ -2,7 +2,6 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 import android.graphics.Shader;
-import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;

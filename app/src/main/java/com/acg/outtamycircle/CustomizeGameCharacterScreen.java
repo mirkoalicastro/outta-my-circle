@@ -4,12 +4,12 @@ import android.graphics.Color;
 
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
-import com.badlogic.androidgames.framework.impl.NumberPickerButton;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.impl.AndroidButton;
 import com.badlogic.androidgames.framework.impl.AndroidRectangularButton;
 import com.badlogic.androidgames.framework.impl.AndroidScreen;
+import com.badlogic.androidgames.framework.impl.NumberPickerButton;
 
 public class CustomizeGameCharacterScreen extends AndroidScreen {
     private byte currentIdSkin = 0;

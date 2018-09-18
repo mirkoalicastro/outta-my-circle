@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.utilities;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
 
