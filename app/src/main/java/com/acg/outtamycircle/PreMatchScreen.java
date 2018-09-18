@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class PreMatchScreen extends AndroidScreen {
 
-    private static final long MAX_TIME = 10000;
+    private static final long MAX_TIME = 7000;
     private final Map<String, Integer> orderedPlayers = new HashMap<>();
 
     private int readMessages = 0;
@@ -145,7 +145,6 @@ public class PreMatchScreen extends AndroidScreen {
             nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks, playerOffset);
         else
             nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, playerOffset);
-        Log.d("OMC", "Sono server ? " + myGoogleRoom.isServer());
         nextPhase();
     }
 

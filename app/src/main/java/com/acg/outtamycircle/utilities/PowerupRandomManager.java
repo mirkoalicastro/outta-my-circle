@@ -70,8 +70,6 @@ public class PowerupRandomManager {
         double p2 = (1./(3*status.getActivePowerups().size()+1)) * WEIGHT_ACTIVE_POWERUPS;
         double p3 = (1 - 1./(diff+1)) * WEIGHT_ELAPSED_TIME;
 
-        Log.d("POWERUP", String.format("P1:%f | P2:%f | P3:%f", p1, p2, p3));
-
         boolean result = (p1 + p2 + p3 > THRESHOLD);
 
         if(result) {

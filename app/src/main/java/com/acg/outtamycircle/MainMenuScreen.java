@@ -13,8 +13,8 @@ import com.badlogic.androidgames.framework.impl.AndroidScreen;
 public class MainMenuScreen extends AndroidScreen {
 
     private final AndroidButton startButton = new AndroidRectangularButton(androidGame.getGraphics(), 890,550,324,124);
-    private final AndroidButton soundButton = new AndroidCircularButton(androidGame.getGraphics(), 1222, 318,86);
-    private final AndroidButton helpButton = new AndroidCircularButton(androidGame.getGraphics(), 322, 318,86);
+    private final AndroidButton soundButton = new AndroidCircularButton(androidGame.getGraphics(), 1288, 318,86);
+    private final AndroidButton helpButton = new AndroidCircularButton(androidGame.getGraphics(), 336, 318,86);
     private boolean unchanged;
     private final MyGoogleSignIn myGoogleSignIn;
 

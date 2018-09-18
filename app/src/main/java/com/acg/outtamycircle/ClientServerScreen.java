@@ -215,11 +215,8 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private void drawEntity(Entity e){
         DrawableComponent component = (DrawableComponent)e.getComponent(Component.Type.Drawable);
-        if(component != null) {
+        if(component != null)
             component.draw();
-        } else {
-            Log.d("POWERUP", "erroreeeeeeeeeee");
-        }
     }
 
 

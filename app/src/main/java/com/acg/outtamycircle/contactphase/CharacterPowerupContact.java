@@ -45,7 +45,6 @@ class CharacterPowerupContact extends ContactType {
         component.deleteBody();
         powerup.removeComponent(Component.Type.Physics);
 
-        Log.d("NULLO", "prova");
         status.setPowerup(null);
 
         // world can't be changed during collision handling

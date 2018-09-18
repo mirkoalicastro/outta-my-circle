@@ -34,8 +34,6 @@ public final class RadialAttackComponent extends AttackComponent {
             float forceX = totalForce * (distanceX/distance); //cosine
             float forceY = totalForce * (distanceY/distance); //sine
 
-            //Log.d("ATTACKS", String.format("My position (%f,%f)\ndeltaX (%f,%f)\nforce (%f, %f)", myX,myY, distanceX, distanceY, forceX, forceY));
-
             component.applyForce(forceX, forceY);
         }
     }

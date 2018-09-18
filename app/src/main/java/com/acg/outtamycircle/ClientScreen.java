@@ -74,7 +74,6 @@ public class ClientScreen extends ClientServerScreen {
                 }
                 break;
                 case DESTROY: {
-                    Log.d("AGLIA", "Ricevo destroy con " + interpreter.getRound(message) + "," + interpreter.getObjectId(message) + " e io sono " + playerOffset);
                     if(interpreter.getRound(message) != roundNum)
                         continue; // just skip old message
                     int objectId = interpreter.getObjectId(message);
