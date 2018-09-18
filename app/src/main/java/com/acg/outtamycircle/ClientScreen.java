@@ -47,6 +47,8 @@ public class ClientScreen extends ClientServerScreen {
     }
 
     private void updatePlayCollision(int objectId, int posX, int posY) {
+        if(true)
+            return;
         for(GameCharacter gameCharacter: status.living) {
             if (gameCharacter.getObjectId() != objectId) {
                 DrawableComponent tmp = (DrawableComponent) gameCharacter.getComponent(Component.Type.Drawable);
@@ -118,6 +120,7 @@ public class ClientScreen extends ClientServerScreen {
                     int x = interpreter.getPosX(message);
                     int y = interpreter.getPosY(message);
                     short powerupType = (short)interpreter.getPowerupType(message);
+                    Log.d("POWERUP", "client powerup " + x + ", " + y + ", " + powerupType + ", " + powerupId);
                     if(Settings.soundEnabled)
                         Assets.newPowerup.play(Settings.volume);
                     status.setPowerup(createPowerup(x, y, powerupType, powerupId));
@@ -129,13 +132,19 @@ public class ClientScreen extends ClientServerScreen {
                     int powerupType = interpreter.getPowerupType(message);
                     if(Settings.soundEnabled && objectId == playerOffset)
                         Assets.powerupCollision.play(Settings.volume);
-                    status.setPowerup(null);
+                    if(status.powerup != null && status.powerup.getObjectId() == powerupId)
+                        status.setPowerup(null);
                 }
                 break;
                 case END: {
                     startAt = System.currentTimeMillis()+5000;
                     winnerId[roundNum-1] = interpreter.getObjectId(message);
                     endRound = true;
+                }
+                break;
+                case COLLISION: {
+                    if(Settings.soundEnabled)
+                        Assets.gameCharacterCollision.play(Settings.volume);
                 }
                 break;
             }

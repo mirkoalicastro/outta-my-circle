@@ -163,4 +163,9 @@ public class GameMessageInterpreterImpl implements GameMessageInterpreter{
     public void makeStartMessage(GameMessage message){
         makeMessage(message, GameMessage.Type.START);
     }
+
+    @Override
+    public void makeCollisionMessage(GameMessage message) {
+        makeMessage(message, GameMessage.Type.COLLISION);
+    }
 }

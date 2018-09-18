@@ -145,6 +145,7 @@ public class PreMatchScreen extends AndroidScreen {
             nextScreen = new ServerScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, attacks, playerOffset);
         else
             nextScreen = new ClientScreen(androidGame, myGoogleRoom, players, skins, spawnPositions, playerOffset);
+        Log.d("OMC", "Sono server ? " + myGoogleRoom.isServer());
         nextPhase();
     }
 

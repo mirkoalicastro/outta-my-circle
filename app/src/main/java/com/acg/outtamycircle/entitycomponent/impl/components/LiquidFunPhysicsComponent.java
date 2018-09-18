@@ -3,6 +3,7 @@ package com.acg.outtamycircle.entitycomponent.impl.components;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.google.fpl.liquidfun.Body;
 import com.google.fpl.liquidfun.Vec2;
+import com.google.fpl.liquidfun.World;
 
 /**
  * Generalizzazione delle componenti fisiche di liquid fun
@@ -10,15 +11,15 @@ import com.google.fpl.liquidfun.Vec2;
 
 public class LiquidFunPhysicsComponent extends PhysicsComponent{
     protected Body body;
+    protected World world;
     private final Vec2 v = new Vec2();
 
     private float width, height;
 
     @Override
     public void applyForce(float x, float y){
-        x /= 150; y /= 150;
+        x /= 140; y /= 140;
 
-        //Simulazione attrito con l'arena
         x -= body.getLinearVelocity().getX();
         y -= body.getLinearVelocity().getY();
 
@@ -63,10 +64,16 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
     }
 
     public void deleteBody(){
-        body.getWorld().destroyBody(body);
+        world.destroyBody(body);
     }
 
     public Body getBody() {
         return body;
     }
+
+    public LiquidFunPhysicsComponent setWorld(World world) {
+        this.world = world;
+        return this;
+    }
+
 }

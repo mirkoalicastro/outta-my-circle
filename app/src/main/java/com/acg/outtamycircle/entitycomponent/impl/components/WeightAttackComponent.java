@@ -64,7 +64,6 @@ public class WeightAttackComponent extends AttackComponent {
         // update owner
         owner.addComponent(physicsComponent);
         physicsComponent.setOwner(owner);
-        //TODO drawable?
 
         firstCalled = System.currentTimeMillis();
     }

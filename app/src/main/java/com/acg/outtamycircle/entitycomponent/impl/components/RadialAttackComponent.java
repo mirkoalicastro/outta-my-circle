@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.entitycomponent.impl.components;
 
-import android.util.Log;
-
 import com.acg.outtamycircle.GameStatus;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
@@ -10,8 +8,8 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
 public final class RadialAttackComponent extends AttackComponent {
-    private static final float MAX_FORCE = 7500;
-    private static final float DELTA_FORCE = 4500;
+    private static final float MAX_FORCE = 9_500;
+    private static final float DELTA_FORCE = 6_000;
 
     @Override
     public void start(GameStatus status, float x, float y) {
@@ -19,8 +17,6 @@ public final class RadialAttackComponent extends AttackComponent {
         PhysicsComponent component = (PhysicsComponent) owner.getComponent(Type.Physics);
         float myX = component.getX();
         float myY = component.getY();
-
-
         final float maxDistance = component.getHeight()*2.5f;
         float diameter = component.getHeight();
 

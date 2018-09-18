@@ -100,7 +100,7 @@ public class PhysicsComponentFactory {
 
     public PhysicsComponent makeComponent(){
         LiquidFunPhysicsComponent component = new LiquidFunPhysicsComponent();
-        component.setWidth(width).setHeight(height).setOwner(owner);
+        component.setWorld(world).setWidth(width).setHeight(height).setOwner(owner);
 
         Body body = world.createBody(bodyDef);
         body.setSleepingAllowed(sleepingAllowed);

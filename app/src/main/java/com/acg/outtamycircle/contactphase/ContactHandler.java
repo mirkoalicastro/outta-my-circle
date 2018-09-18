@@ -15,6 +15,16 @@ import com.google.fpl.liquidfun.Fixture;
 public class ContactHandler extends ContactListener{
     private SparseArray<ContactType> map;
 
+    public ContactHandler() {
+        map = new SparseArray<>();
+        CharactersContact cc = new CharactersContact();
+        CharacterPowerupContact cp = new CharacterPowerupContact();
+
+        map.put(myHashCode(GameCharacter.class, GameCharacter.class), cc);
+        map.put(myHashCode(GameCharacter.class, WeightPowerup.class), cp);
+        map.put(myHashCode(GameCharacter.class, RadialForcePowerup.class), cp);
+    }
+
     @Override
     public void beginContact(Contact contact) {
         super.beginContact(contact);
@@ -30,15 +40,8 @@ public class ContactHandler extends ContactListener{
     }
 
     public void init(GameStatus status) {
-        map = new SparseArray<>();
-
-        CharactersContact cc = new CharactersContact();
-
-        CharacterPowerupContact cp = new CharacterPowerupContact(status);
-
-        map.put(myHashCode(GameCharacter.class,GameCharacter.class), cc);
-        map.put(myHashCode(GameCharacter.class,WeightPowerup.class), cp);
-        map.put(myHashCode(GameCharacter.class,RadialForcePowerup.class), cp);
+        for(int i=0; i<map.size(); i++)
+            map.get(map.keyAt(i)).setStatus(status);
     }
 
     private static int myHashCode(Object a, Object b){

@@ -18,7 +18,6 @@ import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
-import com.google.fpl.liquidfun.PolygonShape;
 import com.google.fpl.liquidfun.World;
 import java.util.Iterator;
 
@@ -52,11 +51,7 @@ public class ServerScreen extends ClientServerScreen {
                 .setBullet(true).setAwake(true).setSleepingAllowed(true).setType(BodyType.dynamicBody)
                 .setDensity(0.000000001f).setRestitution(0.000000001f).setFriction(0.000000001f); //very small values supported by LiquidFun (NO Float.MIN_VALUE)
 
-        startRound();
-        roundNum--;
-
         contactHandler = new ContactHandler();
-        contactHandler.init(status);
         world.setContactListener(contactHandler);
 
         float squareHalfSide = Converter.frameToPhysics((float)(arenaRadius*Math.sqrt(2)/2));
@@ -68,9 +63,12 @@ public class ServerScreen extends ClientServerScreen {
         bottomY = arenaY - squareHalfSide;
         threshold = Converter.frameToPhysics(arenaRadius) + Converter.frameToPhysics(RADIUS_CHARACTER*2)/4;
 
-        powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius), status, startAt);
+        powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
 
         idGenerator = IdGenerator.getInstance((short)players.length);
+
+        startRound();
+        roundNum--;
     }
 
     @Override
@@ -122,6 +120,8 @@ public class ServerScreen extends ClientServerScreen {
 
         // get server player input
         if(shouldAttack){
+            if(Settings.soundEnabled)
+                Assets.attackEnabled.play(Settings.volume);
             GameCharacter gameCharacter = status.characters[playerOffset];
             AttackComponent attackComponent = (AttackComponent) gameCharacter.getComponent(Component.Type.Attack);
             float x = androidJoystick.getNormX();
@@ -170,7 +170,7 @@ public class ServerScreen extends ClientServerScreen {
                 networkMessageHandler.putInBuffer(message);
                 GameMessage.deleteInstance(message);
                 iterator.remove();
-                disablePhysicsComponent(character); //TODO
+                disablePhysicsComponent(character);
             }
         }
         if(message != null) {
@@ -260,7 +260,6 @@ public class ServerScreen extends ClientServerScreen {
             return;
         }
 
-
         /* Reliable Messages */
 
         if(messagesInBuffer>0)
@@ -268,9 +267,16 @@ public class ServerScreen extends ClientServerScreen {
 
         /* Unreliable Messages */
 
+        if(status.collisionDetected) {
+            interpreter.makeCollisionMessage(message);
+            networkMessageHandler.putInBuffer(message);
+            status.collisionDetected = false;
+        }
+
+
         for(GameCharacter ch : status.living){
             shape = (DrawableComponent)ch.getComponent(Component.Type.Drawable);
-            interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0); //TODO rotation
+            interpreter.makeMoveServerMessage(message, ch.getObjectId(), shape.getX(), shape.getY(), 0);
             networkMessageHandler.putInBuffer(message);
         }
         status.living.resetIterator();
@@ -316,8 +322,9 @@ public class ServerScreen extends ClientServerScreen {
         status.actives.resetIterator();
 
         // assignment to player
-        if(status.toActivate.size()>0){
-            Iterator<Powerup> toActivateIterator = status.toActivate.iterator();
+        if(status.powerupsToActivate.size()>0){
+            powerupRandomManager.setStartTime(System.currentTimeMillis());
+            Iterator<Powerup> toActivateIterator = status.powerupsToActivate.iterator();
             while(toActivateIterator.hasNext()){
                 Powerup powerup = toActivateIterator.next();
 
@@ -331,7 +338,7 @@ public class ServerScreen extends ClientServerScreen {
                 status.actives.add(powerup);
                 toActivateIterator.remove();
             }
-            status.toActivate.resetIterator();
+            status.powerupsToActivate.resetIterator();
         }
     }
 
@@ -343,6 +350,9 @@ public class ServerScreen extends ClientServerScreen {
             for(GameCharacter gameCharacter: status.living)
                 ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
         super.startRound();
+
+        contactHandler.init(status);
+        powerupRandomManager.setGameStatus(status).setStartTime(startAt);
 
         status.world = world;
 

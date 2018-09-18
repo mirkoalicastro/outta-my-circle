@@ -2,15 +2,16 @@ package com.acg.outtamycircle.utilities;
 
 import android.util.Log;
 
+import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 
 public class PowerupRandomManager {
     private static int DEGREE_STEPS = 72;
+    private static final double DEFAULT_MINIMUM_TIME = 2f;
     private static float[] cosine;
     private static float[] sine;
 
-    private int current = 0;
+    private int current;
     private float distance;
 
     static{
@@ -25,45 +26,49 @@ public class PowerupRandomManager {
             angle += step;
         }
     }
-    private final GameStatus status;
 
-    private final float arenaX, arenaY, radius;
-    private final short powerupsNumber;
+    private GameStatus status;
+    private long startTime;
 
-    private final MyList<Powerup> actives;
-    private final double THRESHOLD = 0.65;
+    private final float arenaX, arenaY, arenaRadius;
+    private final int powerupsNumber = Assets.powerups.length;
+    private final double THRESHOLD = 0.80;
 
-    private double idleTime = 1f; //1 sec.
-    private final double startTime;
+    private double minimumTime = DEFAULT_MINIMUM_TIME;
 
-    private static final double WEIGHT_RANDOM = 0.4, WEIGHT_ELAPSED_TIME = 0.4, WEIGHT_ACTIVE_POWERUPS = 0.2;
+    private static final double WEIGHT_RANDOM = 0.45, WEIGHT_ELAPSED_TIME = 0.4, WEIGHT_ACTIVE_POWERUPS = 0.15;
 
-    public PowerupRandomManager(float arenaX, float arenaY, float arenaRadius, GameStatus status, long startTime){
-        radius = arenaRadius;
+    public PowerupRandomManager(float arenaX, float arenaY, float arenaRadius){
+        this.arenaRadius = arenaRadius;
         this.arenaX = arenaX;
         this.arenaY = arenaY;
+    }
 
-        powerupsNumber = 1; //TODO (short)Assets.powerup.lenght;
-
-        this.actives = status.getActivePowerups();
-
-        this.startTime = startTime/1000; //millis.
-
+    public PowerupRandomManager setGameStatus(GameStatus status) {
         this.status = status;
+        return this;
+    }
+
+    public PowerupRandomManager setStartTime(long startTime) {
+        this.startTime = startTime;
+        return this;
     }
 
     public boolean randomBoolean(float deltaTime){
+        minimumTime -= deltaTime;
 
-        Log.d("POWERUP", "delta " + deltaTime + " ; idle " + idleTime);
-
-        idleTime -= deltaTime;
-
-        if(idleTime > 0 || status.getPowerup() != null)
+        if(minimumTime > 0 || status.getPowerup() != null)
             return false;
 
+        minimumTime = DEFAULT_MINIMUM_TIME;
+
+        long ora = System.currentTimeMillis();
+        long diff = ora - startTime;
+        diff /= 5000;
+
         double p1 = Math.random() * WEIGHT_RANDOM;
-        double p2 = (1/(actives.size()+1)) * WEIGHT_ACTIVE_POWERUPS;
-        double p3 = (1 - 1/(System.currentTimeMillis() - startTime)) * WEIGHT_ELAPSED_TIME;
+        double p2 = (1./(3*status.getActivePowerups().size()+1)) * WEIGHT_ACTIVE_POWERUPS;
+        double p3 = (1 - 1./(diff+1)) * WEIGHT_ELAPSED_TIME;
 
         Log.d("POWERUP", String.format("P1:%f | P2:%f | P3:%f", p1, p2, p3));
 
@@ -71,8 +76,8 @@ public class PowerupRandomManager {
 
         if(result) {
             current = (int) (Math.random() * DEGREE_STEPS);
-            distance = (float) (Math.random() * radius);
-            idleTime = 1f;
+            distance = (float) (Math.random() * arenaRadius);
+            startTime = System.currentTimeMillis();
         }
 
         return result;

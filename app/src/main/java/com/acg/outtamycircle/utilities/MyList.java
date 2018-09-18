@@ -1,32 +1,12 @@
 package com.acg.outtamycircle.utilities;
 
-import android.support.annotation.NonNull;
-
-import com.badlogic.androidgames.framework.Pool;
-
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class MyList<T> implements Iterable<T> {
     private final MyIterator iterator = new MyIterator();
     private Node<T> head = null;
-    private int count = 0;
-    private final static int POOL_SIZE = 30;
-
-    private static Pool<Node> pool = new Pool.SimplePool<>(new Pool.PoolObjectFactory<Node>() {
-        @Override
-        public Node createObject() {
-            return new Node();
-        }
-    }, POOL_SIZE);
-
-    static{
-        for(int i=0; i<POOL_SIZE/2; i++)
-            pool.free(new Node());
-    }
-
-    @NonNull
+    private int count;
     @Override
     public Iterator<T> iterator() {
         return iterator;
@@ -46,8 +26,7 @@ public class MyList<T> implements Iterable<T> {
     }
 
     public void add(T key){
-        Node<T> node = pool.newObject();
-        node.key = key;
+        Node<T> node = new Node<>(key);
         if(head != null) {
             head.prev = node;
             node.next = head;
@@ -55,19 +34,6 @@ public class MyList<T> implements Iterable<T> {
         head = node;
         count++;
         resetIterator();
-    }
-
-    public boolean remove(T el){
-        resetIterator();
-        while(iterator.hasNext()) {
-            T curr = iterator.next();
-            if(curr.equals(el)) {
-                iterator.remove();
-                resetIterator();
-                return true;
-            }
-        }
-        return false;
     }
 
     private class MyIterator implements Iterator<T> {
@@ -101,14 +67,17 @@ public class MyList<T> implements Iterable<T> {
                 if(cur.next!=null)
                     cur.next.prev = cur.prev;
             }
-            pool.free(cur);
             count--;
         }
     }
 
-    private static class Node<T>{
-        T key;
+    private class Node<T>{
+        final T key;
         Node<T> next, prev;
+
+        Node(T key){
+            this.key = key;
+        }
     }
 
     public void clear(){

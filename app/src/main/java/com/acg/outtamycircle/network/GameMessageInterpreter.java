@@ -62,4 +62,6 @@ public interface GameMessageInterpreter {
     void makeHostOrClientMessage(GameMessage message, int time);
 
     void makeStartMessage(GameMessage message);
+
+    void makeCollisionMessage(GameMessage message);
 }

@@ -16,13 +16,12 @@ import com.google.fpl.liquidfun.World;
 
 public class WeightPowerup extends Powerup {
     private static final long DURATION = 4000;
-    private static final float DENSITY_MULTIPLIER = 4f;
+    private static final float DENSITY_MULTIPLIER = 3f;
     private static final float VELOCITY_MULTIPLIER = 0.65f;
     private static final float BASE_DENSITY = 1f;
     public static final short ID = 0 ;
 
     private PhysicsComponentFactory factory;
-    private World world;
     private static final Shape SHAPE = new CircleShape();
     private long firstCalled;
     private boolean ended;
@@ -34,10 +33,9 @@ public class WeightPowerup extends Powerup {
 
     public WeightPowerup(GameStatus status, short id) {
         super(status, id);
-        world = status.getWorld();
-        factory = new PhysicsComponentFactory(world);
+        factory = new PhysicsComponentFactory(status.getWorld());
 
-        factory = new PhysicsComponentFactory(world);
+        factory = new PhysicsComponentFactory(status.getWorld());
         factory.setAwake(true).setShape(SHAPE).setBullet(true)
                 .setFriction(1f).setDensity(1f).setRestitution(1f)
                 .setType(BodyType.dynamicBody).setSleepingAllowed(true);
@@ -55,7 +53,7 @@ public class WeightPowerup extends Powerup {
         factory.setOwner(character);
 
         // create new
-        factory.setDensity(BASE_DENSITY * DENSITY_MULTIPLIER);
+        factory.setDensity(BASE_DENSITY * DENSITY_MULTIPLIER).setRestitution(.6f);
         factory.setWidth(radius*2).setHeight(radius*2);
 
         LiquidFunPhysicsComponent physicsComponent = (LiquidFunPhysicsComponent) factory.makeComponent();
@@ -71,7 +69,6 @@ public class WeightPowerup extends Powerup {
 
         // delete old
         lastComponent.deleteBody();
-        //TODO drawable?
 
         firstCalled = System.currentTimeMillis();
     }
@@ -88,7 +85,7 @@ public class WeightPowerup extends Powerup {
         Body tmpBody = tmpComponent.getBody();
         Vec2 linearVelocity = tmpBody.getLinearVelocity();
 
-        factory.setDensity(BASE_DENSITY);
+        factory.setDensity(BASE_DENSITY).setRestitution(1f);
         factory.setPosition(tmpBody.getPositionX(), tmpBody.getPositionY());
         factory.setOwner(character);
         LiquidFunPhysicsComponent physicsComponent = (LiquidFunPhysicsComponent) factory.makeComponent();

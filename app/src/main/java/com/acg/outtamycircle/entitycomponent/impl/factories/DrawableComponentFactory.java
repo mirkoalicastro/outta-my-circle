@@ -19,7 +19,7 @@ public class DrawableComponentFactory{
     private Integer strokeColor;
     private Entity owner;
 
-    private DrawableShape shape = DrawableShape.CIRCLE; //TODO lasciare null
+    private DrawableShape shape = DrawableShape.CIRCLE;
     public enum DrawableShape{CIRCLE, RECTANGLE}
 
     public DrawableComponentFactory(Graphics graphics){

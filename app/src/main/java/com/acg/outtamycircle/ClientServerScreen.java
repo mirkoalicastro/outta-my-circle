@@ -2,6 +2,7 @@ package com.acg.outtamycircle;
 
 import android.graphics.Color;
 import android.graphics.Shader;
+import android.util.Log;
 
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
@@ -10,7 +11,7 @@ import com.acg.outtamycircle.entitycomponent.impl.factories.DrawableComponentFac
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.RadialForcePowerup;
-import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerUp;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.WeightPowerup;
 import com.acg.outtamycircle.network.GameMessageInterpreterImpl;
 import com.acg.outtamycircle.network.NetworkMessageHandlerImpl;
 import com.acg.outtamycircle.network.googleimpl.GoogleAndroidGame;
@@ -20,7 +21,6 @@ import com.badlogic.androidgames.framework.Button;
 import com.badlogic.androidgames.framework.Graphics;
 import com.badlogic.androidgames.framework.Input;
 import com.badlogic.androidgames.framework.Pixmap;
-import com.badlogic.androidgames.framework.impl.AndroidButton;
 import com.badlogic.androidgames.framework.impl.AndroidEffect;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
 import com.badlogic.androidgames.framework.impl.AndroidJoystick;
@@ -45,7 +45,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected final int frameHeight, frameWidth, arenaRadius;
     protected final int[] winnerId;
     protected int roundNum = 1;
-    protected long startAt;
+    protected long startAt = System.currentTimeMillis();
     protected GameStatus status;
     protected boolean isAlive = true;
     protected boolean endGame, endRound;
@@ -209,8 +209,11 @@ public abstract class ClientServerScreen extends AndroidScreen {
 
     private void drawEntity(Entity e){
         DrawableComponent component = (DrawableComponent)e.getComponent(Component.Type.Drawable);
-        if(component != null)
+        if(component != null) {
             component.draw();
+        } else {
+            Log.d("POWERUP", "erroreeeeeeeeeee");
+        }
     }
 
 
@@ -296,13 +299,14 @@ public abstract class ClientServerScreen extends AndroidScreen {
     protected Powerup createPowerup(int x, int y, short powerupId, short objectId){
         Powerup powerup = null;
         switch (powerupId){
-            case WeightPowerUp.ID:
-                powerup = new WeightPowerUp(status, objectId);
+            case WeightPowerup.ID:
+                powerup = new WeightPowerup(status, objectId);
                 break;
             case RadialForcePowerup.ID:
                 powerup = new RadialForcePowerup(status, objectId);
                 break;
             default:
+                Log.d("POWERUP", "ritorno null");
                 return null;
         }
 

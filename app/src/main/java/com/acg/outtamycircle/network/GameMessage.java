@@ -1,7 +1,5 @@
 package com.acg.outtamycircle.network;
 
-import android.util.Log;
-
 import com.badlogic.androidgames.framework.Pool;
 
 public class GameMessage {
@@ -85,6 +83,7 @@ public class GameMessage {
         POWERUP_ASSIGN((byte)6),
         ATTACK((byte)7),
         START((byte)1),
+        COLLISION((byte)1),
         END((byte)3),
         HOST_OR_CLIENT((byte)5);
 

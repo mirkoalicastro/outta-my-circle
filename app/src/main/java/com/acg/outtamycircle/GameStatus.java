@@ -8,7 +8,7 @@ import com.acg.outtamycircle.utilities.MyList;
 import com.google.fpl.liquidfun.World;
 
 public class GameStatus {
-    //TODO private final a TUTTO!?!?!?
+    boolean collisionDetected;
     Entity arena;
 
     GameCharacter playerOne;
@@ -19,14 +19,12 @@ public class GameStatus {
 
     World world;
 
-    final MyList<Powerup> toActivate = new MyList<>();
+    final MyList<Powerup> powerupsToActivate = new MyList<>();
 
-    //TODO lista di powerup e override di equals per objectId
     Powerup powerup;
     final MyList<Powerup> actives = new MyList<>();
 
     final MyList<AttackComponent> activeAttacks = new MyList<>();
-
 
     void setArena(Entity arena){
         this.arena = arena;
@@ -62,11 +60,15 @@ public class GameStatus {
         return world;
     }
 
-    public MyList<Powerup> getToActivate(){
-        return toActivate;
+    public MyList<Powerup> getPowerupsToActivate(){
+        return powerupsToActivate;
     }
 
     public void setPowerup(Powerup powerup) {
         this.powerup = powerup;
+    }
+
+    public void setCollisionDetected(boolean collisionDetected) {
+        this.collisionDetected = collisionDetected;
     }
 }
