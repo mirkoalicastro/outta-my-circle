@@ -42,7 +42,7 @@ public abstract class AndroidGame extends Activity implements Game {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.RGB_565);
+        Bitmap frameBuffer = Bitmap.createBitmap(frameBufferWidth, frameBufferHeight, Config.ARGB_8888);
         Point dim = new Point();
         getWindowManager().getDefaultDisplay().getSize(dim);
         float scaleX = (float)frameBufferWidth / dim.x;
