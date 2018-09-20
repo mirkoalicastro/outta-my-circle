@@ -74,8 +74,8 @@ public class PowerupRandomManager {
 
         boolean result = (p1 + p2 + p3 > THRESHOLD);
 
-        boolean isOk;
         if(result) {
+            boolean isOk;
             int attempts = MAX_TRY;
             do {
                 current = (int) (Math.random() * DEGREE_STEPS);

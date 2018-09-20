@@ -17,16 +17,16 @@ class CharacterPowerupContact extends ContactType {
         if(a.getType() == GameObject.Type.POWERUP) {
             powerup = (Powerup)a;
             character = (GameCharacter)b;
-        }
-        else{
+        } else {
             powerup = (Powerup)b;
             character = (GameCharacter)a;
         }
 
-        if(powerup.getAssigned())
-            return;
-
-        powerup.setAssigned(true);
+        synchronized (powerup) {
+            if (powerup.getAssigned())
+                return;
+            powerup.setAssigned(true);
+        }
 
         if(Settings.soundEnabled)
             Assets.powerupCollision.play(Settings.volume);

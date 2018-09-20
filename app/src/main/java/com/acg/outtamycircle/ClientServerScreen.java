@@ -79,12 +79,12 @@ public abstract class ClientServerScreen extends AndroidScreen {
         androidJoystick = new AndroidJoystick(androidGame.getGraphics(),400,720,100){
             @Override
             public float getNormX(){
-                return super.getNormX() * 1000;
+                return super.getNormX() * 1150;
             }
 
             @Override
             public float getNormY(){
-                return super.getNormY() * 1000;
+                return super.getNormY() * 1150;
             }
         };
 
