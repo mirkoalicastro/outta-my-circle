@@ -2,10 +2,14 @@ package com.acg.outtamycircle.utilities;
 
 import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
+import com.acg.outtamycircle.entitycomponent.Component;
+import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 
 public class PowerupRandomManager {
     private static int DEGREE_STEPS = 72;
     private static final double DEFAULT_MINIMUM_TIME = 2f;
+    private static final int MAX_TRY = 5;
     private static float[] cosine;
     private static float[] sine;
 
@@ -70,10 +74,32 @@ public class PowerupRandomManager {
 
         boolean result = (p1 + p2 + p3 > THRESHOLD);
 
+        boolean isOk;
         if(result) {
-            current = (int) (Math.random() * DEGREE_STEPS);
-            distance = (float) (Math.random() * arenaRadius);
-            startTime = System.currentTimeMillis();
+            int attempts = MAX_TRY;
+            do {
+                current = (int) (Math.random() * DEGREE_STEPS);
+                distance = (float) (Math.random() * arenaRadius);
+                float x = randomX();
+                float y = randomY();
+                isOk = true;
+                for(GameCharacter character: status.getLiving()) {
+                    PhysicsComponent comp = (PhysicsComponent) character.getComponent(Component.Type.Physics);
+                    float myX = comp.getX();
+                    float myY = comp.getY();
+                    float myDistance = (float)Math.sqrt( (x - myX)*(x - myX) + (y - myY)*(y - myY) );
+                    if(myDistance < comp.getHeight()*1.5f) {
+                        isOk = false;
+                        break;
+                    }
+                }
+                status.getLiving().resetIterator();
+                attempts--;
+            } while(attempts > 0 && !isOk);
+            if(isOk)
+                startTime = System.currentTimeMillis();
+            else
+                return false;
         }
 
         return result;

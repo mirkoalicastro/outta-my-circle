@@ -65,7 +65,7 @@ public abstract class ClientServerScreen extends AndroidScreen {
         super(game);
         this.backButton = new AndroidRectangularButton(game.getGraphics(),66,550,324,124).setPixmap(Assets.back);
         this.backButton.enable(false);
-        this.timedCircularButton = new TimedCircularButton(game.getGraphics(),1280,720,100,3000);
+        this.timedCircularButton = new TimedCircularButton(game.getGraphics(),1280,720,100,3500);
         this.myGoogleRoom = myGoogleRoom;
         this.players = players;
         this.skins = skins;

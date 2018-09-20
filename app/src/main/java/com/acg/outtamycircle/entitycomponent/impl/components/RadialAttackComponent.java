@@ -8,8 +8,8 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameObject;
 
 public final class RadialAttackComponent extends AttackComponent {
-    private static final float MAX_FORCE = 9_500;
-    private static final float DELTA_FORCE = 6_000;
+    private static final float MAX_FORCE = 10_250;
+    private static final float DELTA_FORCE = 5_000;
 
     @Override
     public void start(GameStatus status, float x, float y) {

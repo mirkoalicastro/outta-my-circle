@@ -5,7 +5,7 @@ import com.acg.outtamycircle.entitycomponent.impl.components.BoostAttackComponen
 import com.acg.outtamycircle.entitycomponent.impl.components.RadialAttackComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.WeightAttackComponent;
 
-public class AttackFactory {
+public class AttackComponentFactory {
     public static final int BOOST = 0;
     public static final int RADIAL = 1;
     public static final int WEIGHT = 2;

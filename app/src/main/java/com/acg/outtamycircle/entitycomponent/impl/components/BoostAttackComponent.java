@@ -6,12 +6,12 @@ import com.acg.outtamycircle.entitycomponent.Entity;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 
 public final class BoostAttackComponent extends AttackComponent {
-    private static final long DURATION = 30;
+    private static final long DURATION = 20;
     private boolean active;
     private float x, y;
     private long firstCalled;
     private PhysicsComponent comp;
-    private static float FORCE_MULTIPLIER = 10f;
+    private static float FORCE_MULTIPLIER = 9f;
 
     @Override
     public void start(GameStatus status, float x, float y){

@@ -5,7 +5,7 @@ import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
-import com.acg.outtamycircle.entitycomponent.impl.factories.AttackFactory;
+import com.acg.outtamycircle.entitycomponent.impl.factories.AttackComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
@@ -373,7 +373,7 @@ public class ServerScreen extends ClientServerScreen {
 
         status.world = world;
 
-        AttackFactory attackFactory = new AttackFactory();
+        AttackComponentFactory attackFactory = new AttackComponentFactory();
         for(int i=0 ; i<attacks.length ; i++) {
             Component comp = attackFactory.makeAttackComponent(attacks[i]);
             status.characters[i].addComponent(comp);
