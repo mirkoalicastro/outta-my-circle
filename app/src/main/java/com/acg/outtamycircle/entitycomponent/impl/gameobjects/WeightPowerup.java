@@ -64,7 +64,7 @@ public class WeightPowerup extends Powerup {
         physicsComponent.setOwner(character);
 
         // delete old
-        lastComponent.deleteBody();
+        lastComponent.delete();
 
         firstCalled = System.currentTimeMillis();
     }
@@ -91,7 +91,7 @@ public class WeightPowerup extends Powerup {
         character.addComponent(physicsComponent);
         physicsComponent.setOwner(character);
 
-        tmpComponent.deleteBody();
+        tmpComponent.delete();
     }
 
     @Override

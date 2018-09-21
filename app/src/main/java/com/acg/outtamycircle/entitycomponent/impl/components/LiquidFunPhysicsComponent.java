@@ -63,7 +63,8 @@ public class LiquidFunPhysicsComponent extends PhysicsComponent{
         return height;
     }
 
-    public void deleteBody(){
+    @Override
+    public void delete(){
         world.destroyBody(body);
     }
 

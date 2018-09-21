@@ -4,6 +4,7 @@ import com.acg.outtamycircle.contactphase.ContactHandler;
 import com.acg.outtamycircle.entitycomponent.AttackComponent;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.DrawableComponent;
+import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.components.LiquidFunPhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.factories.AttackComponentFactory;
 import com.acg.outtamycircle.entitycomponent.impl.factories.PhysicsComponentFactory;
@@ -247,7 +248,7 @@ public class ServerScreen extends ClientServerScreen {
 
     private void disablePhysicsComponent(GameCharacter ch){
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)ch.getComponent(Component.Type.Physics);
-        component.deleteBody();
+        component.delete();
     }
 
     @Override
@@ -351,6 +352,9 @@ public class ServerScreen extends ClientServerScreen {
                 GameMessage.deleteInstance(message);
 
                 powerup.start();
+                PhysicsComponent comp = (PhysicsComponent) powerup.getComponent(Component.Type.Physics);
+                comp.delete();
+                powerup.removeComponent(Component.Type.Physics);
                 status.actives.add(powerup);
                 toActivateIterator.remove();
             }
@@ -365,7 +369,7 @@ public class ServerScreen extends ClientServerScreen {
             return;
         if(status != null)
             for(GameCharacter gameCharacter: status.living)
-                ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).deleteBody();
+                ((LiquidFunPhysicsComponent)gameCharacter.getComponent(Component.Type.Physics)).delete();
         super.startRound();
 
         contactHandler.init(status);

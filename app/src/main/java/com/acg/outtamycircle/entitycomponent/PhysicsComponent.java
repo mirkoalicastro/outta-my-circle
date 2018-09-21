@@ -13,4 +13,6 @@ public abstract class PhysicsComponent extends Component {
     public abstract float getWidth();
 
     public abstract float getHeight();
+
+    public abstract void delete();
 }

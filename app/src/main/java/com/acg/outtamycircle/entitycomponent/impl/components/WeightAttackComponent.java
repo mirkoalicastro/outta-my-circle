@@ -55,7 +55,7 @@ public class WeightAttackComponent extends AttackComponent {
         tmpBody.setLinearVelocity(linearVelocity);
 
         // delete old
-        lastComponent.deleteBody();
+        lastComponent.delete();
 
         // update owner
         owner.addComponent(physicsComponent);
@@ -91,6 +91,6 @@ public class WeightAttackComponent extends AttackComponent {
         owner.addComponent(physicsComponent);
         physicsComponent.setOwner(owner);
 
-        tmpComponent.deleteBody();
+        tmpComponent.delete();
     }
 }

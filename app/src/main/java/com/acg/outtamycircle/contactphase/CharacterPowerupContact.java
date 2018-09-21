@@ -36,8 +36,6 @@ class CharacterPowerupContact extends ContactType {
         LiquidFunPhysicsComponent component = (LiquidFunPhysicsComponent)powerup.getComponent(Component.Type.Physics);
         component.getBody().setAwake(false);
         component.getBody().setActive(false);
-        component.deleteBody();
-        powerup.removeComponent(Component.Type.Physics);
 
         status.setPowerup(null);
 
