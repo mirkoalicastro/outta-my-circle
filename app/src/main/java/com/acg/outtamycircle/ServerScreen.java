@@ -13,7 +13,6 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 import com.acg.outtamycircle.network.GameMessage;
 import com.acg.outtamycircle.network.googleimpl.MyGoogleRoom;
 import com.acg.outtamycircle.utilities.Converter;
-import com.acg.outtamycircle.utilities.IdGenerator;
 import com.acg.outtamycircle.utilities.PowerupRandomManager;
 import com.badlogic.androidgames.framework.Pixmap;
 import com.badlogic.androidgames.framework.impl.AndroidGame;
@@ -38,7 +37,7 @@ public class ServerScreen extends ClientServerScreen {
     private final float threshold;
 
     private int messagesInBuffer; //counter for reliable messages buffer
-    private IdGenerator idGenerator;
+    private int nextId;
 
     public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
@@ -67,7 +66,7 @@ public class ServerScreen extends ClientServerScreen {
 
         powerupRandomManager = new PowerupRandomManager(arenaX, arenaY, Converter.frameToPhysics(arenaRadius));
 
-        idGenerator = IdGenerator.getInstance(players.length);
+        nextId = players.length;
 
         startRound();
         roundNum--;
@@ -311,7 +310,7 @@ public class ServerScreen extends ClientServerScreen {
             int x = (int)powerupRandomManager.randomX();
             int y = (int)powerupRandomManager.randomY();
             int powerupId = powerupRandomManager.randomPowerup();
-            int objectId = idGenerator.next();
+            int objectId = ++nextId;
             if(Settings.soundEnabled)
                 Assets.newPowerup.play(Settings.volume);
             status.setPowerup(createPowerup(x, y, powerupId, objectId));
@@ -383,6 +382,5 @@ public class ServerScreen extends ClientServerScreen {
             status.characters[i].addComponent(comp);
             comp.setOwner(status.characters[i]);
         }
-
     }
 }

@@ -24,7 +24,7 @@ public class WeightPowerup extends Powerup {
 
     @Override
     public byte getCode(){
-        return 0;
+        return ID;
     }
 
     public WeightPowerup(GameStatus status, int id) {

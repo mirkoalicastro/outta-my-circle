@@ -14,7 +14,7 @@ public class RadialForcePowerup extends Powerup {
 
     @Override
     public byte getCode(){
-        return 1;
+        return ID;
     }
 
     @Override
