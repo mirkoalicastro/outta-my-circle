@@ -43,17 +43,13 @@ public class MyGoogleRoom {
     private final RoomStatusUpdateCallback myRoomStatusUpdatedCallback = new MyRoomStatusUpdateCallback(this);
     private final NetworkMessageHandlerImpl networkMessageHandlerImpl = new NetworkMessageHandlerImpl(this);
 
-    private Room room;
     private RealTimeMultiplayerClient realTimeMultiplayerClient;
     private RoomConfig config;
 
     private String serverId;
 
     public boolean isServer() {
-        if(getPlayerId() == null)
-            return false;
-        else
-            return getPlayerId().equals(serverId);
+        return getPlayerId() != null && getPlayerId().equals(serverId);
     }
 
     public void setServerId(String serverId) {
@@ -108,7 +104,6 @@ public class MyGoogleRoom {
     }
 
     private void reset() {
-        room = null;
         config = null;
         realTimeMultiplayerClient = null;
         mRoomId = null;
@@ -157,7 +152,6 @@ public class MyGoogleRoom {
     }
 
     void updateRoom(Room room) {
-        setRoom(room);
         mRoomId = room.getRoomId();
         mMyId = room.getParticipantId(myGoogleSignIn.getPlayerId());
         mParticipants = room.getParticipants();
@@ -215,14 +209,6 @@ public class MyGoogleRoom {
 
     public RealTimeMultiplayerClient getRealTimeMultiplayerClient() {
         return realTimeMultiplayerClient;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    void setRoom(Room room) {
-        this.room = room;
     }
 
     public interface ResetCallback {

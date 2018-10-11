@@ -4,7 +4,7 @@ import com.badlogic.androidgames.framework.Pool;
 
 public class GameMessage {
     private String sender;
-    private static int MAX_BUFFER_SIZE = 11;
+    private static final int MAX_BUFFER_SIZE = 11;
 
     private static final int MAX_CAPACITY = 40;
     private static final int INITIAL_CAPACITY = 20;
@@ -74,22 +74,22 @@ public class GameMessage {
      */
     public enum Type {
         //TODO type description
-        INIT_CLIENT((byte)3),
-        CREATE((byte)8),
-        DESTROY((byte)4),
-        MOVE_SERVER((byte)11),
-        MOVE_CLIENT((byte)7),
-        POWERUP((byte)8),
-        POWERUP_ASSIGN((byte)6),
-        ATTACK((byte)7),
-        START((byte)1),
-        COLLISION((byte)1),
-        END((byte)3),
-        HOST_OR_CLIENT((byte)5);
+        INIT_CLIENT(3),
+        CREATE(8),
+        DESTROY(4),
+        MOVE_SERVER(11),
+        MOVE_CLIENT(7),
+        POWERUP(8),
+        POWERUP_ASSIGN(6),
+        ATTACK(7),
+        START(1),
+        COLLISION(1),
+        END(3),
+        HOST_OR_CLIENT(5);
 
         final byte length;
 
-        Type(byte length){ this.length = length; }
+        Type(int length){ this.length = (byte) length; }
     }
 
     /**

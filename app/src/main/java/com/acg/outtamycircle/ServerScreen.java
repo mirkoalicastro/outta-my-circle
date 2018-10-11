@@ -39,7 +39,7 @@ public class ServerScreen extends ClientServerScreen {
     private int messagesInBuffer; //counter for reliable messages buffer
     private int nextId;
 
-    public ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
+    ServerScreen(AndroidGame game, MyGoogleRoom myGoogleRoom, String[] players, int[] skins, int[][] spawnPositions, int[] attacks, int playerOffset) {
         super(game, myGoogleRoom, players, skins, spawnPositions, playerOffset);
         Converter.setScale(frameWidth, frameHeight);
         this.attacks = attacks;
@@ -114,7 +114,7 @@ public class ServerScreen extends ClientServerScreen {
                     gameCharacter = null;
                     int objId = interpreter.getObjectId(message);
                     for(GameCharacter character: status.living) {
-                        if(character.getObjectId() == objId) {
+                        if (character.getObjectId() == objId) {
                             gameCharacter = character;
                             break;
                         }
@@ -329,8 +329,7 @@ public class ServerScreen extends ClientServerScreen {
             Powerup powerup = powerupIterator.next();
             if (!powerup.isEnded()) {
                 powerup.work();
-            }
-            else {
+            } else {
                 powerup.stop();
                 powerupIterator.remove();
             }

@@ -19,8 +19,7 @@ public class AccelerometerHandler implements SensorEventListener {
         if(manager != null) {
             List<Sensor> sensorList = manager.getSensorList(Sensor.TYPE_ACCELEROMETER);
             if (sensorList != null && !sensorList.isEmpty()) {
-                Sensor accelerometer = manager.getSensorList(
-                        Sensor.TYPE_ACCELEROMETER).get(0);
+                Sensor accelerometer = sensorList.get(0);
                 manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             }
         }

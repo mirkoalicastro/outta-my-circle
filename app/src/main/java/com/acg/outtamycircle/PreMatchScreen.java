@@ -102,6 +102,7 @@ public class PreMatchScreen extends AndroidScreen {
                     sendStart();
                 else
                     receiveStart();
+                break;
         }
     }
 

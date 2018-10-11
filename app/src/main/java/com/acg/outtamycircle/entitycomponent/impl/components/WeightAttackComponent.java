@@ -8,7 +8,6 @@ import com.google.fpl.liquidfun.BodyType;
 import com.google.fpl.liquidfun.CircleShape;
 import com.google.fpl.liquidfun.Shape;
 import com.google.fpl.liquidfun.Vec2;
-import com.google.fpl.liquidfun.World;
 
 public class WeightAttackComponent extends AttackComponent {
     private static final long DURATION = 2000;
@@ -17,9 +16,7 @@ public class WeightAttackComponent extends AttackComponent {
     private static final float BASE_DENSITY = 1f;
 
     private PhysicsComponentFactory factory;
-    private World world;
     private static final Shape SHAPE = new CircleShape();
-    private float x, y, radius;
     private long firstCalled;
     private boolean active;
 
@@ -30,19 +27,14 @@ public class WeightAttackComponent extends AttackComponent {
         Vec2 linearVelocity = body.getLinearVelocity();
         active = true;
         if(factory==null) {
-            this.world = status.getWorld();
-            factory = new PhysicsComponentFactory(world);
+            factory = new PhysicsComponentFactory(status.getWorld());
             factory.setAwake(body.isAwake()).setShape(SHAPE).setBullet(body.isBullet())
                     .setFriction(1f).setDensity(1f).setRestitution(1f)
                     .setType(BodyType.dynamicBody).setSleepingAllowed(body.isSleepingAllowed());
         }
 
-        radius = lastComponent.getHeight()/2f;
-        this.x = lastComponent.getX();
-        this.y = lastComponent.getY();
-
-        factory.setPosition(this.x, this.y);
-        factory.setRadius(radius);
+        factory.setPosition(lastComponent.getX(), lastComponent.getY());
+        factory.setRadius(lastComponent.getHeight()/2f);
         factory.setOwner(owner);
 
         // create new

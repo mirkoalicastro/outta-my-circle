@@ -8,6 +8,7 @@ import com.acg.outtamycircle.network.GameMessageInterpreter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+//TODO release messages
 public class ServerMessageReceiver implements MessageReceiver {
     private final GameMessage[][] messages;
     private GameMessageInterpreter interpreter;

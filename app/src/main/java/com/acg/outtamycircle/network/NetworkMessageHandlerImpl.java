@@ -21,6 +21,16 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
     private int currentBufferSize = 0;
 
     private final MyGoogleRoom myGoogleRoom;
+    private final Pool<Object> bufferPool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<Object>() {
+        @Override
+        public Object createObject() {
+            return new byte[MAX_BUFFER_SIZE];
+        }
+    }, MAX_CAPACITY);
+
+    public interface OnComplete {
+        void work(Task<Integer> task);
+    }
 
     public NetworkMessageHandlerImpl(MyGoogleRoom myGoogleRoom) {
         this.myGoogleRoom = myGoogleRoom;
@@ -39,20 +49,9 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
         sendReliable(playerId, true, null);
     }
 
-    public interface OnComplete {
-        void work(Task<Integer> task);
-    }
-
     public void sendReliable(final String playerId, OnComplete onComplete) {
         sendReliable(playerId, true, onComplete);
     }
-
-    private final Pool<Object> bufferPool = new Pool.SynchronizedPool<>(new Pool.PoolObjectFactory<Object>() {
-        @Override
-        public Object createObject() {
-            return new byte[MAX_BUFFER_SIZE];
-        }
-    }, MAX_CAPACITY);
 
     private void sendReliable(final String playerId, boolean clearBuffer, final OnComplete onComplete) {
         final byte[] toSend = (byte[]) bufferPool.newObject();
@@ -158,6 +157,7 @@ public class NetworkMessageHandlerImpl implements NetworkMessageHandler {
                 int length = GameMessage.Type.values()[messageData[cursor]].length;
                 System.arraycopy(messageData, cursor, message.buffer, 0, length);
                 first.storeMessage(message);
+                //deleteinstance
                 cursor += length;
             }
         }

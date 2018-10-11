@@ -121,11 +121,8 @@ public class ClientScreen extends ClientServerScreen {
             }
         }
 
-        if(playCollision) {
-            playCollision = false;
-            if(Settings.soundEnabled)
-                Assets.gameCharacterCollision.play(Settings.volume);
-        }
+        if(playCollision && Settings.soundEnabled)
+            Assets.gameCharacterCollision.play(Settings.volume);
 
         if(receivedAtLeastOne)
             updateLastTimeReceived();

@@ -30,8 +30,6 @@ public class WeightPowerup extends Powerup {
     public WeightPowerup(GameStatus status, int id) {
         super(status, id);
         factory = new PhysicsComponentFactory(status.getWorld());
-
-        factory = new PhysicsComponentFactory(status.getWorld());
         factory.setAwake(true).setShape(SHAPE).setBullet(true)
                 .setFriction(1f).setDensity(1f).setRestitution(1f)
                 .setType(BodyType.dynamicBody).setSleepingAllowed(true);

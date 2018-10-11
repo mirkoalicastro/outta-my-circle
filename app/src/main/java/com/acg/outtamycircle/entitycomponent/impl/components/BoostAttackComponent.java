@@ -11,7 +11,7 @@ public final class BoostAttackComponent extends AttackComponent {
     private float x, y;
     private long firstCalled;
     private PhysicsComponent comp;
-    private static float FORCE_MULTIPLIER = 9f;
+    private static final float FORCE_MULTIPLIER = 9f;
 
     @Override
     public void start(GameStatus status, float x, float y){

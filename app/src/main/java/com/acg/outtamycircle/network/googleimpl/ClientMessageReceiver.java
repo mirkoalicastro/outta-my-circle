@@ -5,6 +5,7 @@ import com.acg.outtamycircle.network.GameMessage;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO release messages
 public class ClientMessageReceiver implements MessageReceiver {
     private List<GameMessage> messages;
     private static final int DEFAULT_CAPACITY = 40;

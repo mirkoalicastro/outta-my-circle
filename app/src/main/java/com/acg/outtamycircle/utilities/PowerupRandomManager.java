@@ -8,6 +8,7 @@ import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
 
 public class PowerupRandomManager {
     private static int DEGREE_STEPS = 72;
+    private static final double THRESHOLD = 0.80;
     private static final double DEFAULT_MINIMUM_TIME = 2f;
     private static final int MAX_TRY = 5;
     private static float[] cosine;
@@ -34,7 +35,6 @@ public class PowerupRandomManager {
 
     private final float arenaX, arenaY, arenaRadius;
     private final int powerupsNumber = Assets.powerups.length;
-    private final double THRESHOLD = 0.80;
 
     private double minimumTime = DEFAULT_MINIMUM_TIME;
 
@@ -64,45 +64,42 @@ public class PowerupRandomManager {
 
         minimumTime = DEFAULT_MINIMUM_TIME;
 
-        long ora = System.currentTimeMillis();
-        long diff = ora - startTime;
+        long diff = System.currentTimeMillis() - startTime;
         diff /= 5000;
 
         double p1 = Math.random() * WEIGHT_RANDOM;
         double p2 = (1./(3*status.getActivePowerups().size()+1)) * WEIGHT_ACTIVE_POWERUPS;
         double p3 = (1 - 1./(diff+1)) * WEIGHT_ELAPSED_TIME;
 
-        boolean result = (p1 + p2 + p3 > THRESHOLD);
+        if(p1 + p2 + p3 < THRESHOLD)
+            return false;
 
-        if(result) {
-            boolean isOk;
-            int attempts = MAX_TRY;
-            do {
-                current = (int) (Math.random() * DEGREE_STEPS);
-                distance = (float) (Math.random() * arenaRadius);
-                float x = randomX();
-                float y = randomY();
-                isOk = true;
-                for(GameCharacter character: status.getLiving()) {
-                    PhysicsComponent comp = (PhysicsComponent) character.getComponent(Component.Type.Physics);
-                    float myX = comp.getX();
-                    float myY = comp.getY();
-                    float myDistance = (float)Math.sqrt( (x - myX)*(x - myX) + (y - myY)*(y - myY) );
-                    if(myDistance < comp.getHeight()*1.5f) {
-                        isOk = false;
-                        break;
-                    }
+        boolean isOk;
+        int attempts = MAX_TRY;
+        do {
+            current = (int) (Math.random() * DEGREE_STEPS);
+            distance = (float) (Math.random() * arenaRadius);
+            float x = randomX();
+            float y = randomY();
+            isOk = true;
+            for(GameCharacter character: status.getLiving()) {
+                PhysicsComponent comp = (PhysicsComponent) character.getComponent(Component.Type.Physics);
+                float myX = comp.getX();
+                float myY = comp.getY();
+                float myDistance = (float)Math.sqrt( (x - myX)*(x - myX) + (y - myY)*(y - myY) );
+                if(myDistance < comp.getHeight()*1.5f) {
+                    isOk = false;
+                    break;
                 }
-                status.getLiving().resetIterator();
-                attempts--;
-            } while(attempts > 0 && !isOk);
-            if(isOk)
-                startTime = System.currentTimeMillis();
-            else
-                return false;
-        }
+            }
+            status.getLiving().resetIterator();
+            attempts--;
+        } while(attempts > 0 && !isOk);
 
-        return result;
+        if(isOk)
+            startTime = System.currentTimeMillis();
+
+        return isOk;
     }
 
     public float randomX(){
