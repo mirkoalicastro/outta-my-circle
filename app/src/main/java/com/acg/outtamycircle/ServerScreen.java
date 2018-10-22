@@ -306,21 +306,20 @@ public class ServerScreen extends ClientServerScreen {
 
     private void updatePowerupsStatus(float deltaTime){
         // generation
-        if(powerupRandomManager.randomBoolean(deltaTime)){
-            int x = (int)powerupRandomManager.randomX();
-            int y = (int)powerupRandomManager.randomY();
-            int powerupId = powerupRandomManager.randomPowerup();
+        PowerupRandomManager.PowerupInfo powerupInfo = powerupRandomManager.randomPowerup(deltaTime);
+        if(powerupInfo != null) {
             int objectId = ++nextId;
-            if(Settings.soundEnabled)
-                Assets.newPowerup.play(Settings.volume);
-            status.setPowerup(createPowerup(x, y, powerupId, objectId));
+            status.setPowerup(createPowerup(powerupInfo.x, powerupInfo.y, powerupInfo.powerupId, objectId));
 
             GameMessage message = GameMessage.createInstance();
-            interpreter.makePowerupMessage(message, objectId, (int)Converter.physicsToFrame(x),
-                    (int)Converter.physicsToFrame(y), powerupId);
+            interpreter.makePowerupMessage(message, objectId, (int)Converter.physicsToFrame(powerupInfo.x),
+                    (int)Converter.physicsToFrame(powerupInfo.y), powerupInfo.powerupId);
             messagesInBuffer++;
             networkMessageHandler.putInBuffer(message);
             GameMessage.deleteInstance(message);
+
+            if(Settings.soundEnabled)
+                Assets.newPowerup.play(Settings.volume);
         }
 
         // working

@@ -2,11 +2,21 @@ package com.acg.outtamycircle.utilities;
 
 import com.acg.outtamycircle.Assets;
 import com.acg.outtamycircle.GameStatus;
+import com.acg.outtamycircle.Settings;
 import com.acg.outtamycircle.entitycomponent.Component;
 import com.acg.outtamycircle.entitycomponent.PhysicsComponent;
 import com.acg.outtamycircle.entitycomponent.impl.gameobjects.GameCharacter;
+import com.acg.outtamycircle.entitycomponent.impl.gameobjects.Powerup;
 
 public class PowerupRandomManager {
+    public class PowerupInfo {
+        public int x, y, powerupId;
+        private PowerupInfo(int x, int y, int powerupId) {
+            this.x = x;
+            this.y = y;
+            this.powerupId = powerupId;
+        }
+    }
     private static int DEGREE_STEPS = 72;
     private static final double THRESHOLD = 0.80;
     private static final double DEFAULT_MINIMUM_TIME = 2f;
@@ -56,7 +66,20 @@ public class PowerupRandomManager {
         return this;
     }
 
-    public boolean randomBoolean(float deltaTime){
+    public PowerupInfo randomPowerup(float deltaTime) {
+
+        if(randomBoolean(deltaTime)) {
+            int x = (int) randomX();
+            int y = (int) randomY();
+            int powerupId = randomPowerup();
+
+            return new PowerupInfo(x, y, powerupId);
+
+        } else
+            return null;
+    }
+
+    private boolean randomBoolean(float deltaTime){
         minimumTime -= deltaTime;
 
         if(minimumTime > 0 || status.getPowerup() != null)
@@ -102,13 +125,13 @@ public class PowerupRandomManager {
         return isOk;
     }
 
-    public float randomX(){
+    private float randomX(){
         return arenaX+(cosine[current]*distance);
     }
 
-    public float randomY(){
+    private float randomY(){
         return  arenaY+(sine[current]*distance);
     }
 
-    public int randomPowerup(){ return (int)(Math.random() * powerupsNumber); }
+    private int randomPowerup(){ return (int)(Math.random() * powerupsNumber); }
 }
