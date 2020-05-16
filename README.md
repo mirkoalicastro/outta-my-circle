@@ -20,6 +20,3 @@
 # Todos
 - Improve code quality
 - Add single-player mode introducing AI (a neural network?)
-
-# Note
-The project is born as a team project for the course of *Game Design And Development* at the University of Naples "Federico II". By now, the project is maintained only by me, so that I could need a bit to complete the TODO tasks!
